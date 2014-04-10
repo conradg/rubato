@@ -1,0 +1,81 @@
+body{
+    font-family: 'Ubuntu', sans-serif;
+    margin:0;
+    padding:0;
+}
+
+div{
+    display:block;
+}
+.sticky-header{
+    background-color: dodgerblue;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    min-height: 100px;
+}
+
+.sticky-header .container{
+    position: relative;
+    min-width: 900px;
+    max-width: 1100px;
+    margin: auto;
+
+}
+
+.header-nav{
+    float: left;
+
+}
+.header-nav li{
+    list-style: none;
+    float: left;
+    font-size: 16;
+    font-weight: 300;
+    padding: 20px;
+    color: white;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:visited{
+    color:white;
+}
+
+#name {
+    float: left;
+    font-family: 'Roboto Slab', serif;
+    font-weight: 400;
+    font-size: 72px;
+    color: white;
+}
+
+.main {
+    padding-top: 100px;
+    min-width: 900px;
+    max-width: 1100px;
+    margin:auto;
+}
+
+.main p{
+    font-size: 18px;
+    font-weight: 400;
+    text-align: justify;
+    color:#333333;
+}
+
+h2 {
+    font-size: 36px;
+    font-weight: 400;
+    text-align:center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin:20px;
+    color: #555555;
+}
+
+.three-panel{
+    display:block;
+}

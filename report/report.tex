@@ -1,0 +1,37 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{fixltx2e}
+\usepackage[superscript]{cite}
+\usepackage[pdftex]{graphicx}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\renewcommand*{\sectionautorefname}{Section}
+\renewcommand*{\subsectionautorefname}{Section}
+\renewcommand*{\subsubsectionautorefname}{Section}
+
+\def\bsq#1{%both single quotes
+\lq{#1}\rq}
+\def\f0{f\textsubscript{0}}
+\onehalfspacing
+\begin{document}
+
+\input{./title.tex}
+
+\renewcommand{\abstractname}{Executive Summary}
+\tableofcontents
+%\listoffigures
+%\listoftables
+\include{./introduction}
+\include{./background}
+\include{./evaluation}
+\include{./plan}
+
+\bibliographystyle{ieeetr}
+\bibliography{master}
+
+\end{document}

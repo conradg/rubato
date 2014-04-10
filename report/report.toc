@@ -1,0 +1,18 @@
+\contentsline {chapter}{\numberline {1}Introduction}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}Objectives}{3}{section.1.1}
+\contentsline {chapter}{\numberline {2}Background}{4}{chapter.2}
+\contentsline {section}{\numberline {2.1}Adaptive learning}{4}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Adaptive learning in music}{5}{subsection.2.1.1}
+\contentsline {section}{\numberline {2.2}Platform choice}{5}{section.2.2}
+\contentsline {section}{\numberline {2.3}Existing Musicality Tutors}{5}{section.2.3}
+\contentsline {section}{\numberline {2.4}Pitch Detection}{6}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Fundamental Frequency Detection Methods}{6}{subsection.2.4.1}
+\contentsline {subsubsection}{Autocorrelation}{6}{section*.3}
+\contentsline {chapter}{\numberline {3}Evaluation}{8}{chapter.3}
+\contentsline {section}{\numberline {3.1}Adaptivity}{8}{section.3.1}
+\contentsline {section}{\numberline {3.2}Intuitiveness}{8}{section.3.2}
+\contentsline {section}{\numberline {3.3}User Engagement}{8}{section.3.3}
+\contentsline {section}{\numberline {3.4}Teaching Profficiency}{9}{section.3.4}
+\contentsline {section}{\numberline {3.5}Pitch Detection}{9}{section.3.5}
+\contentsline {chapter}{\numberline {4}Plan}{10}{chapter.4}
+\contentsline {section}{\numberline {4.1}Extensions}{10}{section.4.1}
