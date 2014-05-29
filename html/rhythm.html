@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ear trainer</title>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Gabriela|Playfair+Display+SC:400,700,400italic,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="sticky-header">
+        <div class="container">
+            <div id="name">Rubato</div>
+            <nav class="header-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li>Intervals</li>
+                    <li>Note from chord</li>
+                    <li><a href="rhythm.html">Rhythmic Recall</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="main">
+        <h2>Rhythm game, repeat the rhythm you hear using the space bar!</h2>
+        <script>
+            var first = true;
+            var start_time = 0;
+            $(document).keypress(function(e) {
+                if (first){
+                    time = jQuery.now();
+                    first = false;
+                }
+                if(e.which == 13){
+                    time = jQuery.now();
+                }
+                console.log(jQuery.now()-time);
+            });
+        </script>
+    </div>
+</body>
+</html>

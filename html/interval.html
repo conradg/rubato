@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Interval Training</title>
-    <script type="text/javascript" src="../js/MIDI/build/MIDI.min.js"></script>
-
+    <title>Ear trainer</title>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Gabriela|Playfair+Display+SC:400,700,400italic,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <
+<div class="sticky-header">
+    <div class="container">
+        <div id="name">Rubato</div>
+        <nav class="header-nav">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li>Intervals</li>
+                <li>Note from chord</li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <h1>Upload Your Audio</h1>
+    <script type="text/javascript" src="../js/Recorderjs-master/recorder.js"> </script>
+    <input onclick="startRecording()" type="button" value="start recording" />
+    <input onclick="stopRecording()" type="button" value="stop recording and play" />
+    <div id="pitch"></div>
+    <script src="../js/pitchDetect_mine.js"></script>
+</div>
 </body>
 </html>
