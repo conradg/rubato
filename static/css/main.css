@@ -46,10 +46,7 @@ a:visited{
 
 #name {
     float: left;
-    font-family: 'Roboto Slab', serif;
-    font-weight: 400;
-    font-size: 72px;
-    color: white;
+    background-image:url("/static/assets/images/rubato-72px.png");
 }
 
 .main {
@@ -57,6 +54,7 @@ a:visited{
     min-width: 900px;
     max-width: 1100px;
     margin:auto;
+    background-color: #cbe6f5;
 }
 
 .main p{
@@ -85,4 +83,24 @@ h2 {
 .three-panel>div{
     display:inline-block;
     width: 30%;
+    padding:20px;
+}
+
+#pitch{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    display:inline-block;
+}
+
+canvas{
+    display:block;
+    background-color: #0f0f0f;
+}
+
+#correlation_display{
+    display:inline-block;
+    background-color: grey;
+    padding: 10px;
+    padding-bottom: 0;
 }
