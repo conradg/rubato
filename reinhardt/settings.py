@@ -76,7 +76,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'html')]
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -86,4 +86,4 @@ STATIC_ROOT = ''
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = ( os.path.join('static'), )
+STATICFILES_DIRS = (os.path.join('static'), )

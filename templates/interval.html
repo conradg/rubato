@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Interval training{% endblock %}
+
+
+{% static "js/pitchDetect_mine.js"  as pitchDetect_mine  %}
+{% static "js/Recorderjs-master/recorder.js" as recorder %}
+{% block javascript %}
+<script src="{{ pitchDetect_mine }}"></script>
+<script type="text/javascript" src="{{ recorder }}"> </script>
+{% endblock %}
+
+{% block main %}
+    <h1>Test your intonation</h1>
+    <input onclick="startRecording()" type="button" value="start recording" />
+    <input onclick="stopRecording()" type="button" value="stop recording and play" />
+    <div id="main_excercise">
+        <div id="pitch">none</div>
+        <div id="correlation_display">
+            <canvas id="correlation_canvas"; width = 460px; height =  200px;></canvas>
+            <div id="slider"></div>
+        </div>
+    </div>
+{% endblock %}
