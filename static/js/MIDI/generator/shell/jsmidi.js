@@ -251,10 +251,10 @@ var MidiEvent = function(params) {
  *
  * This method accepts two ways of expressing notes. The first one is a string,
  * which will be looked up in the global |noteTable| but it will take the
- * default values for pitch, channel, durtion and volume.
+ * default values for detected_pitch, channel, durtion and volume.
  *
  * If a note object is passed to the method instead, it should contain the properties
- * channel, pitch, duration and volume, of which pitch is mandatory. In case the
+ * channel, detected_pitch, duration and volume, of which detected_pitch is mandatory. In case the
  * channel, the duration or the volume are not passed, default values will be
  * used.
  *
@@ -268,7 +268,7 @@ MidiEvent.createNote = function(note, sustained) {
 
     if (typeof note === "string") {
         note = noteTable[note];
-    // The pitch is mandatory if the note object is used.
+    // The detected_pitch is mandatory if the note object is used.
     } else if (!note.pitch) {
         throw new Error("The pitch is required in order to create a note.");
     }
