@@ -1,39 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ear trainer</title>
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300,400,500' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <link href='http://fonts.googleapis.com/css?family=Gabriela|Playfair+Display+SC:400,700,400italic,700italic,900,900italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
-</head>
-<body>
-    <div class="sticky-header">
-        <div class="container">
-            <div id="name">Rubato</div>
-            <nav class="header-nav">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li>Intervals</li>
-                    <li>Note from chord</li>
-                    <li><a href="rhythm.html">Rhythmic Recall</a></li>
-                </ul>
-            </nav>
+{% extends "base.html" %}
+
+{% block title %}Rubato {% endblock %}
+
+{% block main %}
+    <h2>Rubato turns anyone into a musician!</h2>
+    <div class="three-panel">
+        <div id="panel1"><p>Rubato aims to get the best out of every pupil, by adapting to your learning
+            requirements, and training you in an engaging fashion using addictive exercises.
+        </p></div>
+        <div id="panel2"><p>We will improve your
+            aural ability, as well as your sense of rhythm, and intonation, and Rubato will track your progress
+            throughout your usage and focus on what you're weakest at.</p>
+        </div>
+        <div id="panel3"><p>Rubato is interactive! You can sing at it, clap rhythms for it, and </p>
         </div>
     </div>
-    <div class="main">
-        <h2>Rubato turns anyone into a musician!</h2>
-        <div class="three-panel">
-            <div id="panel1"><p>Rubato aims to get the best out of every pupil, by adapting to your learning
-                requirements, and training you in an engaging fashion using addictive exercises.
-            </p></div>
-            <div id="panel2"><p>We will improve your
-                aural ability, as well as your sense of rhythm, and intonation, and Rubato will track your progress
-                throughout your usage and focus on what you're weakest at.</p>
-            </div>
-            <div id="panel3"><p>Rubato is interactive! You can sing at it, clap rhythms for it, and </p>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+{% endblock %}

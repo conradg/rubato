@@ -5,9 +5,18 @@
 var recorder;
 var audio;
 var context = new webkitAudioContext();
-var buffer;
+var buffer; // the current audio buffer we're analysing
 var debug_freqs;
+var debug_notes;
 var pitch;
+var start_pitch;
+var num_windows;
+var curr_window;
+var debug = true;
+
+var interval = 0; //the size of the interval in semitones, negative indicates downwards interval
+var ACF = []; //store the current autocorrelationfunction
+var ACFs = []; //store the autocorrelation functions for the active buffer
 
 var C3 = "/static/assets/test_pitches/C3.wav"
 var D3 = "/static/assets/test_pitches/D3.wav"
@@ -21,16 +30,19 @@ var D4 = "/static/assets/test_pitches/D4.wav"
 var E4 = "/static/assets/test_pitches/E4.wav"
 var F4 = "/static/assets/test_pitches/F4.wav"
 
-var testAudioURLs = [C3,D3,E3,F3,G3,A3,B3,C4,D4,E4,F4];
-var numURLs = testAudioURLs.length;
+var test_set_all = [C3,D3,E3,F3,G3,A3,B3,C4,D4,E4,F4]
 
-var expectedValues = new Array(numURLs), actualValues = new Array(numURLs);
-for (var i = 0; i<numURLs; i++){
-    var x = testAudioURLs[i];
-    expectedValues[i] = x.slice(x.length-6,x.length-4);
-}
+var testAudioURLs  = [F4];
+var numURLs        = testAudioURLs.length;
+var expectedValues = new Array(numURLs);
+var actualValues   = new Array(numURLs);
+
 
 function testPitchDetection(){
+    for (var i = 0; i<numURLs; i++){
+        var x = testAudioURLs[i];
+        expectedValues[i] = x.slice(x.length-6,x.length-4);
+    }
     testPitchDetection_h(0);
 }
 
@@ -54,10 +66,6 @@ function testPitchDetection_h(i){
         }
     })
 }
-
-testPitchDetection()
-
-
 
 var onFail = function(e) {
     console.log('Rejected!', e);
@@ -97,11 +105,11 @@ function startRecording() {
 //stops recording and sets the pitch value in the browser to the detected pitch
 function stopRecording() {
     recorder.stop();
-    var callback = function(s) {
+    var callback = function (s) {
         var blob = s;
         var url = window.URL.createObjectURL(blob);
         updatePitchDisplay(url);
-    }
+    };
     recorder.exportWAV(callback);
 }
 
@@ -111,6 +119,44 @@ function updatePitchDisplay(url){
         $("#pitch").text(pitch);
     });
 }
+
+//calculates a score based on the value in the pitch variable, the starting note, and the interval
+function calculateScore(){
+    return 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// AJAX LOGIC ////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+var csrftoken = $.cookie('csrftoken');
+console.log(csrftoken);
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    crossDomain: false, // obviates need for sameOrigin test
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type)) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+function sendScore(){
+    var score = calculateScore();
+    var timestamp = Date.now()
+    $.post('/interval/score', {score: score.toString(), interval: interval.toString()}, function(data){
+        console.log("Score saved at " + data)
+     });
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 
 //runs pitch detection on the audio found at the url and passes the callback on completion.
 function pitchDetect(url, callback){
@@ -131,15 +177,31 @@ var toType = function(obj) {
 function getPitch(buf){
     var audioData = buf.getChannelData(0);
     var sampleRate = buf.sampleRate;
-    var freqs = [];
-    var windows = Math.floor(audioData.length/1000);
+    var notes = [];
+
+    num_windows = Math.floor(audioData.length/1000);
+
+    if (debug == true){
+        ACFs = new Array(num_windows)
+        debug_freqs = new Array(num_windows)
+        debug_notes = new Array(num_windows)
+    }
+
     var window;
     var pop_table = [[],[]]; // [[note],[number of occurrences]]
-    for (var i=0; i<windows; i++){
+    for (var i=0; i<num_windows; i++){
         window = audioData.subarray(i*1000,(i+1)*1000);
         var freq = autoCorrelate(window,sampleRate);
+
+        if (debug == true){
+            curr_window = i;
+            debug_freqs[i] = freq
+            ACFs[i] = ACF;
+        }
+
         var note = freqToPitch(freq);
-        freqs[i] = note;
+        notes[i] = note;
+        debug_notes[i] = note;
         var index = pop_table[0].indexOf(note[0]);
         if (index == -1){
             pop_table[0].push(note[0]);
@@ -147,7 +209,6 @@ function getPitch(buf){
         } else {
             pop_table[1][index]++;
         }
-
     }
     var mode;
     var mode_index = 0;
@@ -158,20 +219,18 @@ function getPitch(buf){
         }
     }
 
-    debug_freqs = freqs;
-
     return mode;
 
 }
 
-//returns the frequency of a 1000 sample long buffer.
+//returns the frequency of a 1000 sample long window.
 function autoCorrelate(buf, sampleRate){
     var MIN_SAMPLES = 40;	// corresponds to an 1.2kHz signal
     var MAX_SAMPLES = 500; // corresponds to a 96Hz signal
     var SIZE = 1000;
     var best_offset = -1;
     var best_correlation = 0;
-
+    ACF = new Array(MAX_SAMPLES-MIN_SAMPLES+1) // store the autocorrelation function.
 
     for (var offset = MIN_SAMPLES; offset <= MAX_SAMPLES; offset++) {
         var correlation = 0;
@@ -179,7 +238,9 @@ function autoCorrelate(buf, sampleRate){
         for (var n=0; n<SIZE-offset; n++) {
             correlation += (buf[n])*(buf[n+offset]);
         }
-        correlation *= (SIZE-offset)/SIZE;
+        correlation *= (SIZE-offset)/SIZE; //not sure what this does, some sort of optimisation?
+
+        ACF[offset-MIN_SAMPLES] = correlation //populate the autocorrelation function
 
         if (correlation > best_correlation) {
             best_correlation = correlation;
@@ -233,39 +294,82 @@ function pitchToLetter(pitch){
     }
 }
 
-function updateCorrelation(time) {
-    if (!analyserContext) {
-        var canvas = $("#correlation");
-        canvasWidth = canvas.width;
-        canvasHeight = canvas.height;
-        analyserContext = canvas.getContext('2d');
+function updateCorrelation() {
+
+    var canvas = $("#correlation_canvas")[0];
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
+    var analyserContext = canvas.getContext('2d');
+
+    var BAR_WIDTH = 1;
+    var numBars = ACF.length;
+
+    analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    // Draw ACF.
+    for (var i = 0; i < numBars; ++i) {
+        var magnitude = ACF[i]*-1;
+        analyserContext.fillStyle = "#00FF00"
+        analyserContext.fillRect(i, canvasHeight/2, BAR_WIDTH, magnitude);
     }
 
-    // analyzer draw code here
-    {
-        var SPACING = 3;
-        var BAR_WIDTH = 1;
-        var numBars = Math.round(canvasWidth / SPACING);
-        var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
+    // Draw estimated fundamental frequency
+    var freq = debug_freqs[curr_window];
+    var lag = Math.floor(48000/freq);
+    analyserContext.fillStyle = "#FF0000";
+    analyserContext.fillRect(lag-40, 0, 1, canvasHeight);
 
-        analyserNode.getByteFrequencyData(freqByteData);
 
-        analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
-        analyserContext.fillStyle = '#F6D565';
-        analyserContext.lineCap = 'round';
-        var multiplier = analyserNode.frequencyBinCount / numBars;
+    var window_pitch = freqToPitch(debug_freqs[curr_window]);
+    $("#window").text("window: " + curr_window + "/" + (num_windows-1));
+    $("#window_pitch").text(window_pitch[0] + " " + window_pitch[1] + " cents");
+}
 
-        // Draw rectangle for each frequency bin.
-        for (var i = 0; i < numBars; ++i) {
-            var magnitude = 0;
-            var offset = Math.floor( i * multiplier );
-            // gotta sum/average the block, or we miss narrow-bandwidth spikes
-            for (var j = 0; j< multiplier; j++)
-                magnitude += freqByteData[offset + j];
-            magnitude = magnitude / multiplier;
-            var magnitude2 = freqByteData[i * multiplier];
-            analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
-            analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
-        }
+function updateFrequency(){
+    var canvas = $("#frequency_canvas")[0];
+    var BAR_WIDTH = 4;
+
+    canvas.width = num_windows*BAR_WIDTH;
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
+    var analyserContext = canvas.getContext('2d');
+
+    var BAR_WIDTH = 4;
+    var numBars = debug_freqs.length;
+
+    analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    // Draw Frequencies.
+    for (var i = 0; i < numBars; i++) {
+        var magnitude = (debug_freqs[i]*-1)/10;
+        analyserContext.fillStyle = "#00FF00"
+        analyserContext.fillRect(i*BAR_WIDTH, canvasHeight, BAR_WIDTH, magnitude);
     }
+
+    // Draw estimated fundamental frequency
+    var freq = debug_freqs[curr_window];
+    analyserContext.fillStyle = "rgba(255, 0, 0, 0.5 )";
+    analyserContext.fillRect(curr_window*BAR_WIDTH, 0, BAR_WIDTH, canvasHeight);
+
+
+    var window_pitch = freqToPitch(debug_freqs[curr_window]);
+    $("#window").text("window: " + curr_window + "/" + (num_windows-1));
+    $("#window_pitch").text(window_pitch[0] + " " + window_pitch[1] + " cents");
+
+}
+
+
+window.onkeydown = function(e) {
+    var key = e.keyCode;
+    if (key == 37) { //left key
+        curr_window = curr_window>0 ? curr_window-1 : curr_window
+    } else if (key == 39) { //right key
+        curr_window = curr_window<num_windows-1 ? curr_window+1 : curr_window
+    } else {
+        return
+    }
+    ACF = ACFs[curr_window]
+    updateCorrelation()
+    updateFrequency()
+
 }

@@ -25,15 +25,19 @@ div{
 }
 
 .header-nav{
-    float: left;
+    padding-top: 30px;
+}
 
+.header-nav ul{
+    float:left;
+    margin: 0;
 }
 .header-nav li{
     list-style: none;
     float: left;
-    font-size: 16;
+    font-size: 16px;
     font-weight: 300;
-    padding: 20px;
+    padding: 0 20px 0 20px;
     color: white;
 }
 
@@ -64,7 +68,9 @@ a:visited{
     text-align: justify;
     color:#333333;
 }
-
+h1 {
+    margin:0;
+}
 h2 {
     font-size: 36px;
     font-weight: 400;
@@ -99,13 +105,28 @@ canvas{
     background-color: #0f0f0f;
 }
 
-#correlation_display{
+.canvas_display{
     display:inline-block;
     background-color: grey;
     padding: 10px;
     padding-bottom: 0;
 }
 
-#user-name{
+.sticky-right{
     float: right;
+    padding: 0 40px 0 0;
+    height:22px;
+}
+
+.debug_info ul{
+    float:left;
+    margin: 0;
+}
+.debug_info li{
+    list-style: none;
+    float: left;
+    font-size: 16px;
+    font-weight: 300;
+    padding: 0 20px 0 20px;
+    color: white;
 }

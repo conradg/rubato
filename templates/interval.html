@@ -5,22 +5,38 @@
 {% block title %}Interval training{% endblock %}
 
 
-{% static "js/pitchDetect_mine.js"  as pitchDetect_mine  %}
-{% static "js/Recorderjs-master/recorder.js" as recorder %}
 {% block javascript %}
-<script src="{{ pitchDetect_mine }}"></script>
-<script type="text/javascript" src="{{ recorder }}"> </script>
+<script src="{% static "js/pitchDetect_mine.js" %}"></script>
+<script type="text/javascript" src="{% static "js/Recorderjs-master/recorder.js" %}"> </script>
 {% endblock %}
 
 {% block main %}
     <h1>Test your intonation</h1>
     <input onclick="startRecording()" type="button" value="start recording" />
     <input onclick="stopRecording()" type="button" value="stop recording and play" />
+    <input onclick="testPitchDetection()" type="button" value="test"/>
+    <input onclick="sendScore()" type="button" value="send score"/>
     <div id="main_excercise">
-        <div id="pitch">none</div>
-        <div id="correlation_display">
-            <canvas id="correlation_canvas"; width = 460px; height =  200px;></canvas>
-            <div id="slider"></div>
+        <div class="canvas_display">
+            <h1>Autocorrelation Function</h1>
+            <canvas id="correlation_canvas" width = 461px height =  200px;></canvas>
+            <div class="debug_info">
+                <ul>
+                    <li id="window">2/81</li>
+                    <li id="window_pitch">E3</li>
+                </ul>
+            </div>
         </div>
+        <div class="canvas_display">
+            <h1>Frequency</h1>
+            <canvas id="frequency_canvas" width = 400px height =  200px;></canvas>
+            <div class="debug_info">
+                <ul>
+                    <li id="frequency">2/81</li>
+                </ul>
+            </div>
+        </div>
+        <div id="pitch" style="display:block">none</div>
+
     </div>
 {% endblock %}
