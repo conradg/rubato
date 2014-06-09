@@ -14,6 +14,7 @@ var debug_good_regions;
 var detected_pitch_m;
 var detected_pitch_s;
 var detected_cents;
+var detected_frequency;
 var start_pitch;
 var target_pitch;
 var num_windows;
@@ -39,7 +40,7 @@ var F4 = "/static/assets/test_pitches/F4.wav"
 
 var test_set_all = [C3,D3,E3,F3,G3,A3,B3,C4,D4,E4,F4]
 
-var testAudioURLs  = [C3];
+var testAudioURLs  = [B3];
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
@@ -137,7 +138,6 @@ function calculateScore(){
 ////////////////////////////////////////////////////////////////////////////////
 
 var csrftoken = $.cookie('csrftoken');
-console.log(csrftoken);
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
@@ -215,7 +215,7 @@ function getPitch(buf){
     //isolate good regions//
 
     var slice_size = 5;
-    var std_dev_threshold = 20;
+    var std_dev_threshold = 1;
     var good_regions = [];
 
     var in_region = false;
@@ -250,12 +250,13 @@ function getPitch(buf){
         }
     }
 
-    var average_frequency = arrayAverage(good_regions);
-    var detected_pitch_s_cents = freqToPitch_s_cents(average_frequency);
-    detected_pitch_m = freqToPitch_m(average_frequency);
+    detected_frequency = arrayAverage(good_regions);
+    var detected_pitch_s_cents = freqToPitch_s_cents(detected_frequency);
+    detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
-
+    updateCorrelation()
+    updateFrequency()
 }
 
 //returns the frequency of a 1000 sample long window.
@@ -375,7 +376,7 @@ function pitch12ToSci(pitch){
 function reasonableRange(pitch){
     var gender = $("#gender").text() || "male";
     if (gender == "male"){
-        return pitch>=44 && pitch<=62;
+        return pitch>=44 && pitch<=69;
     } else {
         return pitch>=57 && pitch<=69;
     }
@@ -430,8 +431,21 @@ function updateFrequency(){
 
     // Draw Frequencies.
     for (var i = 0; i < num_windows; i++) {
-        var magnitude = -70 * Math.log((freqs[i])) +280;
-        if (debug_good_regions[i] != 0){ //If it is a "good region", make it green, else red
+
+        var mid = canvasHeight/2;
+        var range = 1.1;
+        var x = mid/Math.log(range);
+        var y = mid*Math.log(detected_frequency/range)/Math.log(range);
+        var z = freqs[i];
+        var magnitude = y - x * Math.log(z);
+        if (i==35){
+            console.log("x:" + x);
+            console.log("y:" + y);
+            console.log("z:" + z);
+            console.log("magnitude:" + magnitude);
+        }
+
+        if (debug_good_regions[i] != null){ //If it is a "good region", make it green, else red
             analyserContext.fillStyle = "#00FF00"
         } else {
             analyserContext.fillStyle = "#FF0000"
