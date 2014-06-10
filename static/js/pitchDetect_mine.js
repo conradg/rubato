@@ -10,6 +10,8 @@ var freqs;
 
 var debug_notes;
 var debug_good_regions;
+var debug_amp;
+var max_amp;
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -20,27 +22,57 @@ var target_pitch;
 var num_windows;
 var curr_window;
 var debug = true;
+var log_view = false;
 
 var interval = 0; //the size of the interval in semitones, negative indicates downwards interval
 var max_correlation = 0;
 var ACF = []; //store the current autocorrelationfunction
 var ACFs = []; //store the autocorrelation functions for the active buffer
 
-var C3 = "/static/assets/test_pitches/C3.wav"
-var D3 = "/static/assets/test_pitches/D3.wav"
-var E3 = "/static/assets/test_pitches/E3.wav"
-var F3 = "/static/assets/test_pitches/F3.wav"
-var G3 = "/static/assets/test_pitches/G3.wav"
-var A3 = "/static/assets/test_pitches/A3.wav"
-var B3 = "/static/assets/test_pitches/B3.wav"
-var C4 = "/static/assets/test_pitches/C4.wav"
-var D4 = "/static/assets/test_pitches/D4.wav"
-var E4 = "/static/assets/test_pitches/E4.wav"
-var F4 = "/static/assets/test_pitches/F4.wav"
+var T1_Bb2 = "/static/assets/test_pitches/male/normal_set_1/Bb2.wav"
+var T1_C3 = "/static/assets/test_pitches/male/normal_set_1/C3.wav"
+var T1_D3 = "/static/assets/test_pitches/male/normal_set_1/D3.wav"
+var T1_E3 = "/static/assets/test_pitches/male/normal_set_1/E3.wav"
+var T1_F3 = "/static/assets/test_pitches/male/normal_set_1/F3.wav"
+var T1_G3 = "/static/assets/test_pitches/male/normal_set_1/G3.wav"
+var T1_A3 = "/static/assets/test_pitches/male/normal_set_1/A3.wav"
+var T1_B3 = "/static/assets/test_pitches/male/normal_set_1/B3.wav"
+var T1_C4 = "/static/assets/test_pitches/male/normal_set_1/C4.wav"
+var T1_D4 = "/static/assets/test_pitches/male/normal_set_1/D4.wav"
+var T1_E4 = "/static/assets/test_pitches/male/normal_set_1/E4.wav"
+var T1_F4 = "/static/assets/test_pitches/male/normal_set_1/F4.wav"
 
-var test_set_all = [C3,D3,E3,F3,G3,A3,B3,C4,D4,E4,F4]
+var T2_C3 = "/static/assets/test_pitches/male/normal_set_2/C3.wav"
+var T2_Cs3 = "/static/assets/test_pitches/male/normal_set_2/Cs3.wav"
+var T2_D3 = "/static/assets/test_pitches/male/normal_set_2/D3.wav"
+var T2_Eb3 = "/static/assets/test_pitches/male/normal_set_2/Eb3.wav"
+var T2_E3 = "/static/assets/test_pitches/male/normal_set_2/E3.wav"
+var T2_F3 = "/static/assets/test_pitches/male/normal_set_2/F3.wav"
+var T2_Fs3 = "/static/assets/test_pitches/male/normal_set_2/Fs3.wav"
+var T2_G3 = "/static/assets/test_pitches/male/normal_set_2/G3.wav"
+var T2_Ab3 = "/static/assets/test_pitches/male/normal_set_2/Ab3.wav"
+var T2_A3 = "/static/assets/test_pitches/male/normal_set_2/A3.wav"
+var T2_Bb3 = "/static/assets/test_pitches/male/normal_set_2/Bb3.wav"
+var T2_B3 = "/static/assets/test_pitches/male/normal_set_2/B3.wav"
+var T2_C4 = "/static/assets/test_pitches/male/normal_set_2/C4.wav"
 
-var testAudioURLs  = [B3];
+var TW_E3 = "/static/assets/test_pitches/male/wobbly/E3.wav"
+var TW_G3 = "/static/assets/test_pitches/male/wobbly/G3.wav"
+var TW_G3_2 = "/static/assets/test_pitches/male/wobbly/G3_2.wav"
+var TW_E3_vib = "/static/assets/test_pitches/male/wobbly/E3_vib.wav"
+var TW_G3_vib = "/static/assets/test_pitches/male/wobbly/G3_vib.wav"
+
+var TH_G4 = "/static/assets/test_pitches/male/high_set_1/G4.wav"
+
+var male_normal_set_1 = [T1_Bb2,T1_C3,T1_D3,T1_E3,T1_F3,T1_G3,T1_A3,T1_B3,T1_C4,T1_D4,T1_E4,T1_F4];
+var male_normal_set_2 = [T2_C3,T2_Cs3,T2_D3,T2_Eb3,T2_E3,T2_F3,T2_Fs3,T2_G3,T2_Ab3,T2_A3,T2_Bb3,T2_B3,T2_C4];
+var test_set_w = [TW_E3,TW_G3,TW_G3_2,TW_E3_vib,TW_G3_vib];
+
+var normal = male_normal_set_1.concat(male_normal_set_2);
+var all = normal.concat(test_set_w);
+
+var testAudioURLs  = male_normal_set_2;
+
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
@@ -49,7 +81,18 @@ var actualValues   = new Array(numURLs);
 function testPitchDetection(){
     for (var i = 0; i<numURLs; i++){
         var x = testAudioURLs[i];
-        expectedValues[i] = x.slice(x.length-6,x.length-4);
+        var start_index = x.lastIndexOf("/")+1;
+        var und_index = x.slice(start_index).indexOf("_") + start_index;
+        if (und_index == start_index-1){
+            var end_index = x.indexOf(".wav")
+        } else {
+            var end_index = und_index;
+        }
+        expectedValues[i] = x.slice(start_index,end_index);
+        var note = expectedValues[i]
+        var sharp = expectedValues[i].indexOf("s")
+        if (sharp != - 1 )
+            expectedValues[i] = note[0] + "#" + note[2];
     }
     testPitchDetection_h(0);
 }
@@ -57,6 +100,7 @@ function testPitchDetection(){
 function testPitchDetection_h(i){
     pitchDetect(testAudioURLs[i], function(){
         actualValues[i] = detected_pitch_s;
+        console.log(detected_pitch_s)
         if (i == numURLs-1){
             var correct = 0;
             var results = "";
@@ -189,16 +233,16 @@ function getPitch(buf){
         freqs = new Array(num_windows)
         debug_notes = new Array(num_windows)
         debug_good_regions = new Array(num_windows);
+        debug_amp = new Array(num_windows);
     }
 
     var window;
-
-    var time1 = new Date().getTime();
 
     //run autocorrelation over each window
     for (var i=0; i<num_windows; i++){
 
         window = audioData.subarray(i*1000,(i+1)*1000);
+        debug_amp[i] = arrayMax(window);
         var freq = autoCorrelate(window,sampleRate);
 
         if (debug == true){
@@ -211,23 +255,24 @@ function getPitch(buf){
         notes[i] = note;
         debug_notes[i] = note;
     }
-
+    max_amp = arrayMax(debug_amp);
     //isolate good regions//
 
     var slice_size = 5;
-    var std_dev_threshold = 1;
+    var std_dev_threshold = 0;
     var good_regions = [];
 
     var in_region = false;
     for (var i=0; i<num_windows-slice_size; i++){
         var slice = freqs.slice(i, i+slice_size);
+        var average = arrayAverage(slice);
+        std_dev_threshold = Math.max(average/80,1);
         var std_dev = stdDev(slice);
         var in_threshold = std_dev<std_dev_threshold;
         if (in_threshold){
             if (!in_region){
                 var avg_slice_freq = arrayAverage(slice);
-                var region_pitch_m = freqToPitch_m(avg_slice_freq);
-                if (reasonablePitch(region_pitch_m)){
+                if (reasonablePitch((avg_slice_freq), true) && reasonableVolume(debug_amp[i])){
                     in_region = true;
                     for (var j=0; j<slice_size-1; j++){
                         var index = i + j;
@@ -255,8 +300,7 @@ function getPitch(buf){
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
-    updateCorrelation()
-    updateFrequency()
+    updateDisplays()
 }
 
 //returns the frequency of a 1000 sample long window.
@@ -270,6 +314,10 @@ function autoCorrelate(buf, sampleRate){
     ACF = new Array(MAX_SAMPLES-MIN_SAMPLES+1) // store the autocorrelation function.
     for (var offset = MIN_SAMPLES; offset <= MAX_SAMPLES; offset++) {
         var correlation = 0;
+        if (!reasonablePitch(sampleRate/offset,true)){
+            ACF[offset-MIN_SAMPLES] = correlation;
+            continue;
+        }
         var max = SIZE-offset;
 
         for (var n=0; n<max; n++) {
@@ -381,8 +429,14 @@ function reasonableRange(pitch){
         return pitch>=57 && pitch<=69;
     }
 }
-function reasonablePitch(pitch){
+function reasonablePitch(pitch, is_freq){
+    if (is_freq)
+        pitch = freqToPitch_m(pitch);
     return reasonableRange(pitch);
+}
+
+function reasonableVolume(amp){
+    return amp>max_amp*0.1;
 }
 function updateCorrelation() {
 
@@ -429,21 +483,29 @@ function updateFrequency(){
 
     analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
+    var freq = freqs[curr_window];
+    analyserContext.fillStyle = "rgba(255, 255, 255, 0.8 )";
+    analyserContext.fillRect(curr_window*BAR_WIDTH, 0, BAR_WIDTH, canvasHeight);
+
     // Draw Frequencies.
     for (var i = 0; i < num_windows; i++) {
 
         var mid = canvasHeight/2;
-        var range = 1.1;
-        var x = mid/Math.log(range);
-        var y = mid*Math.log(detected_frequency/range)/Math.log(range);
-        var z = freqs[i];
-        var magnitude = y - x * Math.log(z);
-        if (i==35){
-            console.log("x:" + x);
-            console.log("y:" + y);
-            console.log("z:" + z);
-            console.log("magnitude:" + magnitude);
+        var range = 1.2;
+
+        function freqToBar(freq, log_view){
+            if (log_view){
+                var x = mid/Math.log(range);
+                var y = mid*Math.log(detected_frequency/range)/Math.log(range);
+            }
+            else {
+                var x = 70;
+                var y = 280;
+            }
+            return  y - x * Math.log(freq);
         }
+
+        var magnitude = freqToBar(freqs[i], log_view)
 
         if (debug_good_regions[i] != null){ //If it is a "good region", make it green, else red
             analyserContext.fillStyle = "#00FF00"
@@ -454,15 +516,52 @@ function updateFrequency(){
     }
 
     // Draw estimated fundamental frequency
-    var freq = freqs[curr_window];
-    analyserContext.fillStyle = "rgba(255, 0, 0, 0.5 )";
-    analyserContext.fillRect(curr_window*BAR_WIDTH, 0, BAR_WIDTH, canvasHeight);
+
 
 
     $("#frequency").text("frequency: " + Math.floor(freq*10)/10);
 
 }
 
+function updateAmplitude(){
+    var canvas = $("#amplitude_canvas")[0];
+    var BAR_WIDTH = 4;
+
+    canvas.width = num_windows*BAR_WIDTH;
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
+    var analyserContext = canvas.getContext('2d');
+
+    var BAR_WIDTH = 4;
+
+    analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    var amp = debug_amp[curr_window];
+    analyserContext.fillStyle = "rgba(255, 255, 255, 0.8 )";
+    analyserContext.fillRect(curr_window*BAR_WIDTH, 0, BAR_WIDTH, canvasHeight);
+
+    // Draw Frequencies.
+    for (var i = 0; i < num_windows; i++) {
+
+        var mid = canvasHeight/2;
+
+        var magnitude = debug_amp[i]/max_amp*mid;
+
+        if (debug_good_regions[i] != null){ //If it is a "good region", make it green, else red
+            analyserContext.fillStyle = "#00FF00"
+        } else {
+            analyserContext.fillStyle = "#FF0000"
+        }
+        analyserContext.fillRect(i*BAR_WIDTH, mid-magnitude, BAR_WIDTH, 2*magnitude);
+    }
+
+    // Draw estimated fundamental frequency
+
+
+
+    $("#amplitude").text("amplitude: " + Math.floor(amp*1000)/1000);
+
+}
 
 window.onkeydown = function(e) {
     var key = e.keyCode;
@@ -470,15 +569,25 @@ window.onkeydown = function(e) {
         curr_window = curr_window>0 ? curr_window-1 : curr_window
     } else if (key == 39) { //right key
         curr_window = curr_window<num_windows-1 ? curr_window+1 : curr_window
+    } else if (key == 90){ //z key
+        curr_window = 0;
+    } else if (key == 88){ //x key
+        curr_window = Math.round(num_windows/2);
+    } else if (key == 67){ //x key
+        curr_window = num_windows-1;
     } else {
         return
     }
     ACF = ACFs[curr_window]
-    updateCorrelation()
-    updateFrequency()
-
+    updateDisplays()
 }
 
+function updateDisplays(){
+    updateCorrelation();
+    updateFrequency();
+    updateAmplitude();
+    updatePitchDisplay();
+}
 function arrayAverage(array){
     acc = 0;
     for (var x=0; x<array.length; x++){
@@ -495,4 +604,8 @@ function stdDev(array){
         sq_diff_acc += Math.pow((array[i] - average),2);
     }
     return Math.sqrt(sq_diff_acc/array.length);
+}
+
+function arrayMax(numArray) {
+    return Math.max.apply(null, numArray);
 }
