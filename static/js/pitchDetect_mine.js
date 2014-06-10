@@ -12,6 +12,7 @@ var debug_notes;
 var debug_good_regions;
 var debug_amp;
 var max_amp;
+var debug_var;
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -71,12 +72,16 @@ var test_set_w = [TW_E3,TW_G3,TW_G3_2,TW_E3_vib,TW_G3_vib];
 var normal = male_normal_set_1.concat(male_normal_set_2);
 var all = normal.concat(test_set_w);
 
-var testAudioURLs  = male_normal_set_2;
+var testAudioURLs  = [TH_G4];
 
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
 
+
+function main(){
+
+}
 
 function testPitchDetection(){
     for (var i = 0; i<numURLs; i++){
@@ -91,26 +96,29 @@ function testPitchDetection(){
         expectedValues[i] = x.slice(start_index,end_index);
         var note = expectedValues[i]
         var sharp = expectedValues[i].indexOf("s")
-        if (sharp != - 1 )
+        if (sharp != - 1 ){
             expectedValues[i] = note[0] + "#" + note[2];
+        }
     }
     testPitchDetection_h(0);
 }
 
 function testPitchDetection_h(i){
     pitchDetect(testAudioURLs[i], function(){
-        actualValues[i] = detected_pitch_s;
-        console.log(detected_pitch_s)
+        actualValues[i] = [detected_pitch_s,detected_cents];
+        console.log(actualValues[i]);
         if (i == numURLs-1){
             var correct = 0;
             var results = "";
             for (var j = 0; j < numURLs; j++){
-                if (expectedValues[j] == actualValues[j]){
+                if (expectedValues[j] == actualValues[j][0]){
                     correct ++;
                 }
-                results += expectedValues[j] + " " + actualValues[j] + "\n";
+                var pitch_s = actualValues[j][0];
+                var cents = actualValues[j][1];
+                results +="Expected: " + expectedValues[j] + " Got: " + pitch_s + " " + cents + " cents" + "\n";
             }
-            console.log("Percentage correct = %" + correct*100/numURLs);
+            console.log("Percentage correct: " + correct*100/numURLs + "%");
             console.log(results);
             return;
         } else {
@@ -198,12 +206,18 @@ $.ajaxSetup({
 
 function sendScore(){
     var score = calculateScore();
-    var timestamp = Date.now()
-    $.post('/interval/score', {score: score.toString(), interval: interval.toString()}, function(data){
+    var i = interval;
+    $.post('/interval/send_score', {score: score.toString(), interval: i.toString()}, function(data){
         console.log("Score saved at " + data)
      });
 }
 
+function getInterval(){
+    $.get('/interval/get_interval', function(data){
+        interval = parseInt(data);
+        console.log("Interval " + interval + " loaded from sever");
+     });
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -586,7 +600,6 @@ function updateDisplays(){
     updateCorrelation();
     updateFrequency();
     updateAmplitude();
-    updatePitchDisplay();
 }
 function arrayAverage(array){
     acc = 0;
