@@ -6,7 +6,7 @@
 
 
 {% block javascript %}
-<script src="{% static "js/pitchDetect_mine.js" %}"></script>
+<script src="{% static "js/pitchDetect.js" %}"></script>
 <script type="text/javascript" src="{% static "js/Recorderjs-master/recorder.js" %}"> </script>
 {% endblock %}
 
@@ -18,30 +18,33 @@
     <input onclick="sendScore()" type="button" value="send score"/>
     <input onclick="getInterval()" type="button" value="get interval"/>
     <div id="main_excercise">
-        <div class="canvas_display">
-            <h1>Autocorrelation Function</h1>
-            <canvas id="correlation_canvas" width = 461px height =  200px;></canvas>
-            <div class="debug_info">
-                <ul>
-                    <li id="window"></li>
-                    <li id="window_pitch"></li>
-                </ul>
+        <h1 id="help">help</h1>
+        <div id="displays">
+            <div class="canvas_display">
+                <h1>Autocorrelation Function</h1>
+                <canvas id="correlation_canvas" width = 461px height =  200px;></canvas>
+                <div class="debug_info">
+                    <ul>
+                        <li id="window"></li>
+                        <li id="window_pitch"></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="canvas_display">
-            <h1>Frequency</h1>
-            <canvas id="frequency_canvas" width = 400px height =  200px;></canvas>
-            <div class="debug_info">
-                <ul>
-                    <li id="frequency"></li>
-                </ul>
-            </div>
-            <h1>Amplitude</h1>
-            <canvas id="amplitude_canvas" width = 400px height =  200px;></canvas>
-            <div class="debug_info">
-                <ul>
-                    <li id="amplitude"></li>
-                </ul>
+            <div class="canvas_display">
+                <h1>Frequency</h1>
+                <canvas id="frequency_canvas" width = 400px height =  200px;></canvas>
+                <div class="debug_info">
+                    <ul>
+                        <li id="frequency"></li>
+                    </ul>
+                </div>
+                <h1>Amplitude</h1>
+                <canvas id="amplitude_canvas" width = 400px height =  200px;></canvas>
+                <div class="debug_info">
+                    <ul>
+                        <li id="amplitude"></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div id="pitch" style="display:block">none</div>

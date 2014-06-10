@@ -106,7 +106,7 @@ canvas{
 }
 
 .canvas_display{
-    display:inline-block;
+    display:block;
     background-color: grey;
     padding: 10px;
     padding-bottom: 0;

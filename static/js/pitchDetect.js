@@ -270,6 +270,15 @@ function getPitch(buf){
         debug_notes[i] = note;
     }
     max_amp = arrayMax(debug_amp);
+    try{
+        if (max_amp < 0.1){
+            throw "Too quiet! Please try again with gusto"
+        }
+    } catch (err){
+        $("#help").text(err);
+        return
+    }
+
     //isolate good regions//
 
     var slice_size = 5;
