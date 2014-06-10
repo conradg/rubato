@@ -80,8 +80,9 @@ var actualValues   = new Array(numURLs);
 
 
 function main(){
-
+    getInterval();
 }
+main();
 
 function testPitchDetection(){
     for (var i = 0; i<numURLs; i++){
@@ -176,13 +177,19 @@ function stopRecording() {
 //runs detected_pitch detection on the audio found at the url and updates the detected_pitch display on the page
 function updatePitchDisplay(url){
     pitchDetect(url, function(){
+        sendScore();
+        getInterval()
         $("#pitch").text(detected_pitch_s);
     });
 }
 
 //calculates a score based on the value in the detected_pitch variable, the starting note, and the interval
 function calculateScore(){
-    return 1;
+    difference = Math.abs(detected_pitch_m-start_pitch)
+    var score = 1 - Math.pow((0.8*difference-0.2),2);
+    score = Math.min(Math.max(score,0),1);
+    console.log(score);
+    return(score);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -215,6 +222,8 @@ function sendScore(){
 function getInterval(){
     $.get('/interval/get_interval', function(data){
         interval = parseInt(data);
+        $("#interval_text").text(interval);
+        start_pitch = calculateStartPitch();
         console.log("Interval " + interval + " loaded from sever");
      });
 }
@@ -222,6 +231,13 @@ function getInterval(){
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+function calculateStartPitch(){
+    return getRandomInt(51,58);
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 //runs detected_pitch detection on the audio found at the url and passes the callback on completion.
 function pitchDetect(url, callback){
@@ -631,3 +647,14 @@ function stdDev(array){
 function arrayMax(numArray) {
     return Math.max.apply(null, numArray);
 }
+
+function playNote(){
+    var delay = 0; // play one note every quarter second
+    var note = start_pitch; // the MIDI note
+    var velocity = 127; // how hard the note hits
+    // play the note
+    MIDI.setVolume(0, 127);
+    MIDI.noteOn(0, note, velocity, delay);
+    MIDI.noteOff(0, note, delay + 0.75);
+}
+

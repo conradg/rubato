@@ -6,48 +6,79 @@
 
 
 {% block javascript %}
-<script src="{% static "js/pitchDetect.js" %}"></script>
+<script type="text/javascript" src="{% static "js/pitchDetect.js" %}"></script>
 <script type="text/javascript" src="{% static "js/Recorderjs-master/recorder.js" %}"> </script>
+<script src="{% static "js/MIDI/js/MIDI/AudioDetect.js" %}" type="text/javascript"></script>
+<script src="{% static "js/MIDI/js/MIDI/LoadPlugin.js" %}"type="text/javascript"></script>
+<script src="{% static "js/MIDI/js/MIDI/Plugin.js" %}"type="text/javascript"></script>
+<script src="{% static "js/MIDI/js/MIDI/Player.js" %}"type="text/javascript"></script>
+<script src="{% static "js/MIDI/js/window/DOMLoader.XMLHttp.js" %}"type="text/javascript"></script>
+<script src="{% static "js/MIDI/inc/Base64.js" %}" type="text/javascript"></script>
+<script src="{% static "js/MIDI/inc/base64binary.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 {% block main %}
     <h1>Test your intonation</h1>
-    <input onclick="startRecording()" type="button" value="start recording" />
-    <input onclick="stopRecording()" type="button" value="stop recording and play" />
     <input onclick="testPitchDetection()" type="button" value="test pitch detection"/>
     <input onclick="sendScore()" type="button" value="send score"/>
     <input onclick="getInterval()" type="button" value="get interval"/>
     <div id="main_excercise">
         <h1 id="help">help</h1>
-        <div id="displays">
-            <div class="canvas_display">
-                <h1>Autocorrelation Function</h1>
-                <canvas id="correlation_canvas" width = 461px height =  200px;></canvas>
-                <div class="debug_info">
-                    <ul>
-                        <li id="window"></li>
-                        <li id="window_pitch"></li>
-                    </ul>
+        <div class="container">
+            <div id="exercise">
+                <div id="interval"><h1 id="interval_text">loading...</h1></div>
+                <div id="buttons">
+                    <div id="playbutton">
+                        <input onclick="playNote()" type="button" value="play note"/>
+                    </div><div id="recordbutton">
+                        <input onclick="startRecording()" type="button" value="start recording"/>
+                        <input onclick="stopRecording()" type="button" value="stop recording"/>
+                    </div>
                 </div>
-            </div>
-            <div class="canvas_display">
-                <h1>Frequency</h1>
-                <canvas id="frequency_canvas" width = 400px height =  200px;></canvas>
-                <div class="debug_info">
-                    <ul>
-                        <li id="frequency"></li>
-                    </ul>
+                <div id="pitch" style="display:block">none</div>
+            </div><div id="displays" class="sidebar">
+                <div class="canvas_display">
+                    <h1>Autocorrelation Function</h1>
+                    <canvas id="correlation_canvas" width = 461px height =  200px;></canvas>
+                    <div class="debug_info">
+                        <ul>
+                            <li id="window"></li>
+                            <li id="window_pitch"></li>
+                        </ul>
+                    </div>
                 </div>
-                <h1>Amplitude</h1>
-                <canvas id="amplitude_canvas" width = 400px height =  200px;></canvas>
-                <div class="debug_info">
-                    <ul>
-                        <li id="amplitude"></li>
-                    </ul>
+                <div class="canvas_display">
+                    <h1>Frequency</h1>
+                    <canvas id="frequency_canvas" width = 400px height =  200px;></canvas>
+                    <div class="debug_info">
+                        <ul>
+                            <li id="frequency"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="canvas_display">
+                    <h1>Amplitude</h1>
+                    <canvas id="amplitude_canvas" width = 400px height =  200px;></canvas>
+                    <div class="debug_info">
+                        <ul>
+                            <li id="amplitude"></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="pitch" style="display:block">none</div>
 
     </div>
+    <script type="text/javascript">
+
+    window.onload = function () {
+        MIDI.loadPlugin({
+            soundfontUrl: "{% static "js/MIDI/soundfont/"  %}",
+            instrument: "acoustic_grand_piano",
+            callback: function() {
+                console.log("ready");
+            }
+        });
+    };
+    </script>
 {% endblock %}

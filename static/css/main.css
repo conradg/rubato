@@ -109,8 +109,8 @@ canvas{
     display:block;
     background-color: grey;
     padding: 10px;
-    padding-bottom: 0;
 }
+
 
 .sticky-right{
     float: right;
@@ -118,15 +118,57 @@ canvas{
     height:22px;
 }
 
+.debug_info{
+    background-color: #393939;
+}
 .debug_info ul{
-    float:left;
     margin: 0;
 }
 .debug_info li{
     list-style: none;
-    float: left;
+    display:inline;
     font-size: 16px;
     font-weight: 300;
     padding: 0 20px 0 20px;
     color: white;
+}
+
+.sidebar{
+    display: inline-block;
+    width:50%;
+}
+
+.container{
+    border: 1px grey;
+    overflow: auto;
+}
+#exercise{
+    display: inline-block;
+    width:50%;
+    vertical-align: top;
+}
+
+#playbutton{
+    display:inline-block;
+    background-color: #19d1ff;
+    width:50%;
+    height:200px;
+}
+
+#recordbutton{
+    display:inline-block;
+    background-color: #00a6ff;
+    width:50%;
+    height:200px;
+}
+
+#interval{
+    height:300px;
+    text-align: center;
+}
+
+#interval h1{
+    font-size:78px;
+    position:relative;
+    line-height:300px;
 }
