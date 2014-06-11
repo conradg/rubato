@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'reinhardt.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^$', views.index),
     url(r'^index/$', views.index),
     url(r'^interval/$', 'intervals.views.interval'),
     url(r'^admin/', include(admin.site.urls)),
