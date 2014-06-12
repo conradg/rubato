@@ -12,5 +12,6 @@ class IntervalScore(models.Model):
     interval = models.ForeignKey(Interval)
     timestamp = models.DateTimeField(auto_now_add=True)
     score = models.FloatField();
+    user = models.PositiveIntegerField();
     def __str__(self):
-        return self.interval.name + " Score: " + str(self.score)
+        return " Score: " + str(self.score) + " for" + self.interval.name + " with user id: " + str(self.user)

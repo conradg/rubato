@@ -10,9 +10,8 @@ var freqs;
 
 var debug_notes;
 var debug_good_regions;
-var debug_amp;
+var amps;
 var max_amp;
-var debug_var;
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -22,7 +21,7 @@ var start_pitch;
 var target_pitch;
 var num_windows;
 var curr_window;
-var debug = true;
+var debug = false;
 var log_view = false;
 
 var interval = 0; //the size of the interval in semitones, negative indicates downwards interval
@@ -79,10 +78,8 @@ var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
 
 
-function main(){
-    getInterval();
-}
-main();
+getInterval();
+
 
 function testPitchDetection(){
     for (var i = 0; i<numURLs; i++){
@@ -176,19 +173,24 @@ function stopRecording() {
 
 //runs detected_pitch detection on the audio found at the url and updates the detected_pitch display on the page
 function updatePitchDisplay(url){
-    pitchDetect(url, function(){
-        sendScore();
-        getInterval()
-        $("#pitch").text(detected_pitch_s);
+    pitchDetect(url, function(err){
+        if(!err){
+            sendScore();
+            getInterval()
+            $("#pitch").text(detected_pitch_s);
+        } else{
+            return
+        }
+
     });
 }
 
 //calculates a score based on the value in the detected_pitch variable, the starting note, and the interval
 function calculateScore(){
-    difference = Math.abs(detected_pitch_m-start_pitch)
+    difference = Math.abs(detected_pitch_m-target_pitch)
     var score = 1 - Math.pow((0.8*difference-0.2),2);
     score = Math.min(Math.max(score,0),1);
-    console.log(score);
+    console.log("score: " + score);
     return(score);
 }
 
@@ -224,6 +226,7 @@ function getInterval(){
         interval = parseInt(data);
         $("#interval_text").text(interval);
         start_pitch = calculateStartPitch();
+        target_pitch = start_pitch + interval;
         console.log("Interval " + interval + " loaded from sever");
      });
 }
@@ -232,7 +235,12 @@ function getInterval(){
 ////////////////////////////////////////////////////////////////////////////////
 
 function calculateStartPitch(){
-    return getRandomInt(51,58);
+    var lower = 51;
+    var upper = 58;
+
+    var start_pitch = getRandomInt(lower,upper) - interval;
+
+    return start_pitch;
 }
 
 function getRandomInt(min, max) {
@@ -255,15 +263,16 @@ function getPitch(buf){
     var sampleRate = buf.sampleRate;
     var notes = [];
 
+    amps = new Array(num_windows);
+    freqs = new Array(num_windows)
+
     num_windows = Math.floor(audioData.length/1000);
 
-    if (debug == true){
+    if (debug){
         max_correlation = 0;
         ACFs = new Array(num_windows)
-        freqs = new Array(num_windows)
         debug_notes = new Array(num_windows)
         debug_good_regions = new Array(num_windows);
-        debug_amp = new Array(num_windows);
     }
 
     var window;
@@ -272,27 +281,28 @@ function getPitch(buf){
     for (var i=0; i<num_windows; i++){
 
         window = audioData.subarray(i*1000,(i+1)*1000);
-        debug_amp[i] = arrayMax(window);
         var freq = autoCorrelate(window,sampleRate);
+        freqs[i] = freq;
+        amps[i] = arrayMax(window);
 
-        if (debug == true){
+
+        if (debug){
             curr_window = i;
-            freqs[i] = freq
             ACFs[i] = ACF;
         }
 
         var note = freqToPitch_s_cents(freq);
         notes[i] = note;
-        debug_notes[i] = note;
+        if (debug) debug_notes[i] = note;
     }
-    max_amp = arrayMax(debug_amp);
+    max_amp = arrayMax(amps);
     try{
         if (max_amp < 0.1){
             throw "Too quiet! Please try again with gusto"
         }
     } catch (err){
         $("#help").text(err);
-        return
+        return err
     }
 
     //isolate good regions//
@@ -311,12 +321,12 @@ function getPitch(buf){
         if (in_threshold){
             if (!in_region){
                 var avg_slice_freq = arrayAverage(slice);
-                if (reasonablePitch((avg_slice_freq), true) && reasonableVolume(debug_amp[i])){
+                if (reasonablePitch((avg_slice_freq), true) && reasonableVolume(amps[i])){
                     in_region = true;
                     for (var j=0; j<slice_size-1; j++){
                         var index = i + j;
                         good_regions.push(freqs[index])
-                        debug_good_regions[index] = freqs[index];
+                        if (debug) debug_good_regions[index] = freqs[index];
                     }
                 } else {
                     continue;
@@ -325,9 +335,7 @@ function getPitch(buf){
             if (in_region){
                 index = i + slice_size - 1;
                 good_regions.push(freqs[index])
-                if (debug){
-                    debug_good_regions[index] = freqs[index];
-                }
+                if (debug) debug_good_regions[index] = freqs[index];
             }
         } else {
             in_region = false;
@@ -339,7 +347,7 @@ function getPitch(buf){
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
-    updateDisplays()
+    if(debug)updateDisplays();
 }
 
 //returns the frequency of a 1000 sample long window.
@@ -575,7 +583,7 @@ function updateAmplitude(){
 
     analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    var amp = debug_amp[curr_window];
+    var amp = amps[curr_window];
     analyserContext.fillStyle = "rgba(255, 255, 255, 0.8 )";
     analyserContext.fillRect(curr_window*BAR_WIDTH, 0, BAR_WIDTH, canvasHeight);
 
@@ -584,7 +592,7 @@ function updateAmplitude(){
 
         var mid = canvasHeight/2;
 
-        var magnitude = debug_amp[i]/max_amp*mid;
+        var magnitude = amps[i]/max_amp*mid;
 
         if (debug_good_regions[i] != null){ //If it is a "good region", make it green, else red
             analyserContext.fillStyle = "#00FF00"
@@ -602,7 +610,7 @@ function updateAmplitude(){
 
 }
 
-window.onkeydown = function(e) {
+if (debug) {window.onkeydown = function(e) {
     var key = e.keyCode;
     if (key == 37) { //left key
         curr_window = curr_window>0 ? curr_window-1 : curr_window
@@ -619,7 +627,7 @@ window.onkeydown = function(e) {
     }
     ACF = ACFs[curr_window]
     updateDisplays()
-}
+}}
 
 function updateDisplays(){
     updateCorrelation();

@@ -18,8 +18,6 @@ def interval(request):
     return HttpResponse(html)
 
 def sendIntervalScore(request):
-    print("hi")
-    context = RequestContext(request)
     if request.method != 'POST':
         return HttpResponse("error")
 
@@ -29,21 +27,20 @@ def sendIntervalScore(request):
     score = float(score_str)
     semitones = int(semitones_str)
 
-    interval = Interval.objects.filter(semitones=semitones)[0] #return database entry matching that interval
+    user_id_str = request.session['_auth_user_id']
+    user_id = int(user_id_str)
 
-
-    interval_score = IntervalScore.objects.create(score=score, interval=interval)
+    send_interval = Interval.objects.get(semitones=semitones) #return database entry matching that interval
+    interval_score = IntervalScore.objects.create(score=score, interval=send_interval, user=user_id)
 
     print (interval_score)
     timestamp = interval_score.timestamp
     return HttpResponse(timestamp)
 
 def getInterval(request):
-    context = RequestContext(request)
-
-    next_interval = learning.get_next_interval() #return database entry matching that interval
+    user_id = request.session['_auth_user_id']
+    next_interval = learning.get_next_interval(user_id) #return database entry matching that interval
 
     print (next_interval)
     interval_semitones = str(next_interval.semitones)
-    print("made it all the way to the end")
     return HttpResponse(interval_semitones)
