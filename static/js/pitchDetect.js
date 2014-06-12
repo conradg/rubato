@@ -13,6 +13,8 @@ var debug_good_regions;
 var amps;
 var max_amp;
 
+var recording = false;
+
 var detected_pitch_m;
 var detected_pitch_s;
 var detected_cents;
@@ -133,6 +135,7 @@ var onSuccess = function(s) {
     var mediaStreamSource = context.createMediaStreamSource(s);
     recorder = new Recorder(mediaStreamSource);
     recorder.record();
+    recording = true;
 }
 
 window.URL = window.URL || window.webkitURL;
@@ -152,6 +155,13 @@ function toAudioBuffer(url, callback){
     request.send();
 }
 
+function toggleRecording(){
+    if (recording){
+        stopRecording()
+    } else {
+        startRecording()
+    }
+}
 function startRecording() {
     if (navigator.getUserMedia) {
         navigator.getUserMedia({audio: true}, onSuccess, onFail);
@@ -163,6 +173,7 @@ function startRecording() {
 //stops recording and sets the detected_pitch value in the browser to the detected detected_pitch
 function stopRecording() {
     recorder.stop();
+    recording = false;
     var callback = function (s) {
         var blob = s;
         var url = window.URL.createObjectURL(blob);
