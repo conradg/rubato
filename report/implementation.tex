@@ -1,0 +1,48 @@
+\chapter{Implementation}
+\section{Web Application}
+The program is taking the format of a web application with different musicality exercises on them. Users can pick and choose whatever exercises they would like to complete, which are grouped by category.
+\subsection{Application flow}
+	\subsubsection{Django web framework}
+		\paragraph{Views}
+		\paragraph{Models}
+		Django interfaces with the database through Models. An example of this is the IntervalScore model below. This particular model stores all the information about a user's attempt at singing an interval in the interval training exercise.
+		\begin{verbatim}
+		class IntervalScore(models.Model):
+   			interval = models.ForeignKey(Interval) 
+    		timestamp = models.DateTimeField(auto_now_add=True)
+    		score = models.FloatField();
+		    user = models.PositiveIntegerField();
+		    def __str__(self):
+        		return " Score: " + str(self.score) + " for" + self.interval.name + " with user id: " + str(self.user)
+
+		\end{verbatim}
+		The interval field represents the interval that the user has attempted, the timestamp tells us when it was attempted, and the score field tells us the calculated score for that attempt (it will be explained how this metric is derived in "Measuring user ability")
+		
+\section{Pitch Detection}
+\par Pitch detection is an important part of the exercises, and as such, robust pitch detection has been an important feature in the development of this program. 
+\par Most existing pitch detection algorithms are based on real-time applications, i.e. where audio captured from a microphone is analysed and the pitch is displayed as a constantly updating function of the audio signal. This is useful for applications like guitar tuning, where you need near instant feedback, and you can be sure that the pitch you are inputting is fairly constant. 
+\par With analysis of pitch in the human voice however, the problem is that even with well trained singers, the pitch of a note can vary quite considerable over a 2 second period, due to vibrato\footnote{Vibrato is the musical technique of intentionally oscillating the pitch of the note around a fixed point.}, or other causes that can be hard to pick up just by listening to yourself, so it is not always trivial to determine one pitch to summarise a sample of a single held note, and indeed, often not appropriate to do so if the singer cannot even stay on the same note for that short period of time, and wobbles around the note inconsistently.
+\par It is with this in mind that I have developed a Segmented Pitch Detection Algorithm, that can accurately determine the pitch of a 2-3 second sample of singing.
+
+\subsection{Segmented Pitch Detection Algorithm}
+The principle of the Segmented Pitch Detection Algorithm is relatively simple: A given audio sample is split into several segments, pitch detection is run on each segment, and then the segments are analysed to calculate pitch.
+
+
+
+
+
+\subsubsection{Choosing a segment size}
+\par Most PC microphones sample audio at either 44,100Hz or 48,000Hz, as these ensure that the full 20KHz spectrum of human hearing can be recorded due to the Nyquist–Shannon sampling theorem (see Background section 2.5). For the sake of simplicity we will assume a sample rate of 48,000Hz for this report, though the program can handle either rate.
+\par The human vocal range defined in section 2.4.2 was E2 - C6, which corresponds to a frequency range of ~80-1000hz\cite{scientificPitchTable}. To calculate the number of samples at either end of the range: 
+ 		 \[48000\div 96 = 600 \text{ samples}\] 
+		 \[48000\div 1000 = 48 \text{ samples}\]
+		
+In order for our autocorrelation algorithm to work, it is  necessary to take a segment size at least twice that of the lowest frequency we wish to sample.
+This is because in autocorrelation, we must compare the signal with an offset version of itself, and this score is maximal with an offset equal to the period of the signal. Therefore, in our example, if we use anything less than a 1200 sample size and are trying to detect a 96Hz signal, we won't even be able to autocorrelate on a full period. [DIAGRAM illustrating how you only compare half a period of you use a 900 sample segment] I have therefore decided to use 1200 as the segment size. Increasing this number results in a higher quality analysis per segment, but the trade-off is that segments per second decreases, meaning you are sacrificing granularity of change of pitch over time. [DIAGRAM of debug freqs graph at differing window sizes.
+		
+\section{Measuring user ability}
+Discussion of the measuring of user ability for the various different exercises.
+\section{Adapting to user ability}
+Discussion of the adaptive element of the program for different exercises.
+\section{Exercises}
+

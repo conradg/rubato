@@ -27,6 +27,27 @@
 	\section{Existing Musicality Tutors}
 	
 	There are a wide variety of existing web-based applications that teach musicality, to varying degrees. There are programs to allow you to practice interval recognition\cite{intervalEarTrainer}, identify a note in a chord, practice recognition of rhythms\cite{rhythmTrainer}. A lot of these programs are standalone, and focussed on one specific area. Musictheory.net\cite{musicTheorynet} is a good example of a website that that goes beyond that, it provides exercises that test a wide variety of skills, trains your ear as well as providing music theory lessons. However Musictheory.net provides no adaption to the user, the furthest it goes is allowing you to specify what you want to be taught, but it is not intelligent enough to work it out itself.
+	\section{Music Theory}
+	In order to understand some of the workings of the program it will be necessary to delve briefly into a little music theory. We will examine the fundamentals of Western music theory, as well as theory of pitch. From here on we shall talk exclusively in terms of Western music theory, as it is the theory that the overwhelming majority of contemporary Western music is based upon.
+	\subsection{Pitch}
+	The fundamental quality of a note played on the piano, plucked on the guitar, or sung by the voice is it's pitch. The other defining quality of a note is it's timbre/tone i.e. whether it sounds harsh or mellow, buzzy or clean, but this is a quality that is very hard to quantify, and also not as important to the overall melody of a piece of music - The same melody played on a guitar and a piano can certainly be considered to be the same piece of music, despite the differing tones of the instruments, but if you change the pitch of any notes, it becomes a different melody entirely. So of an individual note in a melody, we can say that it's pitch is it's defining characteristic.
+	
+	What do we mean by pitch? Scientifically, the pitch value of an audio signal is determined by that signal's fundamental frequency, where a higher frequency is a higher pitch, and a lower frequency a low pitch, however in terms of human perception, it is not as concrete as this, as there are various different psychoacoustic phenomena that determine how "high" or "low" a given note sounds. For example, a sinusoidal tone played at the same frequency at a low volume followed by a high volume will appear to be playing 2 different pitches, with the louder tone sounding lower in pitch. However, sinusoidal tones are much simpler than the rich complex tones of a musical instrument, which due to being made of many different frequencies can provide the listener with more cues as to the pitch they are at, so for the purposes of this project we will define pitch as it is defined in most musical contexts, as a logarithmic function of frequency.
+	
+	The A above middle C on a piano (A4 in scientific notation) is defined as being 440Hz, and this gives the basis for all other pitches to be defined.
+	
+	Some instruments like pianos and guitars have predetermined pitches that the instrumentalist can produce. Others, like the violin or human voice, can create any pitch within a given spectrum in a continuous fashion. This presents a challenge to musician's both new and old 
+	
+	...to be completed
+	
+	\subsection{Human vocal range}
+	Male and female voices can generally be split into 4 types which are determined by their singing range. They are:
+	\begin{itemize}
+		\item Bass: E2-E4
+		\item Tenor: C3-C5
+		\item Alto: F3-F5
+		\item Soprano: C4-C6
+	\end{itemize}
 	\section{Pitch Detection}
 	\par
 	Pitch detection is a well understood problem that has been researched for many years. The pitch of a note, as described above, is the human perception of how high or low it is. The pitch value of a sound signal is determined by the fundamental frequency, \f0 of the signal, and thus the problem of pitch detection of a signal is analogous to finding that signal's fundamental frequency. 
@@ -41,6 +62,11 @@
 	\par
 	
 	
+	
+	
+	
+
+	
 	\subsection{Fundamental Frequency Detection Methods}
 	
 	\f0 detection is a difficult process, and there is no \bsq{best method} so to speak, each approach has its drawbacks and advantages, the normal tradeoff being that a method that is fast may not be reliable and vice versa.
@@ -52,4 +78,7 @@
 	\end{figure}
 		\subsubsection{Autocorrelation}
 		A standard method of time-domain \f0 detection is autocorrelation. It exploits the fact that a periodic or quasiperiodic waveform such as a sustained sung note will be self-similar by the definition of periodicity. If we compare a waveform with a copy of that waveform offset by the period of the waveform i.e. \(\f0 ^{-1}\) then we should expect to see a strong correlation between them. So autocorrelation works by iterating over all the possible offset values, and determining which one has the best correlation. This correlation value for each different offset is described by the equation below, where x is the signal function, N is the window size of the waveform you are considering, and v is the offset value.  \[R_x(v) = \sum_{n=0}^{N-1-v} x[n]x[n+v]\]
+		\subsubsection{Limitations}
+		One fundamental limitation of Autocorrelation is that octave errors are frequently encountered. This occurs when the offset is calculated to be double what it should be, and is prone to happening as the nature of a periodic wave is such that if you shift it along twice the offset then you will also end up with a valid offset.
 	
+\section{Audio processing}

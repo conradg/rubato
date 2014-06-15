@@ -5,13 +5,29 @@
 \BOOKMARK [2][-]{subsection.2.1.1}{Adaptive learning in music}{section.2.1}% 5
 \BOOKMARK [1][-]{section.2.2}{Platform choice}{chapter.2}% 6
 \BOOKMARK [1][-]{section.2.3}{Existing Musicality Tutors}{chapter.2}% 7
-\BOOKMARK [1][-]{section.2.4}{Pitch Detection}{chapter.2}% 8
-\BOOKMARK [2][-]{subsection.2.4.1}{Fundamental Frequency Detection Methods}{section.2.4}% 9
-\BOOKMARK [0][-]{chapter.3}{Evaluation}{}% 10
-\BOOKMARK [1][-]{section.3.1}{Adaptivity}{chapter.3}% 11
-\BOOKMARK [1][-]{section.3.2}{Intuitiveness}{chapter.3}% 12
-\BOOKMARK [1][-]{section.3.3}{User Engagement}{chapter.3}% 13
-\BOOKMARK [1][-]{section.3.4}{Teaching Profficiency}{chapter.3}% 14
-\BOOKMARK [1][-]{section.3.5}{Pitch Detection}{chapter.3}% 15
-\BOOKMARK [0][-]{chapter.4}{Plan}{}% 16
-\BOOKMARK [1][-]{section.4.1}{Extensions}{chapter.4}% 17
+\BOOKMARK [1][-]{section.2.4}{Music Theory}{chapter.2}% 8
+\BOOKMARK [2][-]{subsection.2.4.1}{Pitch}{section.2.4}% 9
+\BOOKMARK [2][-]{subsection.2.4.2}{Human vocal range}{section.2.4}% 10
+\BOOKMARK [1][-]{section.2.5}{Pitch Detection}{chapter.2}% 11
+\BOOKMARK [2][-]{subsection.2.5.1}{Fundamental Frequency Detection Methods}{section.2.5}% 12
+\BOOKMARK [1][-]{section.2.6}{Audio processing}{chapter.2}% 13
+\BOOKMARK [0][-]{chapter.3}{Implementation}{}% 14
+\BOOKMARK [1][-]{section.3.1}{Web Application}{chapter.3}% 15
+\BOOKMARK [2][-]{subsection.3.1.1}{Application flow}{section.3.1}% 16
+\BOOKMARK [1][-]{section.3.2}{Pitch Detection}{chapter.3}% 17
+\BOOKMARK [2][-]{subsection.3.2.1}{Segmented Pitch Detection Algorithm}{section.3.2}% 18
+\BOOKMARK [1][-]{section.3.3}{Measuring user ability}{chapter.3}% 19
+\BOOKMARK [1][-]{section.3.4}{Adapting to user ability}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.5}{Exercises}{chapter.3}% 21
+\BOOKMARK [0][-]{chapter.4}{Development Tools}{}% 22
+\BOOKMARK [1][-]{section.4.1}{AudioContext Web API}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.2}{MIDIjs}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.3}{RecorderJS}{chapter.4}% 25
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 26
+\BOOKMARK [1][-]{section.5.1}{Adaptivity}{chapter.5}% 27
+\BOOKMARK [1][-]{section.5.2}{Intuitiveness}{chapter.5}% 28
+\BOOKMARK [1][-]{section.5.3}{User Engagement}{chapter.5}% 29
+\BOOKMARK [1][-]{section.5.4}{Teaching Proficiency}{chapter.5}% 30
+\BOOKMARK [1][-]{section.5.5}{Pitch Detection}{chapter.5}% 31
+\BOOKMARK [0][-]{chapter.6}{Plan}{}% 32
+\BOOKMARK [1][-]{section.6.1}{Extensions}{chapter.6}% 33

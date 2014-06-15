@@ -1,6 +1,8 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: report.aux
 A level-1 auxiliary file: ./introduction.aux
 A level-1 auxiliary file: ./background.aux
+A level-1 auxiliary file: ./implementation.aux
+A level-1 auxiliary file: ./development.aux
 A level-1 auxiliary file: ./evaluation.aux
 A level-1 auxiliary file: ./plan.aux
 The style file: ieeetr.bst
@@ -20,9 +22,13 @@ I was expecting a `,' or a `}'---line 66 of file master.bib
  : @misc{intervalEarTrainer,
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Illegal end of database file---line 70 of file master.bib
+I was expecting a `,' or a `}'---line 71 of file master.bib
  : 
- : 
+ : @misc{scientificPitchTable,
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-(There were 4 error messages)
+Illegal end of database file---line 74 of file master.bib
+ : }
+ :  
+I'm skipping whatever remains of this entry
+(There were 5 error messages)

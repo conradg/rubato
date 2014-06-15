@@ -1,18 +1,39 @@
-\contentsline {chapter}{\numberline {1}Introduction}{2}{chapter.1}
-\contentsline {section}{\numberline {1.1}Objectives}{3}{section.1.1}
-\contentsline {chapter}{\numberline {2}Background}{4}{chapter.2}
-\contentsline {section}{\numberline {2.1}Adaptive learning}{4}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Adaptive learning in music}{5}{subsection.2.1.1}
-\contentsline {section}{\numberline {2.2}Platform choice}{5}{section.2.2}
-\contentsline {section}{\numberline {2.3}Existing Musicality Tutors}{5}{section.2.3}
-\contentsline {section}{\numberline {2.4}Pitch Detection}{6}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Fundamental Frequency Detection Methods}{6}{subsection.2.4.1}
-\contentsline {subsubsection}{Autocorrelation}{6}{section*.3}
-\contentsline {chapter}{\numberline {3}Evaluation}{8}{chapter.3}
-\contentsline {section}{\numberline {3.1}Adaptivity}{8}{section.3.1}
-\contentsline {section}{\numberline {3.2}Intuitiveness}{8}{section.3.2}
-\contentsline {section}{\numberline {3.3}User Engagement}{8}{section.3.3}
-\contentsline {section}{\numberline {3.4}Teaching Profficiency}{9}{section.3.4}
-\contentsline {section}{\numberline {3.5}Pitch Detection}{9}{section.3.5}
-\contentsline {chapter}{\numberline {4}Plan}{10}{chapter.4}
-\contentsline {section}{\numberline {4.1}Extensions}{10}{section.4.1}
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}
+\contentsline {section}{\numberline {1.1}Objectives}{4}{section.1.1}
+\contentsline {chapter}{\numberline {2}Background}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Adaptive learning}{5}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Adaptive learning in music}{6}{subsection.2.1.1}
+\contentsline {section}{\numberline {2.2}Platform choice}{6}{section.2.2}
+\contentsline {section}{\numberline {2.3}Existing Musicality Tutors}{6}{section.2.3}
+\contentsline {section}{\numberline {2.4}Music Theory}{7}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Pitch}{7}{subsection.2.4.1}
+\contentsline {subsection}{\numberline {2.4.2}Human vocal range}{8}{subsection.2.4.2}
+\contentsline {section}{\numberline {2.5}Pitch Detection}{8}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Fundamental Frequency Detection Methods}{8}{subsection.2.5.1}
+\contentsline {subsubsection}{Autocorrelation}{9}{section*.3}
+\contentsline {subsubsection}{Limitations}{9}{section*.4}
+\contentsline {section}{\numberline {2.6}Audio processing}{9}{section.2.6}
+\contentsline {chapter}{\numberline {3}Implementation}{10}{chapter.3}
+\contentsline {section}{\numberline {3.1}Web Application}{10}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Application flow}{10}{subsection.3.1.1}
+\contentsline {subsubsection}{Django web framework}{10}{section*.5}
+\contentsline {paragraph}{Views}{10}{section*.6}
+\contentsline {paragraph}{Models}{10}{section*.7}
+\contentsline {section}{\numberline {3.2}Pitch Detection}{11}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Segmented Pitch Detection Algorithm}{11}{subsection.3.2.1}
+\contentsline {subsubsection}{Choosing a segment size}{11}{section*.8}
+\contentsline {section}{\numberline {3.3}Measuring user ability}{12}{section.3.3}
+\contentsline {section}{\numberline {3.4}Adapting to user ability}{12}{section.3.4}
+\contentsline {section}{\numberline {3.5}Exercises}{12}{section.3.5}
+\contentsline {chapter}{\numberline {4}Development Tools}{13}{chapter.4}
+\contentsline {section}{\numberline {4.1}AudioContext Web API}{13}{section.4.1}
+\contentsline {section}{\numberline {4.2}MIDIjs}{13}{section.4.2}
+\contentsline {section}{\numberline {4.3}RecorderJS}{13}{section.4.3}
+\contentsline {chapter}{\numberline {5}Evaluation}{14}{chapter.5}
+\contentsline {section}{\numberline {5.1}Adaptivity}{14}{section.5.1}
+\contentsline {section}{\numberline {5.2}Intuitiveness}{14}{section.5.2}
+\contentsline {section}{\numberline {5.3}User Engagement}{14}{section.5.3}
+\contentsline {section}{\numberline {5.4}Teaching Proficiency}{15}{section.5.4}
+\contentsline {section}{\numberline {5.5}Pitch Detection}{15}{section.5.5}
+\contentsline {chapter}{\numberline {6}Plan}{16}{chapter.6}
+\contentsline {section}{\numberline {6.1}Extensions}{16}{section.6.1}

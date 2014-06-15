@@ -22,6 +22,6 @@ urlpatterns = patterns('',
     url(r'^interval/get_interval', 'intervals.views.getInterval'),
 
 
-    url(r'^webcam/$', 'webcam.views.webcam'),
+
 
 )

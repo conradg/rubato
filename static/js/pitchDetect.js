@@ -7,13 +7,19 @@ var audio;
 var context = new webkitAudioContext();
 var buffer; // the current audio buffer we're analysing
 var freqs;
+var center;
+var range = 2;
+
+var auto_correl_count = 0;
 
 var debug_notes;
 var debug_good_regions;
 var amps;
 var max_amp;
-
+var multiplier;
+var amp_threshold = 0.1; //maybe determine this through calibration?
 var recording = false;
+var segment_size = 1200;
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -23,8 +29,13 @@ var start_pitch;
 var target_pitch;
 var num_windows;
 var curr_window;
-var debug = false;
-var log_view = false;
+var debug = true;
+var log_view = true;
+
+var male_range_s = ["G1","F4"];
+var female_range_s =  ["G3","F5"];
+var male_range_m = [pitchSciToMIDI(male_range_s[0]),pitchSciToMIDI(male_range_s[1])];
+var female_range_m = [pitchSciToMIDI(female_range_s[0]),pitchSciToMIDI(female_range_s[1])];
 
 var interval = 0; //the size of the interval in semitones, negative indicates downwards interval
 var max_correlation = 0;
@@ -32,31 +43,31 @@ var ACF = []; //store the current autocorrelationfunction
 var ACFs = []; //store the autocorrelation functions for the active buffer
 
 var T1_Bb2 = "/static/assets/test_pitches/male/normal_set_1/Bb2.wav"
-var T1_C3 = "/static/assets/test_pitches/male/normal_set_1/C3.wav"
-var T1_D3 = "/static/assets/test_pitches/male/normal_set_1/D3.wav"
-var T1_E3 = "/static/assets/test_pitches/male/normal_set_1/E3.wav"
-var T1_F3 = "/static/assets/test_pitches/male/normal_set_1/F3.wav"
-var T1_G3 = "/static/assets/test_pitches/male/normal_set_1/G3.wav"
-var T1_A3 = "/static/assets/test_pitches/male/normal_set_1/A3.wav"
-var T1_B3 = "/static/assets/test_pitches/male/normal_set_1/B3.wav"
-var T1_C4 = "/static/assets/test_pitches/male/normal_set_1/C4.wav"
-var T1_D4 = "/static/assets/test_pitches/male/normal_set_1/D4.wav"
-var T1_E4 = "/static/assets/test_pitches/male/normal_set_1/E4.wav"
-var T1_F4 = "/static/assets/test_pitches/male/normal_set_1/F4.wav"
+var T1_C3  = "/static/assets/test_pitches/male/normal_set_1/C3.wav"
+var T1_D3  = "/static/assets/test_pitches/male/normal_set_1/D3.wav"
+var T1_E3  = "/static/assets/test_pitches/male/normal_set_1/E3.wav"
+var T1_F3  = "/static/assets/test_pitches/male/normal_set_1/F3.wav"
+var T1_G3  = "/static/assets/test_pitches/male/normal_set_1/G3.wav"
+var T1_A3  = "/static/assets/test_pitches/male/normal_set_1/A3.wav"
+var T1_B3  = "/static/assets/test_pitches/male/normal_set_1/B3.wav"
+var T1_C4  = "/static/assets/test_pitches/male/normal_set_1/C4.wav"
+var T1_D4  = "/static/assets/test_pitches/male/normal_set_1/D4.wav"
+var T1_E4  = "/static/assets/test_pitches/male/normal_set_1/E4.wav"
+var T1_F4  = "/static/assets/test_pitches/male/normal_set_1/F4.wav"
 
-var T2_C3 = "/static/assets/test_pitches/male/normal_set_2/C3.wav"
+var T2_C3  = "/static/assets/test_pitches/male/normal_set_2/C3.wav"
 var T2_Cs3 = "/static/assets/test_pitches/male/normal_set_2/Cs3.wav"
-var T2_D3 = "/static/assets/test_pitches/male/normal_set_2/D3.wav"
+var T2_D3  = "/static/assets/test_pitches/male/normal_set_2/D3.wav"
 var T2_Eb3 = "/static/assets/test_pitches/male/normal_set_2/Eb3.wav"
-var T2_E3 = "/static/assets/test_pitches/male/normal_set_2/E3.wav"
-var T2_F3 = "/static/assets/test_pitches/male/normal_set_2/F3.wav"
+var T2_E3  = "/static/assets/test_pitches/male/normal_set_2/E3.wav"
+var T2_F3  = "/static/assets/test_pitches/male/normal_set_2/F3.wav"
 var T2_Fs3 = "/static/assets/test_pitches/male/normal_set_2/Fs3.wav"
-var T2_G3 = "/static/assets/test_pitches/male/normal_set_2/G3.wav"
+var T2_G3  = "/static/assets/test_pitches/male/normal_set_2/G3.wav"
 var T2_Ab3 = "/static/assets/test_pitches/male/normal_set_2/Ab3.wav"
-var T2_A3 = "/static/assets/test_pitches/male/normal_set_2/A3.wav"
+var T2_A3  = "/static/assets/test_pitches/male/normal_set_2/A3.wav"
 var T2_Bb3 = "/static/assets/test_pitches/male/normal_set_2/Bb3.wav"
-var T2_B3 = "/static/assets/test_pitches/male/normal_set_2/B3.wav"
-var T2_C4 = "/static/assets/test_pitches/male/normal_set_2/C4.wav"
+var T2_B3  = "/static/assets/test_pitches/male/normal_set_2/B3.wav"
+var T2_C4  = "/static/assets/test_pitches/male/normal_set_2/C4.wav"
 
 var TW_E3 = "/static/assets/test_pitches/male/wobbly/E3.wav"
 var TW_G3 = "/static/assets/test_pitches/male/wobbly/G3.wav"
@@ -64,21 +75,50 @@ var TW_G3_2 = "/static/assets/test_pitches/male/wobbly/G3_2.wav"
 var TW_E3_vib = "/static/assets/test_pitches/male/wobbly/E3_vib.wav"
 var TW_G3_vib = "/static/assets/test_pitches/male/wobbly/G3_vib.wav"
 
+var DN1_G2  =  "/static/assets/test_pitches/male/david/normal_1/G2.wav"
+var DN1_A2  =  "/static/assets/test_pitches/male/david/normal_1/A2.wav"
+var DN1_B2  =  "/static/assets/test_pitches/male/david/normal_1/B2.wav"
+var DN1_C3  =  "/static/assets/test_pitches/male/david/normal_1/C3.wav"
+var DN1_D3  =  "/static/assets/test_pitches/male/david/normal_1/D3.wav"
+var DN1_E3  =  "/static/assets/test_pitches/male/david/normal_1/E3.wav"
+var DN1_Fs3 =  "/static/assets/test_pitches/male/david/normal_1/Fs3.wav"
+var DN1_G3  =  "/static/assets/test_pitches/male/david/normal_1/G3.wav"
+
+var DV1_G2  =  "/static/assets/test_pitches/male/david/vibrato_1/G2.wav"
+var DV1_A2  =  "/static/assets/test_pitches/male/david/vibrato_1/A2.wav"
+var DV1_B2  =  "/static/assets/test_pitches/male/david/vibrato_1/B2.wav"
+var DV1_C3  =  "/static/assets/test_pitches/male/david/vibrato_1/C3.wav"
+var DV1_D3  =  "/static/assets/test_pitches/male/david/vibrato_1/D3.wav"
+var DV1_E3  =  "/static/assets/test_pitches/male/david/vibrato_1/E3.wav"
+var DV1_Fs3 =  "/static/assets/test_pitches/male/david/vibrato_1/Fs3.wav"
+var DV1_G3  =  "/static/assets/test_pitches/male/david/vibrato_1/G3.wav"
+
+
+
+
 var TH_G4 = "/static/assets/test_pitches/male/high_set_1/G4.wav"
 
-var male_normal_set_1 = [T1_Bb2,T1_C3,T1_D3,T1_E3,T1_F3,T1_G3,T1_A3,T1_B3,T1_C4,T1_D4,T1_E4,T1_F4];
-var male_normal_set_2 = [T2_C3,T2_Cs3,T2_D3,T2_Eb3,T2_E3,T2_F3,T2_Fs3,T2_G3,T2_Ab3,T2_A3,T2_Bb3,T2_B3,T2_C4];
-var test_set_w = [TW_E3,TW_G3,TW_G3_2,TW_E3_vib,TW_G3_vib];
+var male_normal_1 = [T1_Bb2,T1_C3,T1_D3,T1_E3,T1_F3,T1_G3,T1_A3,T1_B3,T1_C4,T1_D4,T1_E4,T1_F4];
+var male_normal_2 = [T2_C3,T2_Cs3,T2_D3,T2_Eb3,T2_E3,T2_F3,T2_Fs3,T2_G3,T2_Ab3,T2_A3,T2_Bb3,T2_B3,T2_C4];
+var male_wobbly = [TW_E3,TW_G3,TW_G3_2,TW_E3_vib,TW_G3_vib];
+var david_normal_1 = [DN1_G2,DN1_A2,DN1_B2,DN1_C3,DN1_D3,DN1_E3,DN1_Fs3,DN1_G3];
+var david_vibrato_1 = [DV1_G2,DV1_A2,DV1_B2,DV1_C3,DV1_D3,DV1_E3,DV1_Fs3,DV1_G3];
 
-var normal = male_normal_set_1.concat(male_normal_set_2);
-var all = normal.concat(test_set_w);
 
-var testAudioURLs  = [TH_G4];
+var normal = male_normal_1.concat(male_normal_2);
+var david = david_normal_1.concat(david_vibrato_1);
+var all = normal.concat(male_wobbly, david);
+
+
+var testAudioURLs  = male_normal_1;
 
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
 
+multiplier = 0.25
+
+testPitchDetection();
 
 getInterval();
 
@@ -106,7 +146,6 @@ function testPitchDetection(){
 function testPitchDetection_h(i){
     pitchDetect(testAudioURLs[i], function(){
         actualValues[i] = [detected_pitch_s,detected_cents];
-        console.log(actualValues[i]);
         if (i == numURLs-1){
             var correct = 0;
             var results = "";
@@ -120,7 +159,6 @@ function testPitchDetection_h(i){
             }
             console.log("Percentage correct: " + correct*100/numURLs + "%");
             console.log(results);
-            return;
         } else {
             testPitchDetection_h(i+1);
         }
@@ -272,12 +310,12 @@ function pitchDetect(url, callback){
 function getPitch(buf){
     var audioData = buf.getChannelData(0);
     var sampleRate = buf.sampleRate;
-    var notes = [];
+
+    num_windows = Math.floor(audioData.length/segment_size);
 
     amps = new Array(num_windows);
     freqs = new Array(num_windows)
 
-    num_windows = Math.floor(audioData.length/1000);
 
     if (debug){
         max_correlation = 0;
@@ -286,16 +324,20 @@ function getPitch(buf){
         debug_good_regions = new Array(num_windows);
     }
 
-    var window;
+    var audio_window;
 
-    //run autocorrelation over each window
+    //run autocorrelation over each audio_window
     for (var i=0; i<num_windows; i++){
 
-        window = audioData.subarray(i*1000,(i+1)*1000);
-        var freq = autoCorrelate(window,sampleRate);
+        audio_window = audioData.subarray(i*segment_size,(i+1)*segment_size);
+        var freq = autoCorrelate(audio_window,sampleRate);
         freqs[i] = freq;
-        amps[i] = arrayMax(window);
 
+        var abs_window = [];
+        for (var sample in audio_window){
+            abs_window.push(Math.abs(audio_window[sample]));
+        }
+        amps[i] = Math.sqrt(arrayAverage(abs_window));
 
         if (debug){
             curr_window = i;
@@ -303,12 +345,12 @@ function getPitch(buf){
         }
 
         var note = freqToPitch_s_cents(freq);
-        notes[i] = note;
         if (debug) debug_notes[i] = note;
     }
     max_amp = arrayMax(amps);
+    amp_threshold = max_amp*multiplier;
     try{
-        if (max_amp < 0.1){
+        if (max_amp < 0.01){
             throw "Too quiet! Please try again with gusto"
         }
     } catch (err){
@@ -318,25 +360,39 @@ function getPitch(buf){
 
     //isolate good regions//
 
+    // put well recorded/detected regions into blocks and add them to a variable good_blocks.
+    // a good region is defined to be one who's standard deviation is less than the average of the block
+    //
+
+    freqs = medianFilter(freqs,3);
+
     var slice_size = 5;
     var std_dev_threshold = 0;
-    var good_regions = [];
 
-    var in_region = false;
+    var block = new Block(0,0,[]); //the current audio_window freq values in the pitch detection
+    var good_blocks = []; // all blocks in the sample.
+    var in_region = false; //are we in a good region at the moment
+    var last_pushed_index = 0;
     for (var i=0; i<num_windows-slice_size; i++){
         var slice = freqs.slice(i, i+slice_size);
         var average = arrayAverage(slice);
-        std_dev_threshold = Math.max(average/80,1);
+        std_dev_threshold = Math.max(average/60,1);
         var std_dev = stdDev(slice);
         var in_threshold = std_dev<std_dev_threshold;
         if (in_threshold){
-            if (!in_region){
+            if (!in_region){ //if we weren't in a region, then enter a new one
                 var avg_slice_freq = arrayAverage(slice);
                 if (reasonablePitch((avg_slice_freq), true) && reasonableVolume(amps[i])){
                     in_region = true;
+                    var block = new Block(Math.max(last_pushed_index+1,i),0,[]);
                     for (var j=0; j<slice_size-1; j++){
                         var index = i + j;
-                        good_regions.push(freqs[index])
+                        if (index <= last_pushed_index){ //make sure we're not overlapping with old block
+                            continue;
+                        }
+
+                        block.data.push(freqs[index]);
+                        last_pushed_index = index;
                         if (debug) debug_good_regions[index] = freqs[index];
                     }
                 } else {
@@ -345,15 +401,31 @@ function getPitch(buf){
             }
             if (in_region){
                 index = i + slice_size - 1;
-                good_regions.push(freqs[index])
+                if (index <= last_pushed_index){
+                    continue;
+                }
+                block.data.push(freqs[index])
+                last_pushed_index = index;
                 if (debug) debug_good_regions[index] = freqs[index];
             }
-        } else {
-            in_region = false;
+        } else { //Leave good region, push the block to the good blocks. start a new block
+            if (in_region){
+                 in_region = false;
+                 block.end = last_pushed_index;
+                 good_blocks.push(block);
+            } else { // otherwise we're still just in junk.
+                continue
+            }
         }
     }
+    contiguous_regions = mergeBlocks(good_blocks);
+    var arrayAverages = new Array(contiguous_regions.length);
+    for (var i = 0; i < contiguous_regions.length; i++){
+        arrayAverages[i] = arrayAverage(contiguous_regions[i].data);
+    }
 
-    detected_frequency = arrayAverage(good_regions);
+    detected_frequency = arrayAverage(arrayAverages);
+    center = detected_frequency;
     var detected_pitch_s_cents = freqToPitch_s_cents(detected_frequency);
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
@@ -364,9 +436,9 @@ function getPitch(buf){
 //returns the frequency of a 1000 sample long window.
 function autoCorrelate(buf, sampleRate){
 
-    var MIN_SAMPLES = 40;	// corresponds to an 1.2kHz signal
-    var MAX_SAMPLES = 500; // corresponds to a 96Hz signal
-    var SIZE = 1000;
+    var MIN_SAMPLES = 48;	// corresponds to an 1.2kHz signal i.e.
+    var MAX_SAMPLES = 600; // corresponds to a ~70hz signal i.e. C#2
+    var SIZE = segment_size;
     var best_offset = -1;
     var best_correlation = 0;
     ACF = new Array(MAX_SAMPLES-MIN_SAMPLES+1) // store the autocorrelation function.
@@ -392,6 +464,7 @@ function autoCorrelate(buf, sampleRate){
             max_correlation = correlation;
         }
     }
+    auto_correl_count++;
     return sampleRate/best_offset;
 }
 
@@ -421,28 +494,40 @@ function pitchSciToMIDI(sci){
     switch(letter){
         case "C":
             pitch = 0;
+            break;
         case "C#" || "Db":
             pitch = 1;
+            break;
         case "D":
             pitch = 2;
+            break;
         case "D#" || "Eb":
             pitch = 3;
+            break;
         case "E":
             pitch = 4;
+            break;
         case "F":
             pitch = 5;
+            break;
         case "F#" || "Gb":
             pitch = 6;
+            break;
         case "G":
             pitch = 7;
+            break;
         case "G#" || "Ab":
             pitch = 8;
+            break;
         case "A":
             pitch = 9;
+            break;
         case "A#" || "Bb":
             pitch = 10;
+            break;
         case "B":
             pitch = 11;
+            break;
     }
 
     return (octave+1)*12 + pitch;
@@ -480,11 +565,11 @@ function pitch12ToSci(pitch){
 }
 
 function reasonableRange(pitch){
-    var gender = $("#gender").text() || "male";
+    var gender =  "male";
     if (gender == "male"){
-        return pitch>=44 && pitch<=69;
+        return pitch>=male_range_m[0] && pitch<=male_range_m[1];
     } else {
-        return pitch>=57 && pitch<=69;
+        return pitch>=female_range_m[1] && pitch<=female_range_m[1];
     }
 }
 function reasonablePitch(pitch, is_freq){
@@ -494,33 +579,40 @@ function reasonablePitch(pitch, is_freq){
 }
 
 function reasonableVolume(amp){
-    return amp>max_amp*0.1;
+    return amp>amp_threshold;
 }
 function updateCorrelation() {
 
     var canvas = $("#correlation_canvas")[0];
+
+    canvas.height = canvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
+
     var analyserContext = canvas.getContext('2d');
 
     var BAR_WIDTH = 1;
     var numBars = ACF.length;
+    var mid = canvasHeight/2;
 
     analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
     // Draw ACF.
     for (var i = 0; i < numBars; ++i) {
-        var multiplier = -1;
+        var multiplier = -1*mid/max_correlation;
         var magnitude = ACF[i]*multiplier;
         analyserContext.fillStyle = "#00FF00"
-        analyserContext.fillRect(i, canvasHeight/2, BAR_WIDTH, magnitude);
+        analyserContext.fillRect(i*BAR_WIDTH, mid, BAR_WIDTH, magnitude);
     }
+
 
     // Draw estimated fundamental frequency
     var freq = freqs[curr_window];
     var lag = Math.floor(48000/freq);
     analyserContext.fillStyle = "#FF0000";
-    analyserContext.fillRect(lag-40, 0, 1, canvasHeight);
+    analyserContext.fillRect(lag-48, 0, 1, canvasHeight);
 
 
     var window_pitch = freqToPitch_s_cents(freqs[curr_window]);
@@ -530,14 +622,16 @@ function updateCorrelation() {
 
 function updateFrequency(){
     var canvas = $("#frequency_canvas")[0];
-    var BAR_WIDTH = 4;
 
-    canvas.width = num_windows*BAR_WIDTH;
+    var BAR_WIDTH = Math.floor(canvas.clientWidth/num_windows);
+
+    canvas.height = canvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
     var analyserContext = canvas.getContext('2d');
 
-    var BAR_WIDTH = 4;
 
     analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -549,18 +643,18 @@ function updateFrequency(){
     for (var i = 0; i < num_windows; i++) {
 
         var mid = canvasHeight/2;
-        var range = 1.2;
 
         function freqToBar(freq, log_view){
             if (log_view){
-                var x = mid/Math.log(range);
-                var y = mid*Math.log(detected_frequency/range)/Math.log(range);
+                var m =  mid/Math.log(range)
+                var c = mid*(1-Math.log(center)/Math.log(range))
             }
             else {
-                var x = 70;
-                var y = 280;
+                var m = 70;
+                var c = 280;
             }
-            return  y - x * Math.log(freq);
+            return  m * Math.log(freq) + c;
+
         }
 
         var magnitude = freqToBar(freqs[i], log_view)
@@ -570,27 +664,30 @@ function updateFrequency(){
         } else {
             analyserContext.fillStyle = "#FF0000"
         }
-        analyserContext.fillRect(i*BAR_WIDTH, canvasHeight, BAR_WIDTH, magnitude);
+        analyserContext.fillRect(i*BAR_WIDTH, canvasHeight, BAR_WIDTH, -magnitude);
+
     }
 
     // Draw estimated fundamental frequency
 
+    var sciPitch = freqToPitch_s_cents(freq)
 
-
-    $("#frequency").text("frequency: " + Math.floor(freq*10)/10);
+    $("#frequency").text("frequency: " + Math.floor(freq*10)/10 + " pitch: " + sciPitch[0] +" " + sciPitch[1] + "cents" );
 
 }
 
 function updateAmplitude(){
     var canvas = $("#amplitude_canvas")[0];
-    var BAR_WIDTH = 4;
 
-    canvas.width = num_windows*BAR_WIDTH;
+    var BAR_WIDTH = Math.floor(canvas.clientWidth/num_windows);
+
+    canvas.height = canvas.clientHeight;
+    canvas.width = canvas.clientWidth;
+
     var canvasWidth = canvas.width;
     var canvasHeight = canvas.height;
     var analyserContext = canvas.getContext('2d');
 
-    var BAR_WIDTH = 4;
 
     analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -617,7 +714,7 @@ function updateAmplitude(){
 
 
 
-    $("#amplitude").text("amplitude: " + Math.floor(amp*1000)/1000);
+    $("#amplitude").text("amplitude: " + Math.floor(amp*100000)/100000);
 
 }
 
@@ -631,8 +728,16 @@ if (debug) {window.onkeydown = function(e) {
         curr_window = 0;
     } else if (key == 88){ //x key
         curr_window = Math.round(num_windows/2);
-    } else if (key == 67){ //x key
+    } else if (key == 67){ //c key
         curr_window = num_windows-1;
+    } else if (key == 87){ // w key
+        range = range + (range-1)*0.2;
+    } else if (key == 83){ // s key
+        range = range - (range-1)*0.2
+    } else if (key == 69){ // e
+        center -= 5*(range-1);
+    } else if (key == 68){ // d
+        center += 5*(range-1);
     } else {
         return
     }
@@ -646,7 +751,7 @@ function updateDisplays(){
     updateAmplitude();
 }
 function arrayAverage(array){
-    acc = 0;
+    var acc = 0;
     for (var x=0; x<array.length; x++){
         acc += array[x];
     }
@@ -655,8 +760,8 @@ function arrayAverage(array){
 }
 
 function stdDev(array){
-    average = arrayAverage(array);
-    sq_diff_acc = 0;
+    var average = arrayAverage(array);
+    var sq_diff_acc = 0;
     for (var i=0; i<array.length; i++){
         sq_diff_acc += Math.pow((array[i] - average),2);
     }
@@ -665,6 +770,71 @@ function stdDev(array){
 
 function arrayMax(numArray) {
     return Math.max.apply(null, numArray);
+}
+
+function Block(start, end, data){
+    this.start = start;
+    this.end = end;
+    this.data = data;
+}
+
+function mergeBlocks(blocks){
+    var merged_blocks = [blocks.pop()];
+    while (blocks.length>0){
+        var merged = merged_blocks.pop();
+        var block =  blocks.pop()
+        if (merged.start == block.end + 1){
+            var contiguous_block = new Block(block.start, merged.end, block.data.concat(merged.data));
+            merged_blocks.push(contiguous_block);
+        } else {
+            merged_blocks.push(merged);
+            merged_blocks.push(block);
+        }
+    }
+    return merged_blocks;
+}
+
+function medianFilter(signal,window_size){
+    if (!window_size%2){
+        console.log("error: median filter must have odd window_size")
+    }
+    var medians = new Array(signal.length);
+    for (var i = 0; i<signal.length; i++){
+        var mid = Math.floor(window_size/2);
+        var startIndex = i - mid;
+        var median_window = new Array(window_size);
+        for (var j = 0; j <window_size; j++){
+            if (startIndex + j < 0){
+                median_window[j] = signal[0]
+            } else if (startIndex + j >= signal.length){
+                median_window[j] = signal[signal.length];
+            } else{
+                median_window[j] = signal[startIndex + j];
+            }
+        }
+        var med = median(median_window);
+        if (median_window[mid] > Math.pow(med,1.03)){
+            medians[i] = (median_window[mid-1]+median_window[mid+1])/2;
+            signal[i] = medians[i];
+        } else {
+            medians[i] = signal[i];
+        }
+    }
+
+    return medians;
+}
+
+function median(values) {
+
+    var sorted = values.slice(0);
+    sorted.sort( function(a,b) {return a - b;} );
+
+    var half = Math.floor(sorted.length/2);
+
+    if(sorted.length % 2)
+        return sorted[half];
+    else
+        return (sorted[half-1] + sorted[half]) / 2.0;
 }
 
 function playNote(){

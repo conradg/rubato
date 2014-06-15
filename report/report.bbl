@@ -32,6 +32,7 @@ S.~Alexander, ``Teaching and learning on the world wide web,'' in {\em
 
 \bibitem{intervalEarTrainer}
 ``Interval ear trainer - recognise the interval between two notes..''
+  \url{http://www.8notes.com/school/theory/interval_ear_trainer.asp},.
 
 \bibitem{rhythmTrainer}
 ``The rhythm trainer - rhythm recognition and representation..''
@@ -40,5 +41,8 @@ S.~Alexander, ``Teaching and learning on the world wide web,'' in {\em
 \bibitem{musicTheorynet}
 ``musictheory.net, on online music theory tutor and ear trainer.''
   \url{http://www.musictheory.net/}.
+
+\bibitem{scientificPitchTable}
+``Table of note frequencies..''
 
 \end{thebibliography}

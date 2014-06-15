@@ -118,6 +118,9 @@ h2 {
 canvas{
     display:block;
     background-color: #4f4f4f;
+    width:100%;
+    height:200px;
+    margin:auto;
 }
 
 .canvas_display{
@@ -148,9 +151,9 @@ canvas{
     color: white;
 }
 
-.sidebar{
+#displays{
     display: inline-block;
-    width:50%;
+    width:100%;
 }
 
 
