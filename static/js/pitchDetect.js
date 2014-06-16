@@ -105,18 +105,18 @@ var david_normal_1 = [DN1_G2,DN1_A2,DN1_B2,DN1_C3,DN1_D3,DN1_E3,DN1_Fs3,DN1_G3];
 var david_vibrato_1 = [DV1_G2,DV1_A2,DV1_B2,DV1_C3,DV1_D3,DV1_E3,DV1_Fs3,DV1_G3];
 
 
-var normal = male_normal_1.concat(male_normal_2);
+var normal = male_normal_1.concat(male_normal_2,david_normal_1);
 var david = david_normal_1.concat(david_vibrato_1);
 var all = normal.concat(male_wobbly, david);
 
 
-var testAudioURLs  = male_normal_1;
+var testAudioURLs  = normal;
 
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
 
-multiplier = 0.25
+multiplier = 0.4
 
 testPitchDetection();
 
@@ -152,13 +152,15 @@ function testPitchDetection_h(i){
             for (var j = 0; j < numURLs; j++){
                 if (expectedValues[j] == actualValues[j][0]){
                     correct ++;
+                } else {
+                    results += "WRONG! ";
                 }
                 var pitch_s = actualValues[j][0];
                 var cents = actualValues[j][1];
                 results +="Expected: " + expectedValues[j] + " Got: " + pitch_s + " " + cents + " cents" + "\n";
             }
-            console.log("Percentage correct: " + correct*100/numURLs + "%");
             console.log(results);
+            console.log("Percentage correct: " + correct*100/numURLs + "% with " +  numURLs + " test cases");
         } else {
             testPitchDetection_h(i+1);
         }
@@ -237,8 +239,10 @@ function updatePitchDisplay(url){
 //calculates a score based on the value in the detected_pitch variable, the starting note, and the interval
 function calculateScore(){
     difference = Math.abs(detected_pitch_m-target_pitch)
-    var score = 1 - Math.pow((0.8*difference-0.2),2);
-    score = Math.min(Math.max(score,0),1);
+    perfect_score = 0.1
+    how_far_from_perfect = Math.max(difference-perfect_score,0);
+    var score = 1 - (how_far_from_perfect);
+    score = Math.max(score,0);
     console.log("score: " + score);
     return(score);
 }
@@ -350,7 +354,7 @@ function getPitch(buf){
     max_amp = arrayMax(amps);
     amp_threshold = max_amp*multiplier;
     try{
-        if (max_amp < 0.01){
+        if (max_amp < 0.1){
             throw "Too quiet! Please try again with gusto"
         }
     } catch (err){
@@ -376,7 +380,7 @@ function getPitch(buf){
     for (var i=0; i<num_windows-slice_size; i++){
         var slice = freqs.slice(i, i+slice_size);
         var average = arrayAverage(slice);
-        std_dev_threshold = Math.max(average/60,1);
+        std_dev_threshold = Math.max(average/30,1);
         var std_dev = stdDev(slice);
         var in_threshold = std_dev<std_dev_threshold;
         if (in_threshold){
@@ -410,15 +414,21 @@ function getPitch(buf){
             }
         } else { //Leave good region, push the block to the good blocks. start a new block
             if (in_region){
-                 in_region = false;
-                 block.end = last_pushed_index;
-                 good_blocks.push(block);
+                in_region = false;
+                block.end = last_pushed_index;
+                good_blocks.push(block);
+                block = null
             } else { // otherwise we're still just in junk.
                 continue
             }
         }
     }
-    contiguous_regions = mergeBlocks(good_blocks);
+    if (block) {
+        block.end=num_windows-1;
+        block.data.push(freqs[num_windows-1]);
+        good_blocks.push(block);
+    } //if we leave the loop while still building the block, then finish the block
+    var contiguous_regions = mergeBlocks(good_blocks);
     var arrayAverages = new Array(contiguous_regions.length);
     for (var i = 0; i < contiguous_regions.length; i++){
         arrayAverages[i] = arrayAverage(contiguous_regions[i].data);
@@ -623,7 +633,8 @@ function updateCorrelation() {
 function updateFrequency(){
     var canvas = $("#frequency_canvas")[0];
 
-    var BAR_WIDTH = Math.floor(canvas.clientWidth/num_windows);
+    var spacing = 2;
+    var BAR_WIDTH = Math.floor(canvas.clientWidth/num_windows) - spacing;
 
     canvas.height = canvas.clientHeight;
     canvas.width = canvas.clientWidth;
@@ -637,7 +648,7 @@ function updateFrequency(){
 
     var freq = freqs[curr_window];
     analyserContext.fillStyle = "rgba(255, 255, 255, 0.8 )";
-    analyserContext.fillRect(curr_window*BAR_WIDTH, 0, BAR_WIDTH, canvasHeight);
+    analyserContext.fillRect(curr_window*(BAR_WIDTH+spacing), 0, BAR_WIDTH, canvasHeight);
 
     // Draw Frequencies.
     for (var i = 0; i < num_windows; i++) {
@@ -664,7 +675,7 @@ function updateFrequency(){
         } else {
             analyserContext.fillStyle = "#FF0000"
         }
-        analyserContext.fillRect(i*BAR_WIDTH, canvasHeight, BAR_WIDTH, -magnitude);
+        analyserContext.fillRect(i*(BAR_WIDTH+spacing), canvasHeight, BAR_WIDTH, -magnitude);
 
     }
 
