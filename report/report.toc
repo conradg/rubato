@@ -1,49 +1,61 @@
 \contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}
-\contentsline {section}{\numberline {1.1}Objectives}{4}{section.1.1}
-\contentsline {chapter}{\numberline {2}Background}{5}{chapter.2}
-\contentsline {section}{\numberline {2.1}Adaptive learning}{5}{section.2.1}
-\contentsline {subsection}{\numberline {2.1.1}Adaptive learning in music}{6}{subsection.2.1.1}
-\contentsline {section}{\numberline {2.2}Platform choice}{6}{section.2.2}
-\contentsline {section}{\numberline {2.3}Existing Musicality Tutors}{6}{section.2.3}
-\contentsline {section}{\numberline {2.4}Music Theory}{7}{section.2.4}
-\contentsline {subsection}{\numberline {2.4.1}Pitch}{7}{subsection.2.4.1}
-\contentsline {subsubsection}{The Scale}{8}{section*.2}
-\contentsline {subsubsection}{Representing pitch}{8}{section*.4}
-\contentsline {subsubsection}{Tuning}{9}{section*.5}
-\contentsline {subsubsection}{Converting from frequency to pitch}{9}{section*.6}
-\contentsline {subsubsection}{Intervals}{9}{section*.7}
-\contentsline {subsubsection}{The importance of good intonation}{10}{section*.8}
-\contentsline {subsection}{\numberline {2.4.2}Human vocal range}{10}{subsection.2.4.2}
-\contentsline {section}{\numberline {2.5}Pitch Detection}{11}{section.2.5}
-\contentsline {subsection}{\numberline {2.5.1}Fundamental Frequency Detection Methods}{11}{subsection.2.5.1}
-\contentsline {subsubsection}{Autocorrelation}{12}{section*.11}
-\contentsline {subsubsection}{Limitations}{12}{section*.12}
-\contentsline {section}{\numberline {2.6}Audio processing}{12}{section.2.6}
-\contentsline {chapter}{\numberline {3}Implementation}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}Web Application}{13}{section.3.1}
-\contentsline {subsection}{\numberline {3.1.1}Application flow}{13}{subsection.3.1.1}
-\contentsline {subsubsection}{Django web framework}{13}{section*.13}
-\contentsline {paragraph}{Views}{13}{section*.14}
-\contentsline {paragraph}{Models}{13}{section*.15}
-\contentsline {section}{\numberline {3.2}Pitch Detection}{14}{section.3.2}
-\contentsline {subsection}{\numberline {3.2.1}Segmented Pitch Detection Algorithm}{14}{subsection.3.2.1}
-\contentsline {subsubsection}{Choosing a segment size}{14}{section*.17}
-\contentsline {subsubsection}{Median Filtering}{16}{section*.18}
-\contentsline {section}{\numberline {3.3}Measuring user ability}{16}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Interval training}{17}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Note from chord}{17}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Beat reproduction}{17}{subsection.3.3.3}
-\contentsline {section}{\numberline {3.4}Adapting to user ability}{17}{section.3.4}
-\contentsline {section}{\numberline {3.5}Exercises}{17}{section.3.5}
-\contentsline {chapter}{\numberline {4}Development Tools}{18}{chapter.4}
-\contentsline {section}{\numberline {4.1}AudioContext Web API}{18}{section.4.1}
-\contentsline {section}{\numberline {4.2}MIDIjs}{18}{section.4.2}
-\contentsline {section}{\numberline {4.3}RecorderJS}{18}{section.4.3}
-\contentsline {chapter}{\numberline {5}Evaluation}{19}{chapter.5}
-\contentsline {section}{\numberline {5.1}Adaptivity}{19}{section.5.1}
-\contentsline {section}{\numberline {5.2}Intuitiveness}{19}{section.5.2}
-\contentsline {section}{\numberline {5.3}User Engagement}{19}{section.5.3}
-\contentsline {section}{\numberline {5.4}Teaching Proficiency}{20}{section.5.4}
-\contentsline {section}{\numberline {5.5}Pitch Detection}{20}{section.5.5}
-\contentsline {chapter}{\numberline {6}Plan}{21}{chapter.6}
-\contentsline {section}{\numberline {6.1}Extensions}{21}{section.6.1}
+\contentsline {section}{\numberline {1.1}Adaptive learning}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Music teaching on the web}{4}{section.1.2}
+\contentsline {section}{\numberline {1.3}Pitch detection}{4}{section.1.3}
+\contentsline {section}{\numberline {1.4}Existing work}{5}{section.1.4}
+\contentsline {section}{\numberline {1.5}Objectives}{5}{section.1.5}
+\contentsline {chapter}{\numberline {2}Background}{6}{chapter.2}
+\contentsline {section}{\numberline {2.1}Adaptive learning}{6}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Adaptive learning in music}{7}{subsection.2.1.1}
+\contentsline {section}{\numberline {2.2}Platform choice}{7}{section.2.2}
+\contentsline {section}{\numberline {2.3}Existing Musicality Tutors}{8}{section.2.3}
+\contentsline {section}{\numberline {2.4}Music Theory}{8}{section.2.4}
+\contentsline {subsection}{\numberline {2.4.1}Pitch}{8}{subsection.2.4.1}
+\contentsline {subsubsection}{The Scale}{9}{section*.3}
+\contentsline {subsubsection}{Representing pitch}{10}{section*.5}
+\contentsline {subsubsection}{Tuning}{10}{section*.6}
+\contentsline {subsubsection}{Converting from frequency to pitch}{11}{section*.7}
+\contentsline {subsubsection}{Intervals}{11}{section*.8}
+\contentsline {subsubsection}{The importance of good intonation}{11}{section*.9}
+\contentsline {subsection}{\numberline {2.4.2}Human vocal range}{12}{subsection.2.4.2}
+\contentsline {section}{\numberline {2.5}Pitch Detection}{13}{section.2.5}
+\contentsline {subsection}{\numberline {2.5.1}Fundamental Frequency Detection Methods}{13}{subsection.2.5.1}
+\contentsline {subsubsection}{Zero crossings algorithm}{14}{section*.12}
+\contentsline {subsubsection}{Autocorrelation}{14}{section*.13}
+\contentsline {subsubsection}{Limitations}{14}{section*.15}
+\contentsline {section}{\numberline {2.6}Audio processing}{15}{section.2.6}
+\contentsline {chapter}{\numberline {3}Implementation}{16}{chapter.3}
+\contentsline {section}{\numberline {3.1}Web Application}{16}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}Application flow}{16}{subsection.3.1.1}
+\contentsline {subsubsection}{Django web framework}{16}{section*.17}
+\contentsline {paragraph}{Views}{16}{section*.18}
+\contentsline {paragraph}{Models}{16}{section*.19}
+\contentsline {section}{\numberline {3.2}Pitch Detection}{17}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Segmented Pitch Detection Algorithm}{18}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.2.2}Breaking it apart}{18}{subsection.3.2.2}
+\contentsline {subsubsection}{Choosing a segment size}{18}{section*.21}
+\contentsline {subsubsection}{Autocorrelation}{19}{section*.22}
+\contentsline {subsubsection}{Enhancing the results: Quadratic Interpolation}{19}{section*.23}
+\contentsline {subsection}{\numberline {3.2.3}Detecting errors}{20}{subsection.3.2.3}
+\contentsline {subsubsection}{Median Filtering}{20}{section*.24}
+\contentsline {subsubsection}{Amplitude filtering}{20}{section*.26}
+\contentsline {subparagraph}{Microphone calibration}{22}{section*.27}
+\contentsline {section}{\numberline {3.3}Putting it together}{22}{section.3.3}
+\contentsline {subsubsection}{Rolling standard deviation}{22}{section*.28}
+\contentsline {section}{\numberline {3.4}Measuring user ability}{23}{section.3.4}
+\contentsline {subsection}{\numberline {3.4.1}Interval training}{23}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {3.4.2}Note from chord}{23}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.3}Beat reproduction}{23}{subsection.3.4.3}
+\contentsline {section}{\numberline {3.5}Adapting to user ability}{23}{section.3.5}
+\contentsline {chapter}{\numberline {4}Development Tools}{24}{chapter.4}
+\contentsline {section}{\numberline {4.1}AudioContext Web API}{24}{section.4.1}
+\contentsline {section}{\numberline {4.2}MIDIjs}{24}{section.4.2}
+\contentsline {section}{\numberline {4.3}RecorderJS}{24}{section.4.3}
+\contentsline {chapter}{\numberline {5}Evaluation}{25}{chapter.5}
+\contentsline {section}{\numberline {5.1}Adaptivity}{25}{section.5.1}
+\contentsline {section}{\numberline {5.2}Intuitiveness}{25}{section.5.2}
+\contentsline {section}{\numberline {5.3}User Engagement}{25}{section.5.3}
+\contentsline {section}{\numberline {5.4}Teaching Proficiency}{26}{section.5.4}
+\contentsline {section}{\numberline {5.5}Pitch Detection}{26}{section.5.5}
+\contentsline {chapter}{\numberline {6}Plan}{27}{chapter.6}
+\contentsline {section}{\numberline {6.1}Extensions}{27}{section.6.1}

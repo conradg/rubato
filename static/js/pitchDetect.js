@@ -16,8 +16,7 @@ var debug_notes;
 var debug_good_regions;
 var amps;
 var max_amp;
-var multiplier;
-var amp_threshold = 0.1; //maybe determine this through calibration?
+var amp_threshold = calibrateMicrophone();
 var recording = false;
 var segment_size = 1200;
 
@@ -32,7 +31,7 @@ var curr_window;
 var debug = true;
 var log_view = true;
 
-var male_range_s = ["G1","F4"];
+var male_range_s = ["G1","G5"];
 var female_range_s =  ["G3","F5"];
 var male_range_m = [pitchSciToMIDI(male_range_s[0]),pitchSciToMIDI(male_range_s[1])];
 var female_range_m = [pitchSciToMIDI(female_range_s[0]),pitchSciToMIDI(female_range_s[1])];
@@ -94,31 +93,83 @@ var DV1_Fs3 =  "/static/assets/test_pitches/male/david/vibrato_1/Fs3.wav"
 var DV1_G3  =  "/static/assets/test_pitches/male/david/vibrato_1/G3.wav"
 
 
+var H1_C4 = "/static/assets/test_pitches/male/high_set_1/C4.wav"
+var H1_Cs4 = "/static/assets/test_pitches/male/high_set_1/Cs4.wav"
+var H1_D4 = "/static/assets/test_pitches/male/high_set_1/D4.wav"
+var H1_Eb4 = "/static/assets/test_pitches/male/high_set_1/Eb4.wav"
+var H1_E4 = "/static/assets/test_pitches/male/high_set_1/E4.wav"
+var H1_F4 = "/static/assets/test_pitches/male/high_set_1/F4.wav"
+var H1_Fs4 = "/static/assets/test_pitches/male/high_set_1/Fs4.wav"
+var H1_G4 = "/static/assets/test_pitches/male/high_set_1/G4.wav"
 
+var P_G2  = "/static/assets/test_pitches/piano/G2.wav"
+var P_Ab2 = "/static/assets/test_pitches/piano/Ab2.wav"
+var P_A2  = "/static/assets/test_pitches/piano/A2.wav"
+var P_Bb2 = "/static/assets/test_pitches/piano/Bb2.wav"
+var P_B2  = "/static/assets/test_pitches/piano/B2.wav"
+var P_C3  = "/static/assets/test_pitches/piano/C3.wav"
+var P_Cs3 = "/static/assets/test_pitches/piano/Cs3.wav"
+var P_D3  = "/static/assets/test_pitches/piano/D3.wav"
+var P_Eb3 = "/static/assets/test_pitches/piano/Eb3.wav"
+var P_E3  = "/static/assets/test_pitches/piano/E3.wav"
+var P_F3  = "/static/assets/test_pitches/piano/F3.wav"
+var P_Fs3 = "/static/assets/test_pitches/piano/Fs3.wav"
+var P_G3  = "/static/assets/test_pitches/piano/G3.wav"
+var P_Ab3 = "/static/assets/test_pitches/piano/Ab3.wav"
+var P_A3  = "/static/assets/test_pitches/piano/A3.wav"
+var P_Bb3 = "/static/assets/test_pitches/piano/Bb3.wav"
+var P_B3  = "/static/assets/test_pitches/piano/B3.wav"
+var P_C4  = "/static/assets/test_pitches/piano/C4.wav"
+var P_Cs4 = "/static/assets/test_pitches/piano/Cs4.wav"
+var P_D4  = "/static/assets/test_pitches/piano/D4.wav"
+var P_Eb4 = "/static/assets/test_pitches/piano/Eb4.wav"
+var P_E4  = "/static/assets/test_pitches/piano/E4.wav"
+var P_F4  = "/static/assets/test_pitches/piano/F4.wav"
+var P_Fs4 = "/static/assets/test_pitches/piano/Fs4.wav"
+var P_G4  = "/static/assets/test_pitches/piano/G4.wav"
+var P_Ab4 = "/static/assets/test_pitches/piano/Ab4.wav"
+var P_A4  = "/static/assets/test_pitches/piano/A4.wav"
+var P_Bb4 = "/static/assets/test_pitches/piano/Bb4.wav"
+var P_B4  = "/static/assets/test_pitches/piano/B4.wav"
+var P_C5  = "/static/assets/test_pitches/piano/C5.wav"
+var P_Cs5 = "/static/assets/test_pitches/piano/Cs5.wav"
+var P_D5  = "/static/assets/test_pitches/piano/D5.wav"
+var P_Eb5 = "/static/assets/test_pitches/piano/Eb5.wav"
+var P_E5  = "/static/assets/test_pitches/piano/E5.wav"
+var P_F5  = "/static/assets/test_pitches/piano/F5.wav"
+var P_Fs5 = "/static/assets/test_pitches/piano/Fs5.wav"
+var P_G5  = "/static/assets/test_pitches/piano/G3.wav"
 
-var TH_G4 = "/static/assets/test_pitches/male/high_set_1/G4.wav"
+var piano1 = [P_G2,P_Ab2,P_A2,P_Bb2,P_B2,P_C3,P_Cs3,P_D3,P_Eb3,P_E3,P_F3,P_Fs3];
+var piano2 = [P_G3,P_Ab3,P_A3,P_Bb3,P_B3,P_C4,P_Cs4,P_D4,P_Eb4,P_E4,P_F4,P_Fs4];
+var piano3 = [P_G4,P_Ab4,P_A4,P_Bb4,P_B4,P_C5,P_Cs5,P_D5,P_Eb5,P_E5,P_F5,P_Fs5];
+
+var piano = piano1.concat(piano2,piano3);
 
 var male_normal_1 = [T1_Bb2,T1_C3,T1_D3,T1_E3,T1_F3,T1_G3,T1_A3,T1_B3,T1_C4,T1_D4,T1_E4,T1_F4];
 var male_normal_2 = [T2_C3,T2_Cs3,T2_D3,T2_Eb3,T2_E3,T2_F3,T2_Fs3,T2_G3,T2_Ab3,T2_A3,T2_Bb3,T2_B3,T2_C4];
 var male_wobbly = [TW_E3,TW_G3,TW_G3_2,TW_E3_vib,TW_G3_vib];
 var david_normal_1 = [DN1_G2,DN1_A2,DN1_B2,DN1_C3,DN1_D3,DN1_E3,DN1_Fs3,DN1_G3];
-var david_vibrato_1 = [DV1_G2,DV1_A2,DV1_B2,DV1_C3,DV1_D3,DV1_E3,DV1_Fs3,DV1_G3];
+var david_vibrato_1 = [DV1_G2,DV1_A2,DV1_D3,DV1_E3,DV1_Fs3];
+var male_high = [H1_C4, H1_Cs4, H1_D4, H1_Eb4, H1_E4, H1_F4, H1_Fs4, H1_G4]
 
 
 var normal = male_normal_1.concat(male_normal_2,david_normal_1);
 var david = david_normal_1.concat(david_vibrato_1);
-var all = normal.concat(male_wobbly, david);
+var all = normal.concat(male_wobbly, david, male_high);
 
 
-var testAudioURLs  = normal;
+var testAudioURLs  = piano;
 
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
 var actualValues   = new Array(numURLs);
 
-multiplier = 0.4
-
-testPitchDetection();
+var times_to_test = 1;
+var iteration = 0;
+var test_results = new Array(times_to_test);
+var start_time;
+var verbose = true;
 
 getInterval();
 
@@ -140,6 +191,7 @@ function testPitchDetection(){
             expectedValues[i] = note[0] + "#" + note[2];
         }
     }
+    start_time = new Date().getTime();
     testPitchDetection_h(0);
 }
 
@@ -159,8 +211,20 @@ function testPitchDetection_h(i){
                 var cents = actualValues[j][1];
                 results +="Expected: " + expectedValues[j] + " Got: " + pitch_s + " " + cents + " cents" + "\n";
             }
-            console.log(results);
-            console.log("Percentage correct: " + correct*100/numURLs + "% with " +  numURLs + " test cases");
+            if (verbose) {
+                console.log(results);
+                console.log("Percentage correct: " + correct*100/numURLs + "% with " +  numURLs + " test cases");
+            }
+            var time_taken = (new Date().getTime() - start_time)/1000;
+            test_results[iteration] = time_taken;
+            var result = "Time taken: " + time_taken + " seconds, or " + (time_taken/numURLs) + " seconds per sample"
+            console.log(result);
+            $("#pitch").text(result);
+            //increment iteration and start next test cycle;
+            iteration++;
+            if (iteration < times_to_test){
+                testPitchDetection();
+            }
         } else {
             testPitchDetection_h(i+1);
         }
@@ -197,7 +261,12 @@ function toAudioBuffer(url, callback){
 
 function toggleRecording(){
     if (recording){
-        stopRecording()
+        stopRecording(
+            function (s) {
+                var blob = s;
+                var url = window.URL.createObjectURL(blob);
+                updatePitchDisplay(url);
+    });
     } else {
         startRecording()
     }
@@ -211,14 +280,9 @@ function startRecording() {
 }
 
 //stops recording and sets the detected_pitch value in the browser to the detected detected_pitch
-function stopRecording() {
+function stopRecording(callback) {
     recorder.stop();
     recording = false;
-    var callback = function (s) {
-        var blob = s;
-        var url = window.URL.createObjectURL(blob);
-        updatePitchDisplay(url);
-    };
     recorder.exportWAV(callback);
 }
 
@@ -337,11 +401,11 @@ function getPitch(buf){
         var freq = autoCorrelate(audio_window,sampleRate);
         freqs[i] = freq;
 
-        var abs_window = [];
+        var square_window = [];
         for (var sample in audio_window){
-            abs_window.push(Math.abs(audio_window[sample]));
+            square_window.push(audio_window[sample]*audio_window[sample]);
         }
-        amps[i] = Math.sqrt(arrayAverage(abs_window));
+        amps[i] = Math.sqrt(arrayAverage(square_window));
 
         if (debug){
             curr_window = i;
@@ -352,9 +416,8 @@ function getPitch(buf){
         if (debug) debug_notes[i] = note;
     }
     max_amp = arrayMax(amps);
-    amp_threshold = max_amp*multiplier;
     try{
-        if (max_amp < 0.1){
+        if (max_amp < amp_threshold * 2){
             throw "Too quiet! Please try again with gusto"
         }
     } catch (err){
@@ -377,7 +440,7 @@ function getPitch(buf){
     var good_blocks = []; // all blocks in the sample.
     var in_region = false; //are we in a good region at the moment
     var last_pushed_index = 0;
-    for (var i=0; i<num_windows-slice_size; i++){
+    for (var i=0; i<=num_windows-slice_size; i++){
         var slice = freqs.slice(i, i+slice_size);
         var average = arrayAverage(slice);
         std_dev_threshold = Math.max(average/30,1);
@@ -397,7 +460,6 @@ function getPitch(buf){
 
                         block.data.push(freqs[index]);
                         last_pushed_index = index;
-                        if (debug) debug_good_regions[index] = freqs[index];
                     }
                 } else {
                     continue;
@@ -410,7 +472,6 @@ function getPitch(buf){
                 }
                 block.data.push(freqs[index])
                 last_pushed_index = index;
-                if (debug) debug_good_regions[index] = freqs[index];
             }
         } else { //Leave good region, push the block to the good blocks. start a new block
             if (in_region){
@@ -429,12 +490,19 @@ function getPitch(buf){
         good_blocks.push(block);
     } //if we leave the loop while still building the block, then finish the block
     var contiguous_regions = mergeBlocks(good_blocks);
-    var arrayAverages = new Array(contiguous_regions.length);
-    for (var i = 0; i < contiguous_regions.length; i++){
-        arrayAverages[i] = arrayAverage(contiguous_regions[i].data);
+    var authoritative_region = getAuthoritativeRegion(contiguous_regions);
+    if (authoritative_region[1]){
+        detected_frequency = arrayAverage(authoritative_region[0].data);
+    } else{
+        detected_frequency = arrayAverage(authoritative_region[0].data);
+    }
+    authoritative_region = authoritative_region[0];
+    if (debug) {
+        for (var j = authoritative_region.start; j <= authoritative_region.end; j++){
+            debug_good_regions[j] = [j];
+        }
     }
 
-    detected_frequency = arrayAverage(arrayAverages);
     center = detected_frequency;
     var detected_pitch_s_cents = freqToPitch_s_cents(detected_frequency);
     detected_pitch_m = freqToPitch_m(detected_frequency);
@@ -670,7 +738,7 @@ function updateFrequency(){
 
         var magnitude = freqToBar(freqs[i], log_view)
 
-        if (debug_good_regions[i] != null){ //If it is a "good region", make it green, else red
+        if (debug_good_regions[i]){ //If it is a "good region", make it green, else red
             analyserContext.fillStyle = "#00FF00"
         } else {
             analyserContext.fillStyle = "#FF0000"
@@ -794,7 +862,10 @@ function mergeBlocks(blocks){
     while (blocks.length>0){
         var merged = merged_blocks.pop();
         var block =  blocks.pop()
-        if (merged.start == block.end + 1){
+        var merged_first = merged.data[0];
+        var block_last = block.data[block.data.length-1];
+        var ratio = merged_first/block_last;
+        if (merged.start == block.end + 1 && (Math.max(ratio,1/ratio) <1.05) ){
             var contiguous_block = new Block(block.start, merged.end, block.data.concat(merged.data));
             merged_blocks.push(contiguous_block);
         } else {
@@ -803,6 +874,25 @@ function mergeBlocks(blocks){
         }
     }
     return merged_blocks;
+}
+
+function getAuthoritativeRegion(regions){
+    var good_data_size = 0 ;
+    for (var i = 0; i<regions.length; i++){
+        good_data_size+= regions[i].data.length;
+    }
+    var largest_region = 0;
+    var largest_index = 0;
+    for (var i = 0; i<regions.length; i++){
+        if (regions[i].data.length>largest_region){
+            largest_index = i;
+            largest_region = regions[i].data.length;
+        }
+    }
+    if (largest_region>0.6*good_data_size){
+        return [regions[largest_index],true];
+    } else return [regions[largest_index],false];
+
 }
 
 function medianFilter(signal,window_size){
@@ -824,7 +914,7 @@ function medianFilter(signal,window_size){
             }
         }
         var med = median(median_window);
-        if (median_window[mid] > Math.pow(med,1.03)){
+        if (median_window[mid] > Math.pow(med,1.03) || median_window[mid] < Math.pow(med,0.97)){
             medians[i] = (median_window[mid-1]+median_window[mid+1])/2;
             signal[i] = medians[i];
         } else {
@@ -846,6 +936,10 @@ function median(values) {
         return sorted[half];
     else
         return (sorted[half-1] + sorted[half]) / 2.0;
+}
+
+function calibrateMicrophone(){
+    return 0.01
 }
 
 function playNote(){

@@ -16,6 +16,14 @@
 R.~Vesselinov and J.~Grego, ``Duolingo effectiveness study,'' {\em City
   University of New York, USA}, 2012.
 
+\bibitem{webaudiodemos}
+``Javascript based real-time pitch detection..''
+  \url{http://webaudiodemos.appspot.com/pitchdetect/index.html},.
+
+\bibitem{audioStretch}
+``Flash based real-time pitch detection..''
+  \url{http://www.audiostretch.com/pitch/},.
+
 \bibitem{griffiths2012profile}
 L.~S. Griffiths, R.~Ogden, and R.~Aspin, ``A profile of the future: what could
   html 5 do for he by 2015?,'' {\em Research in Learning Technology}, vol.~20,

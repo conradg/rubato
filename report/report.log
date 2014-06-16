@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.1.13)  16 JUN 2014 03:55
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.1.13)  16 JUN 2014 20:17
 entering extended mode
 **report.tex
 (C:\Users\Conrad\rubato\report\report.tex
@@ -296,25 +296,49 @@ File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 \Gin@req@height=\dimen133
 \Gin@req@width=\dimen134
 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\latexsym.sty"
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 47.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count117
+\float@exts=\toks22
+\float@box=\box28
+\@float@everytoks=\toks23
+\@floatcapt=\box29
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.sty"
-\lst@mode=\count117
-\lst@gtempboxa=\box28
-\lst@token=\toks22
-\lst@length=\count118
+\lst@mode=\count118
+\lst@gtempboxa=\box30
+\lst@token=\toks24
+\lst@length=\count119
 \lst@currlwidth=\dimen135
-\lst@column=\count119
-\lst@pos=\count120
+\lst@column=\count120
+\lst@pos=\count121
 \lst@lostspace=\dimen136
 \lst@width=\dimen137
-\lst@newlines=\count121
-\lst@lineno=\count122
+\lst@newlines=\count122
+\lst@lineno=\count123
 \lst@maxwidth=\dimen138
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
 File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
-\c@lstnumber=\count123
-\lst@skipnumbers=\count124
-\lst@framebox=\box29
+\c@lstnumber=\count124
+\lst@skipnumbers=\count125
+\lst@framebox=\box31
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.cfg"
 File: listings.cfg 2014/03/04 1.5c listings configuration
@@ -336,20 +360,20 @@ Package color Info: Driver file: pdftex.def on input line 130.
 (C:\Users\Conrad\rubato\report\development.aux)
 (C:\Users\Conrad\rubato\report\evaluation.aux)
 (C:\Users\Conrad\rubato\report\plan.aux))
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 68.
+LaTeX Font Info:    ... okay on input line 68.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -359,15 +383,15 @@ LaTeX Font Info:    ... okay on input line 62.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(90.3375pt, 416.83289pt, 90.3375pt)
-* v-part:(T,H,B)=(90.3375pt, 664.37186pt, 90.3375pt)
+* h-part:(L,W,R)=(108.405pt, 380.69788pt, 108.405pt)
+* v-part:(T,H,B)=(108.405pt, 628.23685pt, 108.405pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=416.83289pt
-* \textheight=664.37186pt
-* \oddsidemargin=18.0675pt
-* \evensidemargin=18.0675pt
-* \topmargin=-18.9325pt
+* \textwidth=380.69788pt
+* \textheight=628.23685pt
+* \oddsidemargin=36.13501pt
+* \evensidemargin=36.13501pt
+* \topmargin=-0.86499pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=11.0pt
@@ -386,22 +410,23 @@ LaTeX Font Info:    ... okay on input line 62.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box30
-Package hyperref Info: Link coloring OFF on input line 62.
+\AtBeginShipoutBox=\box32
+Package hyperref Info: Link coloring OFF on input line 68.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count125
+\c@section@level=\count126
 )
-LaTeX Info: Redefining \ref on input line 62.
-LaTeX Info: Redefining \pageref on input line 62.
-LaTeX Info: Redefining \nameref on input line 62.
+LaTeX Info: Redefining \ref on input line 68.
+LaTeX Info: Redefining \pageref on input line 68.
+LaTeX Info: Redefining \nameref on input line 68.
 
 (C:\Users\Conrad\rubato\report\report.out)
 (C:\Users\Conrad\rubato\report\report.out)
@@ -409,27 +434,42 @@ LaTeX Info: Redefining \nameref on input line 62.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count126
+\scratchcounter=\count127
 \scratchdimen=\dimen139
-\scratchbox=\box31
-\nofMPsegments=\count127
-\nofMParguments=\count128
-\everyMPshowfont=\toks23
-\MPscratchCnt=\count129
+\scratchbox=\box33
+\nofMPsegments=\count128
+\nofMParguments=\count129
+\everyMPshowfont=\toks25
+\MPscratchCnt=\count130
 \MPscratchDim=\dimen140
-\MPnumerator=\count130
-\makeMPintoPDFobject=\count131
-\everyMPtoPDFconversion=\toks24
+\MPnumerator=\count131
+\makeMPintoPDFobject=\count132
+\everyMPtoPDFconversion=\toks26
 )
-\c@lstlisting=\count132
+\c@lstlisting=\count133
  (C:\Users\Conrad\rubato\report\title.tex [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]) (C:\Users\Conrad\rubato\
-report\report.tocpdfTeX warning (ext4): destination with the same identifier (n
-ame{page.1}) has been already used, duplicate ignored
+report\report.toc
+LaTeX Font Info:    Try loading font information for U+msa on input line 2.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 2.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+lasy on input line 2.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ulasy.fd"
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+ been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.42 ...{\numberline {5}Evaluation}{19}{chapter.5}
+l.48 ...3}Beat reproduction}{23}{subsection.3.4.3}
                                                    [1
 
 ])
@@ -437,115 +477,306 @@ l.42 ...{\numberline {5}Evaluation}{19}{chapter.5}
  [2]
 (C:\Users\Conrad\rubato\report\introduction.tex
 Chapter 1.
+<assets/duolingo.png, id=236, 773.89125pt x 424.58624pt>
+File: assets/duolingo.png Graphic file (type png)
+
+<use assets/duolingo.png>
+Package pdftex.def Info: assets/duolingo.png used on input line 12.
+(pdftex.def)             Requested size: 386.94467pt x 212.2926pt.
+
+Overfull \hbox (6.2468pt too wide) in paragraph at lines 12--13
+ [][] 
+ []
+
 [3
 
 
-]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 21.
- ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+] [4 <C:/Users/Conrad/rubato/report/assets/duolingo.png>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 35.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 21.
-) [4]
-(C:\Users\Conrad\rubato\report\background.tex
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
+
+Overfull \hbox (10.43016pt too wide) in paragraph at lines 35--36
+[]\OT1/cmr/bx/n/10.95 Adaptive \OT1/cmr/m/n/10.95 - The prod-uct must anal-yse 
+the user's progress and their strengths,
+ []
+
+) [5] (C:\Users\Conrad\rubato\report\background.tex
 Chapter 2.
-[5
+[6
 
 
 
-] [6] [7] <assets/keyboard.png, id=251, 770.12718pt x 209.28188pt>
+] [7] [8] <assets/keyboard.png, id=291, 770.12718pt x 209.28188pt>
 File: assets/keyboard.png Graphic file (type png)
 
 <use assets/keyboard.png>
 Package pdftex.def Info: assets/keyboard.png used on input line 46.
 (pdftex.def)             Requested size: 385.06264pt x 104.64067pt.
- [8 <C:/Users/Conrad/rubato/report/assets/keyboard.png>] [9] <assets/intervals.
-png, id=270, 968.11688pt x 341.77687pt>
+
+Overfull \hbox (4.36476pt too wide) in paragraph at lines 46--47
+ [][] 
+ []
+
+[9 <C:/Users/Conrad/rubato/report/assets/keyboard.png>] [10]
+<assets/intervals.png, id=308, 968.11688pt x 341.77687pt>
 File: assets/intervals.png Graphic file (type png)
 
 <use assets/intervals.png>
 Package pdftex.def Info: assets/intervals.png used on input line 83.
 (pdftex.def)             Requested size: 387.23988pt x 136.70831pt.
- [10 <C:/Users/Conrad/rubato/report/assets/intervals.png>] <assets/time-frequen
-cy.png, id=279, 218.31563pt x 183.68625pt>
+
+Overfull \hbox (6.542pt too wide) in paragraph at lines 83--84
+ [][] 
+ []
+
+[11] [12 <C:/Users/Conrad/rubato/report/assets/intervals.png>]
+<assets/time-frequency.png, id=324, 218.31563pt x 183.68625pt>
 File: assets/time-frequency.png Graphic file (type png)
 
 <use assets/time-frequency.png>
 Package pdftex.def Info: assets/time-frequency.png used on input line 111.
-(pdftex.def)             Requested size: 208.41644pt x 175.35858pt.
- [11 <C:/Users/Conrad/rubato/report/assets/time-frequency.png>]) [12] (C:\Users
-\Conrad\rubato\report\implementation.tex
-Chapter 3.
+(pdftex.def)             Requested size: 190.34894pt x 160.15607pt.
+ [13 <C:/Users/Conrad/rubato/report/assets/time-frequency.png>] <assets/autocor
+relation.png, id=330, 523.556pt x 231.264pt>
+File: assets/autocorrelation.png Graphic file (type png)
 
-Overfull \hbox (221.27145pt too wide) in paragraph at lines 18--18
-[]         \OT1/cmtt/m/n/10.95 return " Score: " + str(self.score) + " for" + s
-elf.interval.name + " with user id: " + str(self.user)[] 
+<use assets/autocorrelation.png>
+Package pdftex.def Info: assets/autocorrelation.png used on input line 119.
+(pdftex.def)             Requested size: 366.4867pt x 161.88368pt.
+ [14 <C:/Users/Conrad/rubato/report/assets/autocorrelation.png>]) [15] (C:\User
+s\Conrad\rubato\report\implementation.tex
+Chapter 3.
+<assets/webpage.png, id=347, 892.83563pt x 627.09282pt>
+File: assets/webpage.png Graphic file (type png)
+
+<use assets/webpage.png>
+Package pdftex.def Info: assets/webpage.png used on input line 7.
+(pdftex.def)             Requested size: 357.12793pt x 250.83269pt.
+
+! Missing { inserted.
+<to be read again> 
+                   _
+l.24 		    def __
+                 str__(self):
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
+
+! Missing { inserted.
+<to be read again> 
+                   _
+l.24 		    def __str__
+                      (self):
+A left brace was mandatory here, so I've put one in.
+You might want to delete and/or insert some corrections
+so that I will find a matching right brace soon.
+(If you're confused by all this, try typing `I}' now.)
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.26 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.26 
+     
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.26 
+     
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Display math should end with $$.
+<to be read again> 
+                   \par 
+l.26 
+     
+The `$' that I just saw supposedly matches a previous `$$'.
+So I shall assume that you typed `$$' both times.
+
+
+Overfull \hbox (1120.15083pt too wide) detected at line 26
+\OML/cmm/m/it/10.95 language \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 python\OT
+1/cmr/m/n/10.95 ][]\OML/cmm/m/it/10.95 classIntervalScore\OT1/cmr/m/n/10.95 (\O
+ML/cmm/m/it/10.95 models:Model\OT1/cmr/m/n/10.95 ) : \OML/cmm/m/it/10.95 interv
+al \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 models:ForeignKey\OT1/cmr/m/n/10.95
+ (\OML/cmm/m/it/10.95 Interval\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 timestamp
+ \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 models:DateTimeField\OT1/cmr/m/n/10.9
+5 (\OML/cmm/m/it/10.95 auto[]ow[]dd \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 Tr
+ue\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 score \OT1/cmr/m/n/10.95 = \OML/cmm/m
+/it/10.95 models:FloatField\OT1/cmr/m/n/10.95 (); \OML/cmm/m/it/10.95 user \OT1
+/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 models:PositiveIntegerField\OT1/cmr/m/n/10
+.95 (); \OML/cmm/m/it/10.95 def[]
  []
 
-[13
+
+! Undefined control sequence.
+\lstlisting ->\def \lstenv@name 
+                                {lstlisting}\begingroup \lst@setcatcodes \ca...
+l.27 		\end{lstlisting}
+                       
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Package Listings Error: Extra \endlstlisting.
+
+See the Listings package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.27 		\end{lstlisting}
+                       
+I'm ignoring this, since I wasn't doing a \def {lstlisting}\begingroup \catcode
+ `\spacefactor \@m {}11\relax \catcode `\==12\relax \catcode \active =\active \
+lstlisting@.
+
+
+! LaTeX Error: \begin{equation*} on input line 18 ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.27 		\end{lstlisting}
+                       
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+[16
 
 
 
-] <assets/segmented_autocorrelation.png, id=304, 830.35219pt x 532.23843pt>
+] <assets/segmented_autocorrelation.png, id=357, 830.35219pt x 532.23843pt>
 File: assets/segmented_autocorrelation.png Graphic file (type png)
 
 <use assets/segmented_autocorrelation.png>
 Package pdftex.def Info: assets/segmented_autocorrelation.png used on input lin
-e 31.
-(pdftex.def)             Requested size: 498.21515pt x 319.34552pt.
+e 40.
+(pdftex.def)             Requested size: 415.17508pt x 266.11856pt.
 
-Overfull \hbox (81.38226pt too wide) in paragraph at lines 31--32
+Overfull \hbox (34.4772pt too wide) in paragraph at lines 40--41
  [][] 
  []
 
+[17 <C:/Users/Conrad/rubato/report/assets/webpage.png>]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no “ in font cmr10!
-[14] [15 <C:/Users/Conrad/rubato/report/assets/segmented_autocorrelation.png>]
-<assets/median_demonstration.png, id=318, 567.62062pt x 344.78813pt>
-File: assets/median_demonstration.png Graphic file (type png)
+ [18 <C:/Users/Conrad/rubato/report/assets/segmented_autocorrelation.png>] [19]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 74.
 
-<use assets/median_demonstration.png>
-Package pdftex.def Info: assets/median_demonstration.png used on input line 48.
+<assets/median_demonstration_tall.png, id=379, 266.49562pt x 521.69907pt>
+File: assets/median_demonstration_tall.png Graphic file (type png)
 
-(pdftex.def)             Requested size: 397.33171pt x 241.35004pt.
- [16 <C:/Users/Conrad/rubato/report/assets/median_demonstration.png>]) [17]
-(C:\Users\Conrad\rubato\report\development.tex
+<use assets/median_demonstration_tall.png>
+Package pdftex.def Info: assets/median_demonstration_tall.png used on input lin
+e 94.
+(pdftex.def)             Requested size: 186.54565pt x 365.18684pt.
+ [20] [21 <C:/Users/Conrad/rubato/report/assets/median_demonstration_tall.png>]
+
+<assets/amplitude_filtering.png, id=408, 534.49687pt x 151.3153pt>
+File: assets/amplitude_filtering.png Graphic file (type png)
+
+<use assets/amplitude_filtering.png>
+Package pdftex.def Info: assets/amplitude_filtering.png used on input line 116.
+
+(pdftex.def)             Requested size: 374.14525pt x 105.91998pt.
+ [22 <C:/Users/Conrad/rubato/report/assets/amplitude_filtering.png>]) [23] (C:\
+Users\Conrad\rubato\report\development.tex
 Chapter 4.
-) [18
+) [24
 
 
 
 ] (C:\Users\Conrad\rubato\report\evaluation.tex
 Chapter 5.
-[19
+[25
 
 
 
-]) [20] (C:\Users\Conrad\rubato\report\plan.tex
+]) [26] (C:\Users\Conrad\rubato\report\plan.tex
 Chapter 6.
-[21
+[27
 
 
 
-]) [22] (C:\Users\Conrad\rubato\report\report.bbl
+]) [28] (C:\Users\Conrad\rubato\report\report.bbl
+Underfull \hbox (badness 2050) in paragraph at lines 8--10
+[]\OT1/cmr/m/n/10.95 ``Codeacademy, learn to code in-ter-ac-tively, for free..'
+' []$\OT1/cmtt/m/n/10.95 http : / / www .$
+ []
+
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-Underfull \hbox (badness 6859) in paragraph at lines 29--32
-$\OT1/cmtt/m/n/10.95 post / 41960192602 / duolingos-[]data-[]driven-[]approach-
-[]to-[]education$[]\OT1/cmr/m/n/10.95 .  Ac-
+Underfull \hbox (badness 10000) in paragraph at lines 37--40
+[]\OT1/cmr/m/n/10.95 ``Duolingos data-driven ap-proach to ed-u-ca-tion.''
  []
 
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 81.
- [23
+
+Underfull \hbox (badness 10000) in paragraph at lines 37--40
+[]$\OT1/cmtt/m/n/10.95 http : / / blog . duolingo . com / post / 41960192602 /$
+
+ []
 
 
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 81.
+Underfull \hbox (badness 2012) in paragraph at lines 37--40
+$\OT1/cmtt/m/n/10.95 duolingos-[]data-[]driven-[]approach-[]to-[]education$[]\O
+T1/cmr/m/n/10.95 .  Ac-cessed: 2014-
+ []
+
+[29
+
+
+])
+
+Package caption Warning: Unused \captionsetup[sub] on input line 18.
+See the caption package documentation for explanation.
+
+
+! LaTeX Error: \begin{[} on input line 18 ended by \end{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.87 \end{document}
+                   
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 87.
+[30]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 87.
  (C:\Users\Conrad\rubato\report\report.aux
 (C:\Users\Conrad\rubato\report\introduction.aux)
 (C:\Users\Conrad\rubato\report\background.aux)
@@ -553,22 +784,26 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 81.
 (C:\Users\Conrad\rubato\report\development.aux)
 (C:\Users\Conrad\rubato\report\evaluation.aux)
 (C:\Users\Conrad\rubato\report\plan.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 81.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 81.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 87.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 87.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: B324919B1B30F935A703E5D72BB2BA04;2285.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 81.
- ) 
+(rerunfilecheck)             Checksum: C903ECDC3CA7D7E8104D99C573754C2A;2700.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 87.
+ )
+(\end occurred inside a group at level 1)
+
+### semi simple group (level 1) entered at line 18 (\begingroup)
+### bottom level 
 Here is how much of TeX's memory you used:
- 8713 strings out of 493921
- 131971 string characters out of 3144873
- 220791 words of memory out of 3000000
- 11782 multiletter control sequences out of 15000+200000
- 12309 words of font info for 44 fonts, out of 3000000 for 9000
+ 9199 strings out of 493921
+ 138171 string characters out of 3144873
+ 256806 words of memory out of 3000000
+ 12189 multiletter control sequences out of 15000+200000
+ 15067 words of font info for 60 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,12n,40p,1548b,450s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exi
-st, replaced by a fixed one
+ 36i,12n,40p,1548b,1063s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{Hfootnote.3} has been referenced bu
+t does not exist, replaced by a fixed one
 
 pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist
 , replaced by a fixed one
@@ -581,20 +816,22 @@ pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
 Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/P
 rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pro
 gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86
-)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (24 pages, 394028 bytes).
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x8
+6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.
+9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
+e1/public/amsfonts/cm/cmtt9.pfb>
+Output written on report.pdf (31 pages, 574132 bytes).
 PDF statistics:
- 441 PDF objects out of 1000 (max. 8388607)
- 94 named destinations out of 1000 (max. 500000)
- 314 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 556 PDF objects out of 1000 (max. 8388607)
+ 134 named destinations out of 1000 (max. 500000)
+ 382 words of extra memory for PDF output out of 10000 (max. 10000000)
 

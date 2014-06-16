@@ -101,7 +101,10 @@ h2 {
 
 }
 .panel{
-    padding:20px;
+    margin:20px;
+    padding:10px;
+    border-radius:30px;
+    background-color: white;
 }
 
 .panel p{
@@ -261,4 +264,12 @@ canvas{
     text-align:left;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.rounded-square{
+    width: 70%;
+    margin:auto;
+    background-color: white;
+    border-radius: 20px;
+
 }
