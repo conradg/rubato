@@ -1,37 +1,44 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Implementation}{16}{chapter.3}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Implementation}{15}{chapter.3}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Web Application}{16}{section.3.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Application flow}{16}{subsection.3.1.1}}
-\@writefile{toc}{\contentsline {subsubsection}{Django web framework}{16}{section*.17}}
-\@writefile{toc}{\contentsline {paragraph}{Views}{16}{section*.18}}
-\@writefile{toc}{\contentsline {paragraph}{Models}{16}{section*.19}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces The home page of the website\relax }}{17}{figure.caption.16}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Pitch Detection}{17}{section.3.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces The home page of the website\relax }}{15}{figure.caption.15}}
+\citation{django}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Platform choice}{16}{section.3.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Mobile browsing}{16}{subsection.3.1.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Application stack}{16}{section.3.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces The 2-tier application stack for Rubato, showing client and server side technologies used\relax }}{16}{figure.caption.16}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Server-side software}{17}{section.3.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Django web framework}{17}{subsection.3.3.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}SQLite}{17}{subsection.3.3.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Client side JavaScript libraries}{17}{section.3.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Recorder.js and the Web Audio API}{17}{subsection.3.4.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}MIDI.js}{18}{subsection.3.4.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}JQuery}{18}{subsection.3.4.3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Pitch Detection}{18}{section.3.5}}
 \citation{scientificPitchTable}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces An illustration of how Segmented Autocorrelation works\relax }}{18}{figure.caption.20}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Segmented Pitch Detection Algorithm}{18}{subsection.3.2.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Breaking it apart}{18}{subsection.3.2.2}}
-\@writefile{toc}{\contentsline {subsubsection}{Choosing a segment size}{18}{section*.21}}
-\@writefile{toc}{\contentsline {subsubsection}{Autocorrelation}{19}{section*.22}}
-\@writefile{toc}{\contentsline {subsubsection}{Enhancing the results: Quadratic Interpolation}{19}{section*.23}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Detecting errors}{20}{subsection.3.2.3}}
-\@writefile{toc}{\contentsline {subsubsection}{Median Filtering}{20}{section*.24}}
-\@writefile{toc}{\contentsline {subsubsection}{Amplitude filtering}{20}{section*.26}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces A visualisation of the median filter with window size 3\relax }}{21}{figure.caption.25}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Amplitude filtering\relax }}{22}{figure.caption.29}}
-\@writefile{toc}{\contentsline {subparagraph}{Microphone calibration}{22}{section*.27}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Putting it together}{22}{section.3.3}}
-\@writefile{toc}{\contentsline {subsubsection}{Rolling standard deviation}{22}{section*.28}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}Measuring user ability}{23}{section.3.4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Interval training}{23}{subsection.3.4.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}Note from chord}{23}{subsection.3.4.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}Beat reproduction}{23}{subsection.3.4.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}Adapting to user ability}{23}{section.3.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Segmented Autocorrelation Algorithm}{19}{subsection.3.5.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}Breaking it apart}{19}{subsection.3.5.2}}
+\@writefile{toc}{\contentsline {subsubsection}{Choosing a segment size}{19}{section*.18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces An illustration Segmented Autocorrelation. In the first image, we have the original source audio stored in uncompressed PCM format, with time on the \(x\) and amplitude on the \(y\), in the next image it is broken into several equally sized segments of length 1200 samples, and then each of these segments is analysed using autocorrelation to give a frequency reading, shown on the third panel. Red portions represent data discarded as junk by the algorithm\relax }}{20}{figure.caption.17}}
+\@writefile{toc}{\contentsline {subsubsection}{Autocorrelation}{21}{section*.19}}
+\citation{quadraticInterpolation}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces If we simply use the peak of our autocorrelation function to determine the pitch, we limit ourselves to detecting pitches only of discrete intervals. Using quadratic interpolation, we can get a better estimate of the best autocorrelation value\relax }}{22}{figure.caption.21}}
+\@writefile{toc}{\contentsline {subsubsection}{Enhancing the results: Quadratic Interpolation}{22}{section*.20}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}Detecting errors}{23}{subsection.3.5.3}}
+\@writefile{toc}{\contentsline {subsubsection}{Median Filtering}{23}{section*.22}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces A visualisation of the median filter with window size 3: Each point is transformed to the median of a sample size 3 centered on the point. The red column of height 153 is therefore transformed to median(133,152,132) = 133\relax }}{24}{figure.caption.23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.6}{\ignorespaces A recording of a sung note showing amplitude vs time. The red areas have been filtered our with amplitude filtering\relax }}{25}{figure.caption.25}}
+\@writefile{toc}{\contentsline {subsubsection}{Amplitude filtering}{25}{section*.24}}
+\@writefile{toc}{\contentsline {subparagraph}{Microphone calibration}{25}{section*.26}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}Putting it together}{26}{section.3.6}}
+\@writefile{toc}{\contentsline {subsubsection}{Rolling standard deviation}{26}{section*.27}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Measuring user ability}{26}{section.3.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.1}Intonation training}{26}{subsection.3.7.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.8}Adapting to user ability}{27}{section.3.8}}
 \@setckpt{./implementation}{
-\setcounter{page}{24}
+\setcounter{page}{29}
 \setcounter{equation}{0}
 \setcounter{enumi}{0}
 \setcounter{enumii}{0}
@@ -41,22 +48,22 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{0}
 \setcounter{chapter}{3}
-\setcounter{section}{5}
+\setcounter{section}{8}
 \setcounter{subsection}{0}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{4}
+\setcounter{figure}{6}
 \setcounter{table}{0}
 \setcounter{parentequation}{0}
 \setcounter{ContinuedFloat}{0}
 \setcounter{Item}{0}
-\setcounter{Hfootnote}{3}
-\setcounter{bookmark@seq@number}{30}
+\setcounter{Hfootnote}{2}
+\setcounter{bookmark@seq@number}{36}
 \setcounter{subfigure}{0}
 \setcounter{subtable}{0}
 \setcounter{float@type}{8}
-\setcounter{lstnumber}{15}
+\setcounter{lstnumber}{9}
 \setcounter{section@level}{1}
 \setcounter{lstlisting}{0}
 }

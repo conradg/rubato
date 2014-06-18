@@ -25,15 +25,7 @@ There are various ways of measuring musicality, which will be discussed in more 
 \section{Pitch detection}
 There are very few examples of pitch detection algorithms running in browser, and the few that there are aren't very useful to a singer\cite{webaudiodemos,audioStretch}. This is because they all try to perform real-time pitch detection where the output is calculated at the same time the user is singing. This is useful for instruments like guitars where when you strike a note, you can be assured it will remain fairly constant in pitch, but the human voice is prone to slight variations in pitch that can cause a real-time algorithm to oscillate around a point, making it hard to gauge what the note you actually sung was. It is with this in mind that I aim to create a meaningful pitch detection algorithm that looks at a 2-3 second audio sample and gives the user accurate pitch data for that period
 
-\section{Existing work}
 
+\section{Achievements}
 
-\section{Objectives}
-
-I aim to build a program that can successfully teach musicality. To ensure I achieve this goal, the following criteria must be met:
-	\begin{itemize}
-		\item \textbf{Adaptive} - The product must analyse the user's progress and their strengths, and adopt the content of their learning experience accordingly. This will require a user account system, as well as intelligent handling of the exercise data they generate.
-		\item \textbf{Intuitive} - The product must be simple to use, and the exercises given to the user must be simple to understand, even for a beginner.
-		\item \textbf{Engaging} - The user must want to learn and continue learning. In a study of Duolingo's effectiveness, 93.8\% of participants intended to continue using the website after the study had finished \cite{griffiths2012profile}. I would like to aim for at least 75\%.
-		\item \textbf{Pitch Recognition} - Another way I'm aiming push the boundaries of musicality teaching is through introducing exercises that involve pitch data to be submitted by the user, and then grade them based on how accurate they are.
-	\end{itemize}
+I have created a web application to train user's intonation using pitch detection and adaptive learning techniques. In doing so, I have created a designed a functional adaptive learning method, as well as a successful pitch detection function for the recognition of sung notes.

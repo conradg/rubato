@@ -24,14 +24,14 @@ R.~Vesselinov and J.~Grego, ``Duolingo effectiveness study,'' {\em City
 ``Flash based real-time pitch detection..''
   \url{http://www.audiostretch.com/pitch/},.
 
+\bibitem{alexander1995teaching}
+S.~Alexander, ``Teaching and learning on the world wide web,'' in {\em
+  Proceedings of AusWeb}, vol.~95, p.~93, 1995.
+
 \bibitem{griffiths2012profile}
 L.~S. Griffiths, R.~Ogden, and R.~Aspin, ``A profile of the future: what could
   html 5 do for he by 2015?,'' {\em Research in Learning Technology}, vol.~20,
   2012.
-
-\bibitem{alexander1995teaching}
-S.~Alexander, ``Teaching and learning on the world wide web,'' in {\em
-  Proceedings of AusWeb}, vol.~95, p.~93, 1995.
 
 \bibitem{duolingoDataDriven}
 ``Duolingo’s data-driven approach to education.''
@@ -50,7 +50,28 @@ S.~Alexander, ``Teaching and learning on the world wide web,'' in {\em
 ``musictheory.net, on online music theory tutor and ear trainer.''
   \url{http://www.musictheory.net/}.
 
+\bibitem{comparativePitchDetection}
+L.~Rabiner, M.~Cheng, A.~Rosenberg, and C.~McGonegal, ``A comparative
+  performance study of several pitch detection algorithms,'' {\em Acoustics,
+  Speech and Signal Processing, IEEE Transactions on}, vol.~24, pp.~399--418,
+  Oct 1976.
+
+\bibitem{django}
+``Django project homepage.'' \url{https://www.djangoproject.com/},.
+
 \bibitem{scientificPitchTable}
 ``Table of note frequencies..''
+  \url{http://en.wikipedia.org/wiki/Scientific_pitch_notation#Table_of_note_frequencies},.
+
+\bibitem{quadraticInterpolation}
+``Quadratic interpolation formula.''
+  \url{http://www-rohan.sdsu.edu/doc/matlab/toolbox/optim/tutori5b.html},.
+
+\bibitem{testAudio}
+``Test set for pitch detection algorithms.'' \url{http://www.tiny.cc/zdnlhx},.
+
+\bibitem{loeffler2006instrument}
+D.~B. Loeffler, ``Instrument timbres and pitch estimation in polyphonic
+  music,'' 2006.
 
 \end{thebibliography}

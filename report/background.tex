@@ -1,6 +1,8 @@
 \chapter{Background}
+
+In this chapter we cover the theory of adaptive learning, and look at some examples of existing websites that employ adaptive learning. We then look at the basics of Western music theory in terms of pitch, the 12-tone scale, and tuning. Finally, we look at autocorrelation, a method of detecting pitch.
 	\section{Adaptive learning}
-	Web based learning has been a topic of interest almost since the birth of the web\cite{alexander1995teaching}, and the introduction of the HTML5 standard has opened up even more opportunities for computers to play a role in the education process\cite{griffiths2012profile}. 3 notable examples of web based learning systems (WLS) are:
+	Web based learning has been a topic of interest almost since the birth of the web\cite{alexander1995teaching}, and the introduction of the HTML5 standard has opened up even more opportunities for computers to play a role in the education process\cite{griffiths2012profile}. 3 notable examples of web based learning systems, a class of web application I refer to as a WLS, are:
 	\begin{itemize}
 		\item Coursera, a site that provides lecture material for various university level courses.
 		\item  Codeacademy, a site designed to help people learn coding by getting them to undertake interactive browser based programming lessons.
@@ -8,11 +10,11 @@
 	\end{itemize}
 	The end aim of these sites is the same as all WLS's: to educate the user, but there are key differences between them which we can use to categorise them further into a hierarchy.
 	\begin{itemize}
-		\item Coursera is a \emph{static} WLS, it allows a one way interaction whereby the user can view/download learning material. While this is surely useful, it is really the base level of what a WLS can do.
-		\item Codeacademy is a \emph{dynamic} WLS, it allows a two way interaction that introduces feedback for the user, enhancing the learning experience beyond a static WLS.
-		\item Duolingo is an \emph{adaptive} WLS, it includes all the features of a dynamic WLS, only it can treat every user differently by analysing their strengths and weaknesses \cite{duolingoDataDriven}. This adaptive approach allows for superior teaching to static or dynamic WLS's, as if implemented correctly it will start to mimic the tailor-made learning experience one might receive from a real-world \bsq{for-hire} tutor.
+	\item \emph{static}: This facilitates learning through a pull model, with users viewing learning material on the site, and doing what they like with the information they are given. This only allows a one way interaction with no form of testing/feedback mechanism. Coursera is an example of a static WLS.
+		\item \emph{dynamic}: These build on everything the static WLS has to offer, and include some sort of feedback loop, normally in the form of providing the user with tests/exercises they can use to improve their understanding of the learning materials provided to them. This allows a two way interaction that can help to cement understanding of concepts by allowing the user to put them into practice. Codeacademy is an example of a Dynamic WLS.
+		\item \emph{adaptive}: These includes all the features of a dynamic WLS, only it can treat every user differently by analysing their strengths and weaknesses based on the exercises it supplies them with \cite{duolingoDataDriven}. This adaptive approach allows for superior teaching to static or dynamic WLS's, as if implemented correctly it will start to mimic the tailor-made learning experience one might receive from a real-world \bsq{for-hire} tutor. Duolingo is an example of an adaptive WLS.
 	\end{itemize}
-	
+
 	
 	\subsection{Adaptive learning in music}
 		There are many ways that adaptive learning techniques can be applied in a musical context. As an example, imagine a simple exercise.
@@ -21,9 +23,9 @@
 			\item They must then replicate the phrase by tapping it in on the space bar. 
 			\item The application then calculates how accurate the user's approximation of the rhythm is, and feeds this information back to the user
 		\end{itemize}
-		After repeating this exercise multiple times the application notices something: The user is always getting examples featuring multiple consecutive dotted quavers wrong		\footnote{This is a type of rhythm that could prove difficult for the user as it can sound like the rhythm is going in and out of time due to its naturally syncopated nature 		against a four four baseline}, and determines that this particular rhythmical device is something the user is struggling with. It can then subtly adapt future exercises to 	incorporate this device prominently, in order to expose the user to it as much as possible, and hopefully cause them to improve their understanding of that specific rhythm, and rhythm in general.
-	\section{Platform choice}
-	As the modern internet browser has become more and more powerful, web apps have been able to reduce the previous speed disadvantages they faced when compared with their native equivalents. The web-platform is advantageous due to having a singular codebase, meaning that it can be used by anyone with a web browser, independent of their device, so it has the potential to reach more users. Another key advantage of building a web app is that as user testing is so key to evaluating the app's success, when the time comes, and I want to show it to users, I can easily point people to my website and people will know how to get to it. Distributing a mobile app to others for testing purposes is painful, and difficult to update once they have installed it, with a web app I can instantly change the build of my website, and my aunt who's testing it in Jamaica won't have to do anything more than refresh the page.
+		The application can offer the user simple rhythms to start off with, and then, as it notices the user repeat the rhythms with greater and greater accuracy, it can increase the difficulty by introducing syncopation, triplets, and other advanced musical techniques.
+		
+
 	\section{Existing Musicality Tutors}
 	
 	There are a wide variety of existing web-based applications that teach musicality, to varying degrees. There are programs to allow you to practice interval recognition\cite{intervalEarTrainer}, identify a note in a chord, practice recognition of rhythms\cite{rhythmTrainer}. A lot of these programs are standalone, and focussed on one specific area. Musictheory.net\cite{musicTheorynet} is a good example of a website that that goes beyond that, it provides exercises that test a wide variety of skills, trains your ear as well as providing music theory lessons. However Musictheory.net provides no adaption to the user, the furthest it goes is allowing you to specify what you want to be taught, but it is not intelligent enough to work it out itself.
@@ -71,7 +73,7 @@
 		
 	where \(p\) is the pitch in MIDI notation, and \(f\) is the frequency.
 	
-	As mentioned previously in the section regarding the scale, there are only 12 different notes that are commonly used, yet this function can provide us with fractional values. What sense can we make of a number like 54.38? The unit most commonly used to represent fractions of a semitone is the cent. There are 100 cents in a semitone, so the number 54.38 would be translated to a F\#3 at 38 cents sharp.
+	As mentioned previously in the section regarding the scale, there are only 12 different notes that are commonly used, yet this function can provide us with fractional values. What sense can we make of a number like 54.38? The unit most commonly used to represent fractions of a semitone is the cent. There are 100 cents in a semitone, so the number 54.38 would be translated to a F\#3 at 38 cents sharp, similarly, a score of 54.8 would be translated to a G that was 20 cents flat.
 	
 	\subsubsection{Intervals}
 	An interval is the distance between two notes as measured by the ratio of their frequencies. We have discussed one interval already, that being the octave, who's frequency ratio is 2:1. The next simplest interval is the \bsq{perfect fifth}, who's frequencies have a ratio of 3:2. Now we run into a problem with equal temperament. While the perfectly spaced notes of the piano are useful for their flexibility with respect to what key you wish to play in, they cannot accurately represent the purest intervals such as the perfect fifth. The closest interval on the piano is 7 semitones, or a ratio of \(2^\frac{7}{12}\):1 = 1.4983. Thankfully however, this slight difference is not great enough to offend most peoples' ears.
@@ -104,19 +106,20 @@
 	\subsection{Fundamental Frequency Detection Methods}
 	
 	\f0 detection is a difficult process, and there is no \bsq{best method} so to speak, each approach has its drawbacks and advantages, the normal trade-off being that a method that is fast may not be reliable and vice versa.
-	There are two approaches to \f0 detection, analysing the signal in the the time-domain, or the frequency domain. To analyse in the frequency domain requires the use of the Fourier Transform, and is therefore a slower process, but provides more accuracy, as well as support for multiple notes being detected simultaneously. However, as we are only using monophonic pitch detection, and responsiveness is key, then for our purposes, time-domain algorithms will be the most appropriate.
+	There are two main approaches to \f0 detection, analysing the signal in the the time-domain, or the frequency domain. 
+	\par
+	To analyse in the frequency domain requires the use of the Fourier Transform, and is therefore a slower process, but provides more accuracy, as well as support for multiple notes being detected simultaneously. However, as we are only using monophonic pitch detection, and responsiveness is key, then for our purposes, time-domain algorithms will be the most appropriate.
 	\begin{figure}[h!]
-  		\caption{Time domain (above) vs frequency domain representations of the same signal}
+  		\caption{Time domain (above) vs frequency domain representations of the same signal, the Time domain representation plots amplitude against time, and is a quantisation of the raw audio signal. The second image represents the frequencies present in the audio signal, and shows their intensity on the y-axis}
   		\centering
     	\includegraphics[width=0.5\textwidth]{assets/time-frequency.png}
 	\end{figure}
-		\subsubsection{Zero crossings algorithm}
-		This is just about the simplest pitch detection algorithm there is. It works by measuring the distance between zero crossing in (FINISH THIS)
+
 		\subsubsection{Autocorrelation}
-		A standard method of time-domain \f0 detection is autocorrelation. It exploits the fact that a periodic or quasiperiodic waveform such as a sustained sung note will be self-similar by the definition of periodicity. If we compare a waveform with a copy of that waveform offset by the period of the waveform i.e. \(\f0 ^{-1}\) then we should expect to see a strong correlation between them. So autocorrelation works by iterating over all the possible offset values, and determining which one has the best correlation. This correlation value for each different offset is described by the equation below, where x is the signal function, N is the window size of the waveform you are considering, and v is the offset value.  \[R_x(v) = \sum_{n=0}^{N-1-v} x[n]x[n+v]\]
+		A standard method of time-domain \f0 detection is autocorrelation\cite{comparativePitchDetection}. It exploits the fact that a periodic or quasiperiodic waveform such as a sustained sung note will be self-similar by the definition of periodicity. If we compare a waveform with a copy of that waveform offset by the period of the waveform i.e. \(\f0 ^{-1}\) then we should expect to see a strong correlation between them. So autocorrelation works by iterating over all the possible offset values, and determining which one has the best correlation. This correlation value for each different offset is described by the equation below, where x is the signal function, N is the window size of the waveform you are considering, and v is the offset value.  \[R_x(v) = \sum_{n=0}^{N-1-v} x[n]x[n+v]\]
 		\begin{figure}
 			\centering
-			\includegraphics[scale=0.7]{autocorrelation.png}
+			\includegraphics[scale=0.5]{autocorrelation.png}
 			\caption{This lag value will have high autocorrelation}
 		\end{figure}
 
@@ -124,5 +127,9 @@
 		One fundamental limitation of Autocorrelation is that octave errors are frequently encountered. This occurs when the offset is calculated to be double what it should be, and is prone to happening as the nature of a periodic wave is such that if you shift it along twice the offset then you will also end up with a valid offset.
 	
 \section{Audio processing}
-	Audio captured using the Web Audio Context API is stored in PCM format using an array of 32 Bit Floats between -1 and 1 to represent samples. (FINISH THIS)
+	An analog audio signal can be represented digitally as a series of "samples" These samples are quantised versions of the amplitude of the audio signal.
+	\subsection{Nyquist-Shannon sampling theory}
+	The Nyquist-Shannon sampling theory states that to be able to represent a periodic signal with frequency B, we must sample at a rate at least twice that of B. In terms of our pitch detection, the highest frequency we should need to measure will be no higher than 1000Hz, requiring a sampling rate of 2000Hz. Since most microphone capture audio at 44.1KHz or more, then we will have a more than adequate sampling rate.
+	\subsection{Pulse Code Modulation}
+	Pulse Code Modulation (PCM) is the most common format of storing uncompressed digital audio data, and is an array of quantised samples. In our application, we are using 32 bit PCM, where each sample of audio is represented as a 32 Bit Floats between -1 and 1.
 

@@ -69,17 +69,25 @@
 
 \input{./title.tex}
 
-\renewcommand{\abstractname}{Executive Summary}
+\begin{abstract}
+In this project, we propose an adaptive learning web application that employs pitch detection algorithms. As web based learning is growing more and more popular, an increasing number of companies are adopting adaptive learning into their education models, most notably, Duolingo, a language tutoring website. There exists, however, no such application of this type in the domain of music theory, though there are many non-adaptive websites that attempt to teach it. With the advent of HTML5 and the Web Audio API, an opportunity also exists to run browser based pitch detection algorithms to analyse various aspects of a pupil's musical ability, yet there are currently no browser based pitch detection algorithms suitable for measuring vocal performance. We devise a highly robust, fast algorithm suitable for measuring sung pitch in pupils wishing to measure their tuning, and we apply this in an adaptive learning context.
+\end{abstract}
+
+
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+I would like to thank my supervisor Iain Phillips for his continued support and guidance throughout my project. I would also like to thank my friends and family for their company for the past three years at Imperial College. A big thank you is also due to those who helped me pitch detect my algorithm, David Maguire, Elise van Lil, Alex Moore, Emily Ooi, and Tom Watkins.
+
+\end{abstract}
 \tableofcontents
 %\listoffigures
 %\listoftables
 \include{./introduction}
 \include{./background}
 \include{./implementation}
-\include{./development}
 \include{./evaluation}
-
-\include{./plan}
+\include{./conclusions}
+\include{./appendix}
 
 \bibliographystyle{ieeetr}
 \bibliography{master}

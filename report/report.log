@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.1.13)  16 JUN 2014 20:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.1.13)  17 JUN 2014 15:37
 entering extended mode
 **report.tex
 (C:\Users\Conrad\rubato\report\report.tex
@@ -357,9 +357,9 @@ Package color Info: Driver file: pdftex.def on input line 130.
 (C:\Users\Conrad\rubato\report\introduction.aux)
 (C:\Users\Conrad\rubato\report\background.aux)
 (C:\Users\Conrad\rubato\report\implementation.aux)
-(C:\Users\Conrad\rubato\report\development.aux)
 (C:\Users\Conrad\rubato\report\evaluation.aux)
-(C:\Users\Conrad\rubato\report\plan.aux))
+(C:\Users\Conrad\rubato\report\conclusions.aux)
+(C:\Users\Conrad\rubato\report\appendix.aux))
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
 LaTeX Font Info:    ... okay on input line 68.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 68.
@@ -449,8 +449,18 @@ LaTeX Info: Redefining \nameref on input line 68.
 \c@lstlisting=\count133
  (C:\Users\Conrad\rubato\report\title.tex [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]) (C:\Users\Conrad\rubato\
-report\report.toc
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}])pdfTeX warning (ext4): de
+stination with the same identifier (name{page.1}) has been already used, duplic
+ate ignored
+<to be read again> 
+                   \relax 
+l.74 \end{abstract}
+                    [1]pdfTeX warning (ext4): destination with the same identif
+ier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.81 \end{abstract}
+                    [1] (C:\Users\Conrad\rubato\report\report.toc
 LaTeX Font Info:    Try loading font information for U+msa on input line 2.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
@@ -469,7 +479,7 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.48 ...3}Beat reproduction}{23}{subsection.3.4.3}
+l.37 ...ine {3.5}Pitch Detection}{18}{section.3.5}
                                                    [1
 
 ])
@@ -477,7 +487,7 @@ l.48 ...3}Beat reproduction}{23}{subsection.3.4.3}
  [2]
 (C:\Users\Conrad\rubato\report\introduction.tex
 Chapter 1.
-<assets/duolingo.png, id=236, 773.89125pt x 424.58624pt>
+<assets/duolingo.png, id=252, 773.89125pt x 424.58624pt>
 File: assets/duolingo.png Graphic file (type png)
 
 <use assets/duolingo.png>
@@ -491,243 +501,145 @@ Overfull \hbox (6.2468pt too wide) in paragraph at lines 12--13
 [3
 
 
-] [4 <C:/Users/Conrad/rubato/report/assets/duolingo.png>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 35.
-
+] [4 <C:/Users/Conrad/rubato/report/assets/duolingo.png>]) [5]
+(C:\Users\Conrad\rubato\report\background.tex
+Chapter 2.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 7.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
-
-Overfull \hbox (10.43016pt too wide) in paragraph at lines 35--36
-[]\OT1/cmr/bx/n/10.95 Adaptive \OT1/cmr/m/n/10.95 - The prod-uct must anal-yse 
-the user's progress and their strengths,
- []
-
-) [5] (C:\Users\Conrad\rubato\report\background.tex
-Chapter 2.
-[6
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 7.
+ [6
 
 
 
-] [7] [8] <assets/keyboard.png, id=291, 770.12718pt x 209.28188pt>
+] [7] [8]
+<assets/keyboard.png, id=302, 770.12718pt x 209.28188pt>
 File: assets/keyboard.png Graphic file (type png)
 
 <use assets/keyboard.png>
-Package pdftex.def Info: assets/keyboard.png used on input line 46.
+Package pdftex.def Info: assets/keyboard.png used on input line 48.
 (pdftex.def)             Requested size: 385.06264pt x 104.64067pt.
 
-Overfull \hbox (4.36476pt too wide) in paragraph at lines 46--47
+Overfull \hbox (4.36476pt too wide) in paragraph at lines 48--49
  [][] 
  []
 
 [9 <C:/Users/Conrad/rubato/report/assets/keyboard.png>] [10]
-<assets/intervals.png, id=308, 968.11688pt x 341.77687pt>
+<assets/intervals.png, id=322, 968.11688pt x 341.77687pt>
 File: assets/intervals.png Graphic file (type png)
 
 <use assets/intervals.png>
-Package pdftex.def Info: assets/intervals.png used on input line 83.
+Package pdftex.def Info: assets/intervals.png used on input line 85.
 (pdftex.def)             Requested size: 387.23988pt x 136.70831pt.
 
-Overfull \hbox (6.542pt too wide) in paragraph at lines 83--84
+Overfull \hbox (6.542pt too wide) in paragraph at lines 85--86
  [][] 
  []
 
-[11] [12 <C:/Users/Conrad/rubato/report/assets/intervals.png>]
-<assets/time-frequency.png, id=324, 218.31563pt x 183.68625pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[11] <assets/time-frequency.png, id=330, 218.31563pt x 183.68625pt>
 File: assets/time-frequency.png Graphic file (type png)
 
 <use assets/time-frequency.png>
-Package pdftex.def Info: assets/time-frequency.png used on input line 111.
+Package pdftex.def Info: assets/time-frequency.png used on input line 115.
 (pdftex.def)             Requested size: 190.34894pt x 160.15607pt.
- [13 <C:/Users/Conrad/rubato/report/assets/time-frequency.png>] <assets/autocor
-relation.png, id=330, 523.556pt x 231.264pt>
+ [12 <C:/Users/Conrad/rubato/report/assets/intervals.png>] <assets/autocorrelat
+ion.png, id=338, 523.556pt x 231.264pt>
 File: assets/autocorrelation.png Graphic file (type png)
 
 <use assets/autocorrelation.png>
-Package pdftex.def Info: assets/autocorrelation.png used on input line 119.
-(pdftex.def)             Requested size: 366.4867pt x 161.88368pt.
- [14 <C:/Users/Conrad/rubato/report/assets/autocorrelation.png>]) [15] (C:\User
-s\Conrad\rubato\report\implementation.tex
+Package pdftex.def Info: assets/autocorrelation.png used on input line 122.
+(pdftex.def)             Requested size: 261.77736pt x 115.63171pt.
+ [13 <C:/Users/Conrad/rubato/report/assets/time-frequency.png>]) [14 <C:/Users/
+Conrad/rubato/report/assets/autocorrelation.png>] (C:\Users\Conrad\rubato\repor
+t\implementation.tex
 Chapter 3.
-<assets/webpage.png, id=347, 892.83563pt x 627.09282pt>
+<assets/webpage.png, id=356, 892.83563pt x 627.09282pt>
 File: assets/webpage.png Graphic file (type png)
 
 <use assets/webpage.png>
-Package pdftex.def Info: assets/webpage.png used on input line 7.
+Package pdftex.def Info: assets/webpage.png used on input line 5.
 (pdftex.def)             Requested size: 357.12793pt x 250.83269pt.
-
-! Missing { inserted.
-<to be read again> 
-                   _
-l.24 		    def __
-                 str__(self):
-A left brace was mandatory here, so I've put one in.
-You might want to delete and/or insert some corrections
-so that I will find a matching right brace soon.
-(If you're confused by all this, try typing `I}' now.)
-
-! Missing { inserted.
-<to be read again> 
-                   _
-l.24 		    def __str__
-                      (self):
-A left brace was mandatory here, so I've put one in.
-You might want to delete and/or insert some corrections
-so that I will find a matching right brace soon.
-(If you're confused by all this, try typing `I}' now.)
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.26 
-     
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.26 
-     
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.26 
-     
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Display math should end with $$.
-<to be read again> 
-                   \par 
-l.26 
-     
-The `$' that I just saw supposedly matches a previous `$$'.
-So I shall assume that you typed `$$' both times.
-
-
-Overfull \hbox (1120.15083pt too wide) detected at line 26
-\OML/cmm/m/it/10.95 language \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 python\OT
-1/cmr/m/n/10.95 ][]\OML/cmm/m/it/10.95 classIntervalScore\OT1/cmr/m/n/10.95 (\O
-ML/cmm/m/it/10.95 models:Model\OT1/cmr/m/n/10.95 ) : \OML/cmm/m/it/10.95 interv
-al \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 models:ForeignKey\OT1/cmr/m/n/10.95
- (\OML/cmm/m/it/10.95 Interval\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 timestamp
- \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 models:DateTimeField\OT1/cmr/m/n/10.9
-5 (\OML/cmm/m/it/10.95 auto[]ow[]dd \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 Tr
-ue\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 score \OT1/cmr/m/n/10.95 = \OML/cmm/m
-/it/10.95 models:FloatField\OT1/cmr/m/n/10.95 (); \OML/cmm/m/it/10.95 user \OT1
-/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 models:PositiveIntegerField\OT1/cmr/m/n/10
-.95 (); \OML/cmm/m/it/10.95 def[]
- []
-
-
-! Undefined control sequence.
-\lstlisting ->\def \lstenv@name 
-                                {lstlisting}\begingroup \lst@setcatcodes \ca...
-l.27 		\end{lstlisting}
-                       
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Package Listings Error: Extra \endlstlisting.
-
-See the Listings package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.27 		\end{lstlisting}
-                       
-I'm ignoring this, since I wasn't doing a \def {lstlisting}\begingroup \catcode
- `\spacefactor \@m {}11\relax \catcode `\==12\relax \catcode \active =\active \
-lstlisting@.
-
-
-! LaTeX Error: \begin{equation*} on input line 18 ended by \end{lstlisting}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.27 		\end{lstlisting}
-                       
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[16
+ [15
 
 
 
-] <assets/segmented_autocorrelation.png, id=357, 830.35219pt x 532.23843pt>
+ <C:/Users/Conrad/rubato/report/assets/webpage.png>] <assets/application_stack.
+png, id=362, 925.20656pt x 362.85562pt>
+File: assets/application_stack.png Graphic file (type png)
+
+<use assets/application_stack.png>
+Package pdftex.def Info: assets/application_stack.png used on input line 16.
+(pdftex.def)             Requested size: 370.07607pt x 145.13968pt.
+ [16 <C:/Users/Conrad/rubato/report/assets/application_stack.png>]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 31.
+ [17] [18]
+<assets/segmented_autocorrelation.png, id=402, 830.35219pt x 720.44156pt>
 File: assets/segmented_autocorrelation.png Graphic file (type png)
 
 <use assets/segmented_autocorrelation.png>
 Package pdftex.def Info: assets/segmented_autocorrelation.png used on input lin
-e 40.
-(pdftex.def)             Requested size: 415.17508pt x 266.11856pt.
+e 75.
+(pdftex.def)             Requested size: 415.17508pt x 360.2199pt.
 
-Overfull \hbox (34.4772pt too wide) in paragraph at lines 40--41
+Overfull \hbox (34.4772pt too wide) in paragraph at lines 75--76
  [][] 
  []
 
-[17 <C:/Users/Conrad/rubato/report/assets/webpage.png>]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no “ in font cmr10!
- [18 <C:/Users/Conrad/rubato/report/assets/segmented_autocorrelation.png>] [19]
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 74.
+[19] [20 <C:/Users/Conrad/rubato/report/assets/segmented_autocorrelation.png>]
+[21] <assets/quadratic_interpolation.png, id=446, 212.29312pt x 374.14781pt>
+File: assets/quadratic_interpolation.png Graphic file (type png)
 
-<assets/median_demonstration_tall.png, id=379, 266.49562pt x 521.69907pt>
+<use assets/quadratic_interpolation.png>
+Package pdftex.def Info: assets/quadratic_interpolation.png used on input line 
+128.
+(pdftex.def)             Requested size: 84.91574pt x 149.65646pt.
+ [22 <C:/Users/Conrad/rubato/report/assets/quadratic_interpolation.png>]
+<assets/median_demonstration_tall.png, id=458, 266.49562pt x 521.69907pt>
 File: assets/median_demonstration_tall.png Graphic file (type png)
 
 <use assets/median_demonstration_tall.png>
 Package pdftex.def Info: assets/median_demonstration_tall.png used on input lin
-e 94.
+e 174.
 (pdftex.def)             Requested size: 186.54565pt x 365.18684pt.
- [20] [21 <C:/Users/Conrad/rubato/report/assets/median_demonstration_tall.png>]
+ [23] [24 <C:/Users/Conrad/rubato/report/assets/median_demonstration_tall.png>]
 
-<assets/amplitude_filtering.png, id=408, 534.49687pt x 151.3153pt>
+<assets/amplitude_filtering.png, id=485, 534.49687pt x 151.3153pt>
 File: assets/amplitude_filtering.png Graphic file (type png)
 
 <use assets/amplitude_filtering.png>
-Package pdftex.def Info: assets/amplitude_filtering.png used on input line 116.
+Package pdftex.def Info: assets/amplitude_filtering.png used on input line 187.
 
 (pdftex.def)             Requested size: 374.14525pt x 105.91998pt.
- [22 <C:/Users/Conrad/rubato/report/assets/amplitude_filtering.png>]) [23] (C:\
-Users\Conrad\rubato\report\development.tex
+ [25 <C:/Users/Conrad/rubato/report/assets/amplitude_filtering.png>] [26] [27])
+ [28]
+(C:\Users\Conrad\rubato\report\evaluation.tex
 Chapter 4.
-) [24
+[29
 
 
 
-] (C:\Users\Conrad\rubato\report\evaluation.tex
+] [30] [31]
+Overfull \vbox (44.30801pt too high) has occurred while \output is active []
+
+
+[32]) [33] (C:\Users\Conrad\rubato\report\conclusions.tex
 Chapter 5.
-[25
+) [34
 
 
 
-]) [26] (C:\Users\Conrad\rubato\report\plan.tex
-Chapter 6.
-[27
-
-
-
-]) [28] (C:\Users\Conrad\rubato\report\report.bbl
+]
+No file ./appendix.tex.
+(C:\Users\Conrad\rubato\report\report.bbl
 Underfull \hbox (badness 2050) in paragraph at lines 8--10
 []\OT1/cmr/m/n/10.95 ``Codeacademy, learn to code in-ter-ac-tively, for free..'
 ' []$\OT1/cmtt/m/n/10.95 http : / / www .$
@@ -753,60 +665,54 @@ $\OT1/cmtt/m/n/10.95 duolingos-[]data-[]driven-[]approach-[]to-[]education$[]\O
 T1/cmr/m/n/10.95 .  Ac-cessed: 2014-
  []
 
-[29
+[35
 
 
-])
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 63--65
+[]\OT1/cmr/m/n/10.95 ``Table of note fre-quen-cies..'' []$\OT1/cmtt/m/n/10.95 h
+ttp : / / en . wikipedia . org / wiki /$
+ []
+
+
+Underfull \hbox (badness 1742) in paragraph at lines 67--69
+[]\OT1/cmr/m/n/10.95 ``Quadratic in-ter-po-la-tion for-mula.'' []$\OT1/cmtt/m/n
+/10.95 http : / / www-[]rohan . sdsu . edu / doc /$
+ []
+
+)
 
 Package caption Warning: Unused \captionsetup[sub] on input line 18.
 See the caption package documentation for explanation.
 
-
-! LaTeX Error: \begin{[} on input line 18 ended by \end{document}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.87 \end{document}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 87.
-[30]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 87.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 95.
+[36]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 95.
  (C:\Users\Conrad\rubato\report\report.aux
 (C:\Users\Conrad\rubato\report\introduction.aux)
 (C:\Users\Conrad\rubato\report\background.aux)
 (C:\Users\Conrad\rubato\report\implementation.aux)
-(C:\Users\Conrad\rubato\report\development.aux)
 (C:\Users\Conrad\rubato\report\evaluation.aux)
-(C:\Users\Conrad\rubato\report\plan.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 87.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 87.
+(C:\Users\Conrad\rubato\report\conclusions.aux)
+(C:\Users\Conrad\rubato\report\appendix.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 95.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 95.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: C903ECDC3CA7D7E8104D99C573754C2A;2700.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 87.
- )
-(\end occurred inside a group at level 1)
-
-### semi simple group (level 1) entered at line 18 (\begingroup)
-### bottom level 
+(rerunfilecheck)             Checksum: 9CC2CC635B20DD5BC1C787D98E45B5D7;2931.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 95.
+ ) 
 Here is how much of TeX's memory you used:
- 9199 strings out of 493921
- 138171 string characters out of 3144873
- 256806 words of memory out of 3000000
- 12189 multiletter control sequences out of 15000+200000
+ 9342 strings out of 493921
+ 140417 string characters out of 3144873
+ 276001 words of memory out of 3000000
+ 12259 multiletter control sequences out of 15000+200000
  15067 words of font info for 60 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 36i,12n,40p,1548b,1063s stack positions out of 5000i,500n,10000p,200000b,50000s
-pdfTeX warning (dest): name{Hfootnote.3} has been referenced bu
-t does not exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist
-, replaced by a fixed one
+ 39i,12n,40p,1548b,1703s stack positions out of 5000i,500n,10000p,200000b,50000s
+pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exi
+st, replaced by a fixed one
 
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
 , replaced by a fixed one
@@ -816,22 +722,21 @@ pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
 Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/P
 rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Pro
 gram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x8
-6)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86)/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
-ts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmtt9.pfb>
-Output written on report.pdf (31 pages, 574132 bytes).
+am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program 
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fil
+es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x86)/Mi
+KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmtt9.pfb>
+Output written on report.pdf (39 pages, 641189 bytes).
 PDF statistics:
- 556 PDF objects out of 1000 (max. 8388607)
- 134 named destinations out of 1000 (max. 500000)
- 382 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 690 PDF objects out of 1000 (max. 8388607)
+ 208 named destinations out of 1000 (max. 500000)
+ 408 words of extra memory for PDF output out of 10000 (max. 10000000)
 

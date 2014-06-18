@@ -138,11 +138,25 @@ var P_Eb5 = "/static/assets/test_pitches/piano/Eb5.wav"
 var P_E5  = "/static/assets/test_pitches/piano/E5.wav"
 var P_F5  = "/static/assets/test_pitches/piano/F5.wav"
 var P_Fs5 = "/static/assets/test_pitches/piano/Fs5.wav"
-var P_G5  = "/static/assets/test_pitches/piano/G3.wav"
+var P_G5  = "/static/assets/test_pitches/piano/G5.wav"
+
+var sine440 = "/static/assets/test_pitches/sine/440.wav"
+var sine430 = "/static/assets/test_pitches/sine/430.wav"
+var sine420 = "/static/assets/test_pitches/sine/420.wav"
+var sine410 = "/static/assets/test_pitches/sine/410.wav"
+var sine400 = "/static/assets/test_pitches/sine/400.wav"
+
+var sine440n = "/static/assets/test_pitches/sine/440n.wav"
+var sine430n = "/static/assets/test_pitches/sine/430n.wav"
+var sine420n = "/static/assets/test_pitches/sine/420n.wav"
+var sine410n = "/static/assets/test_pitches/sine/410n.wav"
+var sine400n = "/static/assets/test_pitches/sine/400n.wav"
+
+var sine440nl = "/static/assets/test_pitches/sine/440nl.wav"
 
 var piano1 = [P_G2,P_Ab2,P_A2,P_Bb2,P_B2,P_C3,P_Cs3,P_D3,P_Eb3,P_E3,P_F3,P_Fs3];
 var piano2 = [P_G3,P_Ab3,P_A3,P_Bb3,P_B3,P_C4,P_Cs4,P_D4,P_Eb4,P_E4,P_F4,P_Fs4];
-var piano3 = [P_G4,P_Ab4,P_A4,P_Bb4,P_B4,P_C5,P_Cs5,P_D5,P_Eb5,P_E5,P_F5,P_Fs5];
+var piano3 = [P_G4,P_Ab4,P_A4,P_Bb4,P_B4,P_C5,P_Cs5,P_D5,P_Eb5,P_E5,P_F5,P_Fs5,P_G5];
 
 var piano = piano1.concat(piano2,piano3);
 
@@ -167,7 +181,8 @@ var actualValues   = new Array(numURLs);
 
 var times_to_test = 1;
 var iteration = 0;
-var test_results = new Array(times_to_test);
+var test_seconds = new Array(times_to_test);
+var test_results = [];
 var start_time;
 var verbose = true;
 
@@ -198,6 +213,7 @@ function testPitchDetection(){
 function testPitchDetection_h(i){
     pitchDetect(testAudioURLs[i], function(){
         actualValues[i] = [detected_pitch_s,detected_cents];
+
         if (i == numURLs-1){
             var correct = 0;
             var results = "";
@@ -216,7 +232,7 @@ function testPitchDetection_h(i){
                 console.log("Percentage correct: " + correct*100/numURLs + "% with " +  numURLs + " test cases");
             }
             var time_taken = (new Date().getTime() - start_time)/1000;
-            test_results[iteration] = time_taken;
+            test_seconds[iteration] = time_taken;
             var result = "Time taken: " + time_taken + " seconds, or " + (time_taken/numURLs) + " seconds per sample"
             console.log(result);
             $("#pitch").text(result);
@@ -514,8 +530,8 @@ function getPitch(buf){
 //returns the frequency of a 1000 sample long window.
 function autoCorrelate(buf, sampleRate){
 
-    var MIN_SAMPLES = 48;	// corresponds to an 1.2kHz signal i.e.
-    var MAX_SAMPLES = 600; // corresponds to a ~70hz signal i.e. C#2
+    var MIN_SAMPLES = 48;	// corresponds to an 1.2kHz signal i.e. C6
+    var MAX_SAMPLES = 600; // corresponds to an 80hz signal i.e. E2
     var SIZE = segment_size;
     var best_offset = -1;
     var best_correlation = 0;
@@ -542,8 +558,26 @@ function autoCorrelate(buf, sampleRate){
             max_correlation = correlation;
         }
     }
+    var x1 = best_offset - 1;
+    var x2 = best_offset;
+    var x3 = best_offset + 1;
+
+    var f1 = ACF[best_offset-MIN_SAMPLES-1]
+    var f2 = ACF[best_offset-MIN_SAMPLES]
+    var f3 = ACF[best_offset-MIN_SAMPLES+1]
+
+    var B23 = x2*x2-x3*x3;
+    var B31 = x3*x3-x1*x1;
+    var B12 = x1*x1-x2*x2;
+
+    var y23 = x2-x3;
+    var y31 = x3-x1;
+    var y12 = x1-x2;
+
+    var qerp =(B23*f1 + B31*f2 + B12*f3)/(2*(y23*f1 + y31*f2 + y12*f3));
+
     auto_correl_count++;
-    return sampleRate/best_offset;
+    return sampleRate/qerp;
 }
 
 
@@ -701,7 +735,7 @@ function updateCorrelation() {
 function updateFrequency(){
     var canvas = $("#frequency_canvas")[0];
 
-    var spacing = 2;
+    var spacing = 0;
     var BAR_WIDTH = Math.floor(canvas.clientWidth/num_windows) - spacing;
 
     canvas.height = canvas.clientHeight;

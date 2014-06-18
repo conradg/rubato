@@ -32,20 +32,21 @@
     </div>
     <div id="main_exercise">
         <h2 id="help">help</h2>
+        <div id="pitch" style="display:block;text-align: center">Press play to hear the note</div>
         <div class="container">
             <div id="exercise">
                 <div id="interval"><h1 id="interval_text"></h1></div>
                     <div id="buttons">
                         <div class="button-container">
                             <div id="playbutton">
-                                <img onclick="playNote()" src="{% static "assets/images/play.png" %}"/>
+                                <img onclick="playNote();" src="{% static "assets/images/play.png" %}"/>
                             </div>
                         </div><div class="button-container">
                             <div id="recordbutton">
                                 <img onclick="toggleRecording()"  src="{% static "assets/images/record.png" %}"/>
                             </div>
                         </div>
-                    </div><div id="pitch" style="display:block">none</div>
+                    </div>
             </div><div id="displays" >
                 <div class="canvas_display">
                     <h1>Autocorrelation Function</h1>
