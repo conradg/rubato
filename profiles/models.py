@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    level = models.PositiveIntegerField()
+    level = models.PositiveIntegerField(1)
     exp = models.FloatField()
     gender = models.CharField(max_length=1, choices=(("m","male"),("f","female")))
     def __str__(self):

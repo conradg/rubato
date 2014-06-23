@@ -20,6 +20,7 @@ var amp_threshold = calibrateMicrophone();
 var recording = false;
 var segment_size = 1200;
 var error = false;
+var error_text = "";
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -175,7 +176,7 @@ var david = david_normal_1.concat(david_vibrato_1);
 var all = normal.concat(male_wobbly, david, male_high);
 
 
-var testAudioURLs  = piano;
+var testAudioURLs  = [T1_D3];
 
 var numURLs        = testAudioURLs.length;
 var expectedValues = new Array(numURLs);
@@ -310,7 +311,7 @@ function updatePitchDisplay(url){
     pitchDetect(url, function(){
         if(!error){
             sendAndGetScore()
-            $("#pitch").text(detected_pitch_s);
+          //  $("#pitch").text(detected_pitch_s);
         } else{
             $("#pitch").text(error_text);
             return
@@ -327,6 +328,22 @@ function calculateScore(){
     score = 1 - (how_far_from_perfect);
     score = Math.max(score,0);
     console.log("score: " + score);
+    var flat_sharp = detected_pitch_m>target_pitch ? "sharp" : "flat"
+    if (score==0){
+        if (difference>11 && difference < 13){
+            $("#pitch").text("Looks like you're singing in the wrong octave!")
+        } else {
+            $("#pitch").text("It seems like you're singing the wrong note, try again")
+        }
+    } else if (score<0.3){
+        $("#pitch").text("You're quite " + flat_sharp + "!")
+    } else if (score<0.7){
+        $("#pitch").text("A little " + flat_sharp + " but pretty good")
+    } else if (score<1){
+        $("#pitch").text("Good job!")
+    } else if (score==1){
+        $("#pitch").text("Perfect Score!");
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -359,12 +376,18 @@ function sendAndGetScore(){
     var i = interval;
     $.post('/interval/send_score', {score: score.toString(), interval: i.toString()}, function(){
         if (score == 0){
-            attemps++;
+            attempts++;
             if (attempts==3){
                 playAnswer()
+                $('#pitch').text("Sorry, you got it wrong too many times!")
+                setTimeout(function(){
+                    getInterval()
+                },5000);
+                attempts=0;
             }
-        }
+        } else {
             getInterval()
+        }
      });
 }
 
@@ -464,13 +487,10 @@ function getPitch(buf){
         if (debug) debug_notes[i] = note;
     }
     max_amp = arrayMax(amps);
-    try{
-        if (max_amp < amp_threshold * 2){
-            throw "Too quiet! Please try again with gusto"
-        }
-    } catch (err){
-        $("#tip").text(err);
+    if (max_amp < amp_threshold * 2){
+        error_text =  "Too quiet! Please try again with gusto"
         error = true;
+
     }
 
     //isolate good regions//
@@ -556,7 +576,11 @@ function getPitch(buf){
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
-    score = calculateScore()
+    calculateScore()
+    if (detected_frequency == NaN){
+        error = true;
+        error_text = "Woah! Something went wrong there... Please try again"
+    }
     if(debug)updateDisplays();
 }
 
@@ -1057,7 +1081,7 @@ function median(values) {
 }
 
 function calibrateMicrophone(){
-    return 0.01
+    return 0.02
 }
 
 function playNote(pitch){

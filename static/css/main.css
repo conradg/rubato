@@ -116,7 +116,8 @@ h2 {
 #pitch{
     font-family: 'Ubuntu', sans-serif;
     font-size: 36px;
-    font-weight: bold;
+    font-weight: 100;
+    padding:20px;
     display:inline-block;
 }
 
