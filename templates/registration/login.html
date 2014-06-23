@@ -3,19 +3,24 @@
 {% block title %}Login Rubato{% endblock %}
 {% block main %}
 
+<h2>Please login!</h2>
+<p>Rubato tracks your progress as you complete exercises, and adapts accordingly, so we need you to log in so we can store your exercise info.</p>
+<div id="spacer">
   {% if form.errors %}
     <p class="error">Sorry, that's not a valid username or password</p>
   {% endif %}
 
   <form action="" method="post">
     {% csrf_token %}
+    <div class="row">
     <label for="username">User name:</label>
     <input type="text" name="username" value="" id="username">
+    </div><div class="row">
     <label for="password">Password:</label>
     <input type="password" name="password" value="" id="password">
-
+    </div>
     <input type="submit" value="login" />
     <input type="hidden" name="next" value="{{ next|escape }}" />
   </form>
-
+</div>
 {% endblock %}

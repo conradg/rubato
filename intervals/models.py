@@ -6,7 +6,9 @@ class Interval(models.Model):
     up = models.BooleanField(default=True)
     name = models.CharField(max_length=128)
     def __str__(self):
-        return self.name
+        return self.name + " " + str(self.up)
+
+
 
 class IntervalScore(models.Model):
     interval = models.ForeignKey(Interval)

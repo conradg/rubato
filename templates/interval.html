@@ -22,31 +22,57 @@
 
 
 {% block main %}
-    <h1>Test your intonation</h1>
+    <h1>Train your intonation</h1>
+    <h2 class="top-right" onclick="showHelp()">help</h2>
     <div id="debug">
         <h2>Debug</h2>
         <hr/>
         <input onclick="testPitchDetection()" type="button" value="test pitch detection"/>
         <input onclick="sendScore()" type="button" value="send score"/>
+        <input onclick="sendPerfectScore()" type="button" value="send perfect score">
+        <input onclick="sendZeroScore()" type="button" value="send zero score">
         <input onclick="getInterval()" type="button" value="get interval"/>
+        <input onclick="toggleDisplays()" type="button" value="toggle displays"/>
+
+    </div>
+    <div id="help" class="overlay">
+        <div id="help-menu">
+            <h2>Help</h2>
+            <p>
+            A musical interval is the gap between two notes. Every interval has a name, that corresponds to an amount
+            of semitones equal to that gap. For example, a diminished second is the smallest interval, and corresponds to one semitone.
+            </p>
+            <p>
+                Intonation is the ability to accurately produce the pitch of a note, and in this exercise we'll try and improve it by asking you to
+                sing notes at a given interval above or below a note played on the piano.
+            </p>
+            <p>
+                On the left there is a rendering of the musical representation of the interval you are asked to sing, and on the right
+                is the text representation.
+            </p>
+        </div>
     </div>
     <div id="main_exercise">
-        <h2 id="help">help</h2>
         <div id="pitch" style="display:block;text-align: center">Press play to hear the note</div>
         <div class="container">
             <div id="exercise">
-                <div id="interval"><h1 id="interval_text"></h1></div>
-                    <div id="buttons">
-                        <div class="button-container">
-                            <div id="playbutton">
-                                <img onclick="playNote();" src="{% static "assets/images/play.png" %}"/>
-                            </div>
-                        </div><div class="button-container">
-                            <div id="recordbutton">
-                                <img onclick="toggleRecording()"  src="{% static "assets/images/record.png" %}"/>
-                            </div>
+                <div id="interval">
+                    <div id="vexflow_container">
+                        <canvas id="vexflow"></canvas>
+                    </div><div id="interval_text_container">
+                        <h2 id="interval_text"></h2></div>
+                    </div>
+                <div id="buttons">
+                    <div class="button-container">
+                        <div id="playbutton">
+                            <img onclick="playNote(start_pitch);" src="{% static "assets/images/play.png" %}"/>
+                        </div>
+                    </div><div class="button-container">
+                        <div id="recordbutton">
+                            <img onclick="toggleRecording()"  src="{% static "assets/images/record.png" %}"/>
                         </div>
                     </div>
+                </div>
             </div><div id="displays" >
                 <div class="canvas_display">
                     <h1>Autocorrelation Function</h1>
@@ -84,13 +110,14 @@
     if (!debug){
         $("#displays").remove();
     }
+
     window.onload = function () {
 
         MIDI.loadPlugin({
             soundfontUrl: "{% static "js/MIDI/soundfont/"  %}",
             instrument: "acoustic_grand_piano",
             callback: function(){
-                $("#overlay").fadeOut(400,function(){$("#overlay").remove()});
+                $("#midi-loading").fadeOut(400,function(){$("#midi-loading").remove()});
             }
         });
     };
@@ -99,7 +126,7 @@
     var loading = function() {
         // add the overlay with loading image to the page
 
-        var over = '<div id="overlay">' +
+        var over = '<div id="midi-loading" class="overlay">' +
             '<img id="loading" src="{% static "assets/images/loading.gif" %}">' +
             '</div>';
         $(over).appendTo('body');

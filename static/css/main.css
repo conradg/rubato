@@ -13,6 +13,7 @@ div{
     width: 100%;
     top: 0;
     min-height: 100px;
+    z-index: 99;
 }
 
 .sticky-header .container{
@@ -56,6 +57,7 @@ a:visited{
 }
 
 .main {
+    position: relative;
     padding-top: 100px;
     min-width: 900px;
     max-width: 1100px;
@@ -118,7 +120,7 @@ h2 {
     display:inline-block;
 }
 
-canvas{
+.canvas_display>canvas{
     display:block;
     background-color: #4f4f4f;
     width:100%;
@@ -192,20 +194,33 @@ canvas{
     height:200px;
     margin:10px 0 10px 0;
     padding:10px;
+    padding-right:0;
 
 }
 
+#vexflow{
+
+}
 #interval{
-    height:200px;
+    height:150px
+}
+#interval>div{
+    vertical-align: top;
+    display:inline-block;
     text-align: center;
 }
 
-#interval h1{
-    font-size:78px;
-    line-height:200px;
+#vexflow_container{
+    height:100%;
+    width:40%;
 }
 
-#overlay {
+#interval_text_container{
+    height:100%;
+    width:60%;
+}
+
+.overlay {
     position: fixed;
     left: 0;
     top: 0;
@@ -219,9 +234,24 @@ canvas{
     left: 50%;
     margin: -28px 0 0 -138px;
 }
+
+#help-menu{
+    background-color: #cbe6f5;
+    width:500px;
+    padding:50px;
+    margin:auto;
+    margin-top:200px;
+}
+
+#help{
+    display:none;
+}
+
+
 #buttons{
     margin:10px;
 }
+
 .button-container{
     display:inline-block;
     width:50%;
@@ -272,4 +302,37 @@ canvas{
     background-color: white;
     border-radius: 20px;
 
+}
+
+.main>p{
+    font-weight:300; font-size: 24px; padding:20px 200px 20px 200px
+}
+
+#spacer{
+    text-align: center;
+}
+
+#spacer form{
+    padding:70px;
+}
+
+#spacer>*{
+    display:block;
+}
+
+.row>*{
+    display:inline;
+}
+
+.top-right{
+    position:absolute;
+    top:100px;
+    right:0;
+    margin:0;
+    margin-right:20px;
+    line-height:58px;
+}
+
+.top-right:hover{
+    color: white;
 }

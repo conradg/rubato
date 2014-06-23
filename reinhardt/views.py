@@ -8,6 +8,8 @@ from django.shortcuts import redirect, render_to_response
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
+from intervals import learning
+import time, datetime
 import logging
 logger = logging.getLogger(__name__)
 
@@ -58,7 +60,13 @@ def exercises(request):
 @login_required
 def profile(request):
     context = RequestContext(request)
+
+    user_id_str = request.session['_auth_user_id']
+    user_id = int(user_id_str)
+
+    best_interval_week = learning.best_interval(user_id )
+    worst_interval_week = learning.worst_interval(user_id)
+
     t = get_template('../templates/profile.html')
     html = t.render(context)
     return HttpResponse(html)
-

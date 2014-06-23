@@ -9,9 +9,9 @@ var buffer; // the current audio buffer we're analysing
 var freqs;
 var center;
 var range = 2;
-
+var score;
 var auto_correl_count = 0;
-
+var attempts = 0;
 var debug_notes;
 var debug_good_regions;
 var amps;
@@ -19,6 +19,7 @@ var max_amp;
 var amp_threshold = calibrateMicrophone();
 var recording = false;
 var segment_size = 1200;
+var error = false;
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -30,6 +31,7 @@ var num_windows;
 var curr_window;
 var debug = true;
 var log_view = true;
+
 
 var male_range_s = ["G1","G5"];
 var female_range_s =  ["G3","F5"];
@@ -285,6 +287,7 @@ function toggleRecording(){
     });
     } else {
         startRecording()
+        error = false;
     }
 }
 function startRecording() {
@@ -304,12 +307,12 @@ function stopRecording(callback) {
 
 //runs detected_pitch detection on the audio found at the url and updates the detected_pitch display on the page
 function updatePitchDisplay(url){
-    pitchDetect(url, function(err){
-        if(!err){
-            sendScore();
-            getInterval()
+    pitchDetect(url, function(){
+        if(!error){
+            sendAndGetScore()
             $("#pitch").text(detected_pitch_s);
         } else{
+            $("#pitch").text(error_text);
             return
         }
 
@@ -321,10 +324,9 @@ function calculateScore(){
     difference = Math.abs(detected_pitch_m-target_pitch)
     perfect_score = 0.1
     how_far_from_perfect = Math.max(difference-perfect_score,0);
-    var score = 1 - (how_far_from_perfect);
+    score = 1 - (how_far_from_perfect);
     score = Math.max(score,0);
     console.log("score: " + score);
-    return(score);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -347,21 +349,51 @@ $.ajaxSetup({
 });
 
 function sendScore(){
-    var score = calculateScore();
     var i = interval;
     $.post('/interval/send_score', {score: score.toString(), interval: i.toString()}, function(data){
         console.log("Score saved at " + data)
      });
 }
 
+function sendAndGetScore(){
+    var i = interval;
+    $.post('/interval/send_score', {score: score.toString(), interval: i.toString()}, function(){
+        if (score == 0){
+            attemps++;
+            if (attempts==3){
+                playAnswer()
+            }
+        }
+            getInterval()
+     });
+}
+
+
+function sendPerfectScore(){
+    var i = interval;
+    $.post('/interval/send_score', {score: "1", interval: i.toString()}, function(data){
+        console.log("level" + data)
+     });
+}
+
+function sendZeroScore(){
+    var i = interval;
+    $.post('/interval/send_score', {score: "0", interval: i.toString()}, function(data){
+        console.log("Score saved at " + data)
+     });
+}
+
 function getInterval(){
     $.get('/interval/get_interval', function(data){
-        interval = parseInt(data);
-        $("#interval_text").text(interval);
+        var json = JSON.parse(data);
+        interval = json.semitones;
+        var name = json.name;
+        var direction = json.direction;
+        $("#interval_text").text(name + " " + direction);
         start_pitch = calculateStartPitch();
         target_pitch = start_pitch + interval;
-        console.log("Interval " + interval + " loaded from sever");
-     });
+        updateVex(start_pitch, target_pitch);
+     }, "json");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -437,8 +469,8 @@ function getPitch(buf){
             throw "Too quiet! Please try again with gusto"
         }
     } catch (err){
-        $("#help").text(err);
-        return err
+        $("#tip").text(err);
+        error = true;
     }
 
     //isolate good regions//
@@ -524,6 +556,7 @@ function getPitch(buf){
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
+    score = calculateScore()
     if(debug)updateDisplays();
 }
 
@@ -674,6 +707,46 @@ function pitch12ToSci(pitch){
         default:
             return null;
     }
+}
+
+function pitchMIDItoSci(pitch){
+    var pitch12 = pitch%12
+    var octave = Math.floor(pitch/12) - 1;
+    switch(pitch12){
+        case 0:
+            return "C" + octave
+        case 1:
+            return "C#" + octave
+        case 2:
+            return "D" + octave
+        case 3:
+            return "Eb" + octave
+        case 4:
+            return "E" + octave
+        case 5:
+            return "F" + octave
+        case 6:
+            return "F#" + octave
+        case 7:
+            return "G" + octave
+        case 8:
+            return "Ab" + octave
+        case 9:
+            return "A" + octave
+        case 10:
+            return "Bb" + octave
+        case 11:
+            return "B" + octave
+        default:
+            return null;
+    }
+}
+
+function pitchMIDItoVex(pitch){
+    var sci = pitchMIDItoSci(pitch)
+    var pitch = sci.slice(0,sci.length-1)
+    var octave = sci[sci.length-1] - - 1
+    return pitch.toLowerCase() + "/" + octave
 }
 
 function reasonableRange(pitch){
@@ -851,12 +924,23 @@ if (debug) {window.onkeydown = function(e) {
         center -= 5*(range-1);
     } else if (key == 68){ // d
         center += 5*(range-1);
+    } else if (key == 27){
+        hideHelp();
     } else {
         return
     }
     ACF = ACFs[curr_window]
     updateDisplays()
 }}
+
+function showHelp(){
+    $("#help").fadeIn(200);
+
+}
+
+function hideHelp(){
+    $("#help").fadeOut(200);
+}
 
 function updateDisplays(){
     updateCorrelation();
@@ -976,9 +1060,9 @@ function calibrateMicrophone(){
     return 0.01
 }
 
-function playNote(){
+function playNote(pitch){
     var delay = 0; // play one note every quarter second
-    var note = start_pitch; // the MIDI note
+    var note = pitch; // the MIDI note
     var velocity = 127; // how hard the note hits
     // play the note
     MIDI.setVolume(0, 127);
@@ -986,3 +1070,56 @@ function playNote(){
     MIDI.noteOff(0, note, delay + 0.75);
 }
 
+function playAnswer(){
+    playNote(start_pitch)
+    setTimeout(function(){
+        playNote(target_pitch)}, 1000
+    )
+    setTimeout(function(){
+        playNote(start_pitch);
+        playNote(target_pitch)}, 2000
+    )
+}
+
+function toggleDisplays(){
+    $("#displays").toggle()
+}
+
+function updateVex(start_pitch,target_pitch){
+    var start_pitch_vex = pitchMIDItoVex(start_pitch);
+    var target_pitch_vex = pitchMIDItoVex(target_pitch);
+
+    var canvas = $("#vexflow")[0];
+    var renderer = new Vex.Flow.Renderer(canvas,
+    Vex.Flow.Renderer.Backends.CANVAS);
+
+    var ctx = renderer.getContext();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var stave = new Vex.Flow.Stave(10, 0, 300);
+    stave.addClef("treble").setContext(ctx).draw();
+
+    var notes = []
+    if (start_pitch_vex.length != 4){
+        notes.push(new Vex.Flow.StaveNote({ keys: [start_pitch_vex], duration: "h" }))
+    } else{
+        notes.push(new Vex.Flow.StaveNote({ keys: [start_pitch_vex], duration: "h" }).addAccidental(0,new Vex.Flow.Accidental(start_pitch_vex[1])))
+    }
+    if (target_pitch_vex.length != 4){
+        notes.push(new Vex.Flow.StaveNote({ keys: [target_pitch_vex], duration: "h" }))
+    } else{
+        notes.push(new Vex.Flow.StaveNote({ keys: [target_pitch_vex], duration: "h" }).addAccidental(0,new Vex.Flow.Accidental(target_pitch_vex[1])))
+    }
+
+    var voice = new Vex.Flow.Voice({
+        num_beats: 4,
+        beat_value: 4,
+        resolution: Vex.Flow.RESOLUTION
+    });
+
+    voice.addTickables(notes);
+
+    var formatter = new Vex.Flow.Formatter().
+        joinVoices([voice]).format([voice], 300);
+
+    voice.draw(ctx, stave);
+}

@@ -7,6 +7,8 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from intervals import learning;
+from profiles.models import UserProfile
+import json
 
 @login_required
 @ensure_csrf_cookie
@@ -33,14 +35,23 @@ def sendIntervalScore(request):
     send_interval = Interval.objects.get(semitones=semitones) #return database entry matching that interval
     interval_score = IntervalScore.objects.create(score=score, interval=send_interval, user=user_id)
 
-    print (interval_score)
-    timestamp = interval_score.timestamp
-    return HttpResponse(timestamp)
+    learning.update_level(user_id, score)
+
+    level = UserProfile.objects.get(user__id=user_id).level
+    exp = UserProfile.objects.get(user__id=user_id).exp
+    return HttpResponse(level + exp)
 
 def getInterval(request):
     user_id = request.session['_auth_user_id']
     next_interval = learning.get_next_interval(user_id) #return database entry matching that interval
 
-    print (next_interval)
-    interval_semitones = str(next_interval.semitones)
-    return HttpResponse(interval_semitones)
+    if next_interval.up:
+        direction = "up"
+    else:
+        direction = "down"
+
+    response_data = dict()
+    response_data['direction'] = direction
+    response_data['name'] = next_interval.name
+    response_data['semitones'] = next_interval.semitones
+    return HttpResponse(json.dumps(response_data), content_type="application/json" )
