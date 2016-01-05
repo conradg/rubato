@@ -1,9 +1,9 @@
 // [VexFlow](http://vexflow.com) - Copyright (c) Mohit Muthanna 2010.
 //
 // ## Description
-// 
+//
 // This file implements `Beams` that span over a set of `StemmableNotes`.
-// 
+//
 // Requires: vex.js, vexmusic.js, note.js
 Vex.Flow.Beam = (function() {
   function Beam(notes, auto_stem) {
@@ -34,7 +34,7 @@ Vex.Flow.Beam = (function() {
       var i; // shared iterator
       var note;
 
-      this.stem_direction = 1;
+      this.stem_direction = Stem.UP;
 
       for (i = 0; i < notes.length; ++i) {
         note = notes[i];
@@ -44,30 +44,17 @@ Vex.Flow.Beam = (function() {
         }
       }
 
-      var stem_direction = -1;
-
+      var stem_direction = this.stem_direction;
       // Figure out optimal stem direction based on given notes
       if (auto_stem && notes[0].getCategory() === 'stavenotes')  {
-        // Auto Stem StaveNotes
-        this.min_line = 1000;
-
-        for (i = 0; i < notes.length; ++i) {
-          note = notes[i];
-          if (note.getKeyProps) {
-            var props = note.getKeyProps();
-            var center_line = (props[0].line + props[props.length - 1].line) / 2;
-            this.min_line = Math.min(center_line, this.min_line);
-          }
-        }
-
-        if (this.min_line < 3) stem_direction = 1;
+        stem_direction = calculateStemDirection(notes);
       } else if (auto_stem && notes[0].getCategory() === 'tabnotes') {
         // Auto Stem TabNotes
         var stem_weight = notes.reduce(function(memo, note) {
           return memo + note.stem_direction;
         }, 0);
 
-        stem_direction = stem_weight > -1 ? 1 : -1;
+        stem_direction = stem_weight > -1 ? Stem.UP : Stem.DOWN;
       }
 
       // Apply stem directions and attach beam to notes
@@ -89,10 +76,12 @@ Vex.Flow.Beam = (function() {
         max_slope: 0.25,
         min_slope: -0.25,
         slope_iterations: 20,
-        slope_cost: 25,
+        slope_cost: 100,
         show_stemlets: false,
         stemlet_extension: 7,
-        partial_beam_length: 10
+        partial_beam_length: 10,
+        flat_beams: false,
+        min_flat_beam_offset: 15
       };
     },
 
@@ -163,15 +152,19 @@ Vex.Flow.Beam = (function() {
           }
 
         }
-        /*
-          // This causes too many zero-slope beams.
 
-          var cost = this.render_options.slope_cost * Math.abs(slope) +
+        var last_note = this.notes[this.notes.length - 1];
+        var first_last_slope = ((last_note.getStemExtents().topY - first_y_px) /
+                (last_note.getStemX() - first_x_px));
+        // most engraving books suggest aiming for a slope about half the angle of the
+        // difference between the first and last notes' stem length;
+        var ideal_slope = first_last_slope / 2;
+        var distance_from_ideal = Math.abs(ideal_slope - slope);
+
+        // This tries to align most beams to something closer to the ideal_slope, but
+        // doesn't go crazy. To disable, set this.render_options.slope_cost = 0
+        var cost = this.render_options.slope_cost * distance_from_ideal +
             Math.abs(total_stem_extension);
-        */
-
-        // Pick a beam that minimizes stem extension.
-        var cost = Math.abs(total_stem_extension);
 
         // update state when a more ideal slope is found
         if (cost < min_cost) {
@@ -185,11 +178,77 @@ Vex.Flow.Beam = (function() {
       this.y_shift = y_shift;
     },
 
+    // Calculate a slope and y-shift for flat beams
+    calculateFlatSlope: function() {
+
+      // If a flat beam offset has not yet been supplied or calculated,
+      // generate one based on the notes in this particular note group
+      var total = 0;
+      var extreme_y = 0;  // Store the highest or lowest note here
+      var extreme_beam_count = 0;  // The beam count of the extreme note
+      var current_extreme = 0;
+      for (var i = 0; i < this.notes.length; i++) {
+
+        // Total up all of the offsets so we can average them out later
+        var note = this.notes[i];
+        var top_y = note.getStemExtents().topY;
+        total += top_y;
+
+        // Store the highest (stems-up) or lowest (stems-down) note so the
+        //  offset can be adjusted in case the average isn't enough
+        if (this.stem_direction === Stem.DOWN && current_extreme < top_y) {
+          current_extreme = top_y;
+          extreme_y = note.getNoteHeadBounds().y_bottom;
+          extreme_beam_count = note.getBeamCount();
+        } else if (this.stem_direction === Stem.UP && (current_extreme === 0 || current_extreme > top_y)) {
+          current_extreme = top_y;
+          extreme_y = note.getNoteHeadBounds().y_top;
+          extreme_beam_count = note.getBeamCount();
+        }
+      }
+
+      // Average the offsets to try and come up with a reasonable one that
+      //  works for all of the notes in the beam group.
+      var offset = total / this.notes.length;
+
+      // In case the average isn't long enough, add or subtract some more
+      //  based on the highest or lowest note (again, based on the stem
+      //  direction). This also takes into account the added height due to
+      //  the width of the beams.
+      var beam_width = this.render_options.beam_width * 1.5;
+      var extreme_test = this.render_options.min_flat_beam_offset + (extreme_beam_count * beam_width);
+      var new_offset = extreme_y + (extreme_test * -this.stem_direction);
+      if (this.stem_direction === Stem.DOWN && offset < new_offset) {
+        offset = extreme_y + extreme_test;
+      } else if (this.stem_direction === Stem.UP && offset > new_offset) {
+        offset = extreme_y - extreme_test;
+      }
+      if (!this.render_options.flat_beam_offset) {
+
+        // Set the offset for the group based on the calculations above.
+        this.render_options.flat_beam_offset = offset;
+      } else if (this.stem_direction === Stem.DOWN && offset > this.render_options.flat_beam_offset) {
+        this.render_options.flat_beam_offset = offset;
+      } else if (this.stem_direction === Stem.UP && offset < this.render_options.flat_beam_offset) {
+        this.render_options.flat_beam_offset = offset;
+      }
+
+      // for flat beams, the slope and y_shift are simply 0
+      this.slope = 0;
+      this.y_shift = 0;
+    },
+
     // Create new stems for the notes in the beam, so that each stem
     // extends into the beams.
     applyStemExtensions: function(){
       var first_note = this.notes[0];
       var first_y_px = first_note.getStemExtents().topY;
+
+      // If rendering flat beams, and an offset exists, set the y-coordinate to
+      //  the offset so the stems all end at the beam offset.
+      if (this.render_options.flat_beams && this.render_options.flat_beam_offset) {
+        first_y_px = this.render_options.flat_beam_offset;
+      }
       var first_x_px = first_note.getStemX();
 
       for (var i = 0; i < this.notes.length; ++i) {
@@ -199,6 +258,12 @@ Vex.Flow.Beam = (function() {
         var y_extents = note.getStemExtents();
         var base_y_px = y_extents.baseY;
         var top_y_px = y_extents.topY;
+
+        // If flat beams, set the top of the stem to the offset, rather than
+        //  relying on the topY value from above.
+        if (this.render_options.flat_beams) {
+          top_y_px = first_y_px;
+        }
 
         // For harmonic note heads, shorten stem length by 3 pixels
         base_y_px += this.stem_direction * note.glyph.stem_offset;
@@ -225,8 +290,8 @@ Vex.Flow.Beam = (function() {
             note.setStem(new Vex.Flow.Stem({
               x_begin: centerGlyphX,
               x_end: centerGlyphX,
-              y_bottom: this.stem_direction === 1 ? end_y : start_y,
-              y_top: this.stem_direction === 1 ? start_y : end_y,
+              y_bottom: this.stem_direction === Stem.UP ? end_y : start_y,
+              y_top: this.stem_direction === Stem.UP ? start_y : end_y,
               y_extend: y_displacement,
               stem_extension: -1, // To avoid protruding through the beam
               stem_direction: this.stem_direction
@@ -242,8 +307,8 @@ Vex.Flow.Beam = (function() {
         note.setStem(new Vex.Flow.Stem({
           x_begin: x_px - (Vex.Flow.STEM_WIDTH/2),
           x_end: x_px,
-          y_top: this.stem_direction === 1 ? top_y_px : base_y_px,
-          y_bottom: this.stem_direction === 1 ? base_y_px :  top_y_px ,
+          y_top: this.stem_direction === Stem.UP ? top_y_px : base_y_px,
+          y_bottom: this.stem_direction === Stem.UP ? base_y_px :  top_y_px,
           y_extend: y_displacement,
           stem_extension: Math.abs(top_y_px - slope_y) - Stem.HEIGHT - 1,
           stem_direction: this.stem_direction
@@ -255,83 +320,101 @@ Vex.Flow.Beam = (function() {
     getBeamLines: function(duration) {
       var beam_lines = [];
       var beam_started = false;
-      var current_beam;
+      var current_beam = null;
       var partial_beam_length = this.render_options.partial_beam_length;
-
-      function determinePartialSide (prev_note, next_note){
-          // Compare beam counts and store differences
-          var unshared_beams = 0;
-          if (next_note && prev_note) {
-            unshared_beams = prev_note.getBeamCount() - next_note.getBeamCount();
-          }
-
-          var left_partial = duration !== "8" && unshared_beams > 0;
-          var right_partial = duration !== "8" && unshared_beams < 0;
-
-          return {
-            left: left_partial,
-            right: right_partial
-          };
-        }
-
+      var previous_should_break = false;
+      var tick_tally = 0;
       for (var i = 0; i < this.notes.length; ++i) {
         var note = this.notes[i];
-        var prev_note = this.notes[i-1];
-        var next_note = this.notes[i+1];
+
+        // See if we need to break secondary beams on this note.
         var ticks = note.getIntrinsicTicks();
-        var partial = determinePartialSide(prev_note, next_note);
+        tick_tally += ticks;
+        var should_break = false;
+
+        // 8th note beams are always drawn.
+        if (parseInt(duration) >= 8) {
+
+          // First, check to see if any indices were set up through breakSecondaryAt()
+          should_break = this.break_on_indices.indexOf(i) !== -1;
+
+          // If the secondary breaks were auto-configured in the render options,
+          //  handle that as well.
+          if (this.render_options.secondary_break_ticks && tick_tally >= this.render_options.secondary_break_ticks) {
+            tick_tally = 0;
+            should_break = true;
+          }
+        }
+        var note_gets_beam = ticks < Vex.Flow.durationToTicks(duration);
         var stem_x = note.isRest() ? note.getCenterGlyphX() : note.getStemX();
 
-        // Check whether to apply beam(s)
-        if (ticks < Vex.Flow.durationToTicks(duration)) {
-          if (!beam_started) {
-            var new_line = {start: stem_x, end: null};
+        // Check to see if the next note in the group will get a beam at this
+        //  level. This will help to inform the partial beam logic below.
+        var next_note = this.notes[i + 1];
+        var beam_next = next_note && next_note.getIntrinsicTicks() < Vex.Flow.durationToTicks(duration);
+        if (note_gets_beam) {
 
-            if (partial.left) {
-              new_line.end = stem_x - partial_beam_length;
-            }
+          // This note gets a beam at the current level
+          if (beam_started) {
 
-            beam_lines.push(new_line);
-            beam_started = true;
-          } else {
+            // We're currently in the middle of a beam. Just continue it on to
+            //  the stem X of the current note.
             current_beam = beam_lines[beam_lines.length - 1];
             current_beam.end = stem_x;
 
-            // Should break secondary beams on note
-            var should_break = this.break_on_indices.indexOf(i) !== -1;
-            // Shorter than or eq an 8th note duration
-            var can_break = parseInt(duration, 10) >= 8;
-            if (should_break  && can_break) {
+            // If a secondary beam break is set up, end the beam right now.
+            if (should_break) {
+              beam_started = false;
+              if (next_note && !beam_next && current_beam.end === null) {
+
+                // This note gets a beam,.but the next one does not. This means
+                //  we need a partial pointing right.
+                current_beam.end = current_beam.start - partial_beam_length;
+              }
+            }
+          } else {
+
+            // No beam started yet. Start a new one.
+            current_beam = { start: stem_x, end: null };
+            beam_started = true;
+            if (!beam_next) {
+
+              // The next note doesn't get a beam. Draw a partial.
+              if((previous_should_break || i === 0) && next_note) {
+
+                // This is the first note (but not the last one), or it is
+                //  following a secondary break. Draw a partial to the right.
+                current_beam.end = current_beam.start + partial_beam_length;
+              } else {
+
+                // By default, draw a partial to the left.
+                current_beam.end = current_beam.start - partial_beam_length;
+              }
+            } else if (should_break) {
+
+              // This note should have a secondary break after it. Even though
+              //  we just started a beam, it needs to end immediately.
+              current_beam.end = current_beam.start - partial_beam_length;
               beam_started = false;
             }
+            beam_lines.push(current_beam);
           }
         } else {
-          if (!beam_started) {
-            // we don't care
-          } else {
-            current_beam = beam_lines[beam_lines.length - 1];
-            if (current_beam.end == null) {
-              // single note
-              current_beam.end = current_beam.start +
-                                 partial_beam_length;
-            } else {
-              // we don't care
-            }
-          }
 
+          // The current note does not get a beam.
           beam_started = false;
         }
+
+        // Store the secondary break flag to inform the partial beam logic in
+        //  the next iteration of the loop.
+        previous_should_break = should_break;
       }
 
-      if (beam_started === true) {
-        current_beam = beam_lines[beam_lines.length - 1];
-        if (current_beam.end == null) {
-          // single note
-          current_beam.end = current_beam.start -
-              partial_beam_length;
-        }
+      // Add a partial beam pointing left if this is the last note in the group
+      var last_beam = beam_lines[beam_lines.length - 1];
+      if (last_beam && last_beam.end === null) {
+        last_beam.end = last_beam.start - partial_beam_length;
       }
-
       return beam_lines;
     },
 
@@ -357,6 +440,13 @@ Vex.Flow.Beam = (function() {
       var first_y_px = first_note.getStemExtents().topY;
       var last_y_px = last_note.getStemExtents().topY;
 
+      // For flat beams, set the first and last Y to the offset, rather than
+      //  using the note's stem extents.
+      if (this.render_options.flat_beams && this.render_options.flat_beam_offset) {
+        first_y_px = this.render_options.flat_beam_offset;
+        last_y_px = this.render_options.flat_beam_offset;
+      }
+
       var first_x_px = first_note.getStemX();
 
       var beam_width = this.render_options.beam_width * this.stem_direction;
@@ -368,7 +458,7 @@ Vex.Flow.Beam = (function() {
 
         for (var j = 0; j < beam_lines.length; ++j) {
           var beam_line = beam_lines[j];
-          var first_x = beam_line.start - (this.stem_direction == -1 ? Vex.Flow.STEM_WIDTH/2:0);
+          var first_x = beam_line.start - (this.stem_direction == Stem.DOWN ? Vex.Flow.STEM_WIDTH/2:0);
           var first_y = this.getSlopeY(first_x, first_x_px, first_y_px, this.slope);
 
           var last_x = beam_line.end +
@@ -393,12 +483,17 @@ Vex.Flow.Beam = (function() {
     preFormat: function() { return this; },
 
     // Post-format the beam. This can only be called after
-    // the notes in the beam have both `x` and `y` values. ie: they've 
+    // the notes in the beam have both `x` and `y` values. ie: they've
     // been formatted and have staves
     postFormat: function() {
       if (this.postFormatted) return;
 
-      this.calculateSlope();
+      // Calculate a smart slope if we're not forcing the beams to be flat.
+      if(this.render_options.flat_beams) {
+        this.calculateFlatSlope();
+      } else {
+        this.calculateSlope();
+      }
       this.applyStemExtensions();
 
       this.postFormatted = true;
@@ -422,8 +517,23 @@ Vex.Flow.Beam = (function() {
     }
   };
 
+  function calculateStemDirection(notes) {
+    var lineSum = 0;
+    notes.forEach(function(note) {
+      if (note.keyProps) {
+        note.keyProps.forEach(function(keyProp){
+          lineSum += (keyProp.line - 3);
+        });
+      }
+    });
+
+    if (lineSum >= 0)
+      return Stem.DOWN;
+    return Stem.UP;
+  }
+
   // ## Static Methods
-  // 
+  //
   // Gets the default beam groups for a provided time signature.
   // Attempts to guess if the time signature is not found in table.
   // Currently this is fairly naive.
@@ -479,7 +589,7 @@ Vex.Flow.Beam = (function() {
 
   // A helper function to automatically build basic beams for a voice. For more
   // complex auto-beaming use `Beam.generateBeams()`.
-  // 
+  //
   // Parameters:
   // * `voice` - The voice to generate the beams for
   // * `stem_direction` - A stem direction to apply to the entire voice
@@ -491,9 +601,9 @@ Vex.Flow.Beam = (function() {
     });
   };
 
-  // A helper function to autimatically build beams for a voice with 
+  // A helper function to autimatically build beams for a voice with
   // configuration options.
-  // 
+  //
   // Example configuration object:
   //
   // ```
@@ -505,7 +615,7 @@ Vex.Flow.Beam = (function() {
   //   show_stemlets: false
   // };
   // ```
-  // 
+  //
   // Parameters:
   // * `notes` - An array of notes to create the beams for
   // * `config` - The configuration object
@@ -513,8 +623,9 @@ Vex.Flow.Beam = (function() {
   //    * `stem_direction` - Set to apply the same direction to all notes
   //    * `beam_rests` - Set to `true` to include rests in the beams
   //    * `beam_middle_only` - Set to `true` to only beam rests in the middle of the beat
-  //    * `show_stemlets` - Set to `true` to draw stemlets for rests 
-  // 
+  //    * `show_stemlets` - Set to `true` to draw stemlets for rests
+  //    * `maintain_stem_directions` - Set to `true` to not apply new stem directions
+  //
   Beam.generateBeams = function(notes, config) {
 
     if (!config) config = {};
@@ -563,21 +674,26 @@ Vex.Flow.Beam = (function() {
         }
 
         currentGroup.push(unprocessedNote);
-        var ticksPerGroup = tickGroups[currentTickGroup].value();
-        var totalTicks = getTotalTicks(currentGroup).value();
+        var ticksPerGroup = tickGroups[currentTickGroup].clone();
+        var totalTicks = getTotalTicks(currentGroup);
 
         // Double the amount of ticks in a group, if it's an unbeamable tuplet
-        if (parseInt(unprocessedNote.duration, 10) < 8 && unprocessedNote.tuplet) {
-          ticksPerGroup *= 2;
+        var unbeamable = Vex.Flow.durationToNumber(unprocessedNote.duration) < 8;
+        if (unbeamable && unprocessedNote.tuplet) {
+          ticksPerGroup.numerator *= 2;
         }
 
         // If the note that was just added overflows the group tick total
-        if (totalTicks > ticksPerGroup) {
-          nextGroup.push(currentGroup.pop());
+        if (totalTicks.greaterThan(ticksPerGroup)) {
+          // If the overflow note can be beamed, start the next group
+          // with it. Unbeamable notes leave the group overflowed.
+          if (!unbeamable) {
+            nextGroup.push(currentGroup.pop());
+          }
           noteGroups.push(currentGroup);
           currentGroup = nextGroup;
           nextTickGroup();
-        } else if (totalTicks == ticksPerGroup) {
+        } else if (totalTicks.equals(ticksPerGroup)) {
           noteGroups.push(currentGroup);
           currentGroup = nextGroup;
           nextTickGroup();
@@ -611,23 +727,43 @@ Vex.Flow.Beam = (function() {
         var tempGroup = [];
         group.forEach(function(note, index, group) {
           var isFirstOrLast = index === 0 || index === group.length - 1;
+          var prevNote = group[index-1];
 
           var breaksOnEachRest = !config.beam_rests && note.isRest();
           var breaksOnFirstOrLastRest = (config.beam_rests &&
             config.beam_middle_only && note.isRest() && isFirstOrLast);
 
-          var shouldBreak = breaksOnEachRest || breaksOnFirstOrLastRest;
+          var breakOnStemChange = false;
+          if (config.maintain_stem_directions && prevNote &&
+              !note.isRest() && !prevNote.isRest()) {
+            var prevDirection = prevNote.getStemDirection();
+            var currentDirection = note.getStemDirection();
+            breakOnStemChange = currentDirection !== prevDirection;
+          }
+
+          var isUnbeamableDuration = parseInt(note.duration, 10) < 8;
+
+          // Determine if the group should be broken at this note
+          var shouldBreak = breaksOnEachRest || breaksOnFirstOrLastRest ||
+                            breakOnStemChange || isUnbeamableDuration;
 
           if (shouldBreak) {
+            // Add current group
             if (tempGroup.length > 0) {
               sanitizedGroups.push(tempGroup);
             }
-            tempGroup = [];
+
+            // Start a new group. Include the current note if the group
+            // was broken up by stem direction, as that note needs to start
+            // the next group of notes
+            tempGroup = breakOnStemChange ? [note] : [];
           } else {
+            // Add note to group
             tempGroup.push(note);
           }
         });
 
+        // If there is a remaining group, add it as well
         if (tempGroup.length > 0) {
           sanitizedGroups.push(tempGroup);
         }
@@ -638,31 +774,35 @@ Vex.Flow.Beam = (function() {
 
     function formatStems() {
       noteGroups.forEach(function(group){
-        var stemDirection = determineStemDirection(group);
+        var stemDirection;
+        if (config.maintain_stem_directions) {
+          var note = findFirstNote(group);
+          stemDirection = note ? note.getStemDirection() : Stem.UP;
+        } else {
+          if (config.stem_direction){
+            stemDirection = config.stem_direction;
+          } else {
+            stemDirection = calculateStemDirection(group);
+          }
+        }
         applyStemDirection(group, stemDirection);
       });
     }
 
-    function determineStemDirection(group) {
-      if (config.stem_direction) return config.stem_direction;
-
-      var lineSum = 0;
-      group.forEach(function(note) {
-        if (note.keyProps) {
-          note.keyProps.forEach(function(keyProp){
-            lineSum += (keyProp.line - 2.5);
-          });
+    function findFirstNote(group) {
+      for (var i = 0; i < group.length; i++) {
+        var note = group[i];
+        if (!note.isRest()) {
+          return note;
         }
-      });
+      }
 
-      if (lineSum > 0)
-        return -1;
-      return 1;
+      return false;
     }
 
     function applyStemDirection(group, direction) {
       group.forEach(function(note){
-        if (note.hasStem()) note.setStemDirection(direction);
+        note.setStemDirection(direction);
       });
     }
 
@@ -694,7 +834,13 @@ Vex.Flow.Beam = (function() {
       if (config.show_stemlets) {
         beam.render_options.show_stemlets = true;
       }
-
+      if (config.secondary_breaks) {
+        beam.render_options.secondary_break_ticks = Vex.Flow.durationToTicks(config.secondary_breaks);
+      }
+      if (config.flat_beams === true) {
+        beam.render_options.flat_beams = true;
+        beam.render_options.flat_beam_offset = config.flat_beam_offset;
+      }
       beams.push(beam);
     });
 
@@ -711,7 +857,7 @@ Vex.Flow.Beam = (function() {
       var tuplet = firstNote.tuplet;
 
       if (firstNote.beam) tuplet.setBracketed(false);
-      if (firstNote.stem_direction == -1) {
+      if (firstNote.stem_direction == Stem.DOWN) {
         tuplet.setTupletLocation(Vex.Flow.Tuplet.LOCATION_BOTTOM);
       }
     });

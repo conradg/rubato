@@ -25,6 +25,13 @@ Vex.Flow.Tickable = (function() {
       this.postFormatted = false;
       this.tuplet = null;
 
+      // For interactivity
+      this.id = null;
+      this.elem = null;
+
+      this.align_center = false;
+      this.center_x_shift = 0; // Shift from tick context if center aligned
+
       // This flag tells the formatter to ignore this tickable during
       // formatting and justification. It is set by tickables such as BarNote.
       this.ignore_ticks = false;
@@ -32,11 +39,30 @@ Vex.Flow.Tickable = (function() {
     },
 
     setContext: function(context) { this.context = context; },
+
+    // Set the DOM ID of the element. Must be called before draw(). TODO: Update
+    // ID of element if has already been rendered.
+    setId: function(id) { this.id = id; },
+    getId: function() { return this.id; },
+    getElem: function() { return this.elem; },
     getBoundingBox: function() { return null; },
     getTicks: function() { return this.ticks; },
     shouldIgnoreTicks: function() { return this.ignore_ticks; },
     getWidth: function() { return this.width; },
     setXShift: function(x) { this.x_shift = x; },
+    getCenterXShift: function() {
+      if (this.isCenterAligned()) {
+        return this.center_x_shift;
+      }
+
+      return 0;
+    },
+
+    isCenterAligned: function() { return this.align_center; },
+    setCenterAlignment: function(align_center) {
+      this.align_center = align_center;
+      return this;
+    },
 
     // Every tickable must be associated with a voice. This allows formatters
     // and preFormatter to associate them with the right modifierContexts.
@@ -100,13 +126,11 @@ Vex.Flow.Tickable = (function() {
         this.width += this.modifierContext.getWidth();
       }
     },
-
     postFormat: function() {
       if (this.postFormatted) return;
       this.postFormatted = true;
       return this;
     },
-
     getIntrinsicTicks: function() {
       return this.intrinsicTicks;
     },
@@ -114,13 +138,17 @@ Vex.Flow.Tickable = (function() {
       this.intrinsicTicks = intrinsicTicks;
       this.ticks = this.tickMultiplier.clone().multiply(this.intrinsicTicks);
     },
-
     getTickMultiplier: function() {
       return this.tickMultiplier;
     },
     applyTickMultiplier: function(numerator, denominator) {
       this.tickMultiplier.multiply(numerator, denominator);
       this.ticks = this.tickMultiplier.clone().multiply(this.intrinsicTicks);
+    },
+    setDuration: function(duration) {
+      var ticks = duration.numerator * (Vex.Flow.RESOLUTION / duration.denominator);
+      this.ticks = this.tickMultiplier.clone().multiply(ticks);
+      this.intrinsicTicks = this.ticks.value();
     }
   };
 

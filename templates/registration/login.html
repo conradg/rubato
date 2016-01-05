@@ -5,11 +5,11 @@
 
 <h2>Please login!</h2>
 <p>Rubato tracks your progress as you complete exercises, and adapts accordingly, so we need you to log in so we can store your exercise info.</p>
-<div id="spacer">
-  {% if form.errors %}
-    <p class="error">Sorry, that's not a valid username or password</p>
-  {% endif %}
 
+{% if invalid %}
+    <p class="warning">Invalid email/password, please try again!</p>
+{% endif %}
+<div id="spacer">
   <form action="" method="post">
     {% csrf_token %}
     <div class="row">

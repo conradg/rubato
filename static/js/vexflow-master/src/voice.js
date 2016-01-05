@@ -1,8 +1,8 @@
 // [VexFlow](http://vexflow.com) - Copyright (c) Mohit Muthanna 2010.
 //
 // ## Description
-// 
-// This file implements the main Voice class. It's mainly a container 
+//
+// This file implements the main Voice class. It's mainly a container
 // object to group `Tickables` for formatting.
 Vex.Flow.Voice = (function() {
   function Voice(time) {
@@ -84,22 +84,20 @@ Vex.Flow.Voice = (function() {
 
     // Get the bounding box for the voice
     getBoundingBox: function() {
+      var stave, boundingBox, bb, i;
+
       if (!this.boundingBox) {
         if (!this.stave) throw Vex.RERR("NoStave", "Can't get bounding box without stave.");
-        var stave = this.stave;
+        stave = this.stave;
+        boundingBox = null;
 
-        var boundingBox = null;
-        if (this.tickables[0]) {
-          this.tickables[0].setStave(stave);
-          boundingBox = this.tickables[0].getBoundingBox();
-        }
-
-        for (var i = 0; i < this.tickables.length; ++i) {
+        for (i = 0; i < this.tickables.length; ++i) {
           this.tickables[i].setStave(stave);
-          if (i > 0 && boundingBox) {
-            var bb = this.tickables[i].getBoundingBox();
-            if (bb) boundingBox.mergeWith(bb);
-          }
+
+          bb = this.tickables[i].getBoundingBox();
+          if (!bb) continue;
+
+          boundingBox = boundingBox ? boundingBox.mergeWith(bb) : bb;
         }
 
         this.boundingBox = boundingBox;
@@ -139,34 +137,34 @@ Vex.Flow.Voice = (function() {
       if (!tickable.shouldIgnoreTicks()) {
         var ticks = tickable.getTicks();
 
-        // Update the total ticks for this line
+        // Update the total ticks for this line.
         this.ticksUsed.add(ticks);
 
         if ((this.mode == Vex.Flow.Voice.Mode.STRICT ||
              this.mode == Vex.Flow.Voice.Mode.FULL) &&
-             this.ticksUsed.value() > this.totalTicks.value()) {
+             this.ticksUsed.greaterThan(this.totalTicks)) {
           this.totalTicks.subtract(ticks);
           throw new Vex.RERR("BadArgument", "Too many ticks.");
         }
 
-        // Track the smallest tickable for formatting
-        if (ticks.value() < this.smallestTickCount.value()) {
+        // Track the smallest tickable for formatting.
+        if (ticks.lessThan(this.smallestTickCount)) {
           this.smallestTickCount = ticks.clone();
         }
 
         this.resolutionMultiplier = this.ticksUsed.denominator;
 
-        // Expand total ticks using denominator from ticks used
+        // Expand total ticks using denominator from ticks used.
         this.totalTicks.add(0, this.ticksUsed.denominator);
       }
 
-      // Add the tickable to the line
+      // Add the tickable to the line.
       this.tickables.push(tickable);
       tickable.setVoice(this);
       return this;
     },
 
-    // Add an array of tickables to the voice
+    // Add an array of tickables to the voice.
     addTickables: function(tickables) {
       for (var i = 0; i < tickables.length; ++i) {
         this.addTickable(tickables[i]);
@@ -175,7 +173,7 @@ Vex.Flow.Voice = (function() {
       return this;
     },
 
-    // Preformats the voice by applying the voice's stave to each note
+    // Preformats the voice by applying the voice's stave to each note.
     preFormat: function(){
       if (this.preFormatted) return;
 

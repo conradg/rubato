@@ -2,7 +2,7 @@
 //
 // ## Description
 //
-// This file implements notes for standard notation. This consists of one or 
+// This file implements notes for standard notation. This consists of one or
 // more `NoteHeads`, an optional stem, and an optional flag.
 //
 // *Throughout these comments, a "note" refers to the entire `StaveNote`,
@@ -13,6 +13,7 @@ Vex.Flow.StaveNote = (function() {
   var StaveNote = function(note_struct) {
     if (arguments.length > 0) this.init(note_struct);
   };
+  StaveNote.CATEGORY = "stavenotes";
 
   // To enable logging for this class. Set `Vex.Flow.StaveNote.DEBUG` to `true`.
   function L() { if (StaveNote.DEBUG) Vex.L("Vex.Flow.StaveNote", arguments); }
@@ -24,6 +25,233 @@ Vex.Flow.StaveNote = (function() {
   StaveNote.STEM_UP = Stem.UP;
   StaveNote.STEM_DOWN = Stem.DOWN;
 
+  // Helper methods for rest positioning in ModifierContext.
+  var shiftRestVertical = function(rest, note, dir) {
+    var delta = (note.isrest ? 0.0 : 1.0) * dir;
+
+    rest.line += delta;
+    rest.max_line += delta;
+    rest.min_line += delta;
+    rest.note.setKeyLine(0, rest.note.getKeyLine(0) + (delta));
+  };
+
+  // Called from formatNotes :: center a rest between two notes
+  var centerRest = function(rest, noteU, noteL) {
+    var delta = rest.line - Vex.MidLine(noteU.min_line, noteL.max_line);
+    rest.note.setKeyLine(0, rest.note.getKeyLine(0) - delta);
+    rest.line -= delta;
+    rest.max_line -= delta;
+    rest.min_line -= delta;
+  };
+
+  // ## Static Methods
+  //
+  // Format notes inside a ModifierContext.
+  StaveNote.format = function(notes, state) {
+    if (!notes || notes.length < 2) return false;
+
+    if (notes[0].getStave() != null) return StaveNote.formatByY(notes, state);
+
+    var notes_list= [];
+
+    for (var i = 0; i < notes.length; i++) {
+      var props = notes[i].getKeyProps();
+      var line = props[0].line;
+      var minL = props[props.length -1].line;
+      var stem_dir = notes[i].getStemDirection();
+      var stem_max = notes[i].getStemLength() / 10;
+      var stem_min = notes[i].getStemMinumumLength() / 10;
+
+      var maxL;
+      if (notes[i].isRest()) {
+        maxL = line + notes[i].glyph.line_above;
+        minL = line - notes[i].glyph.line_below;
+      } else {
+        maxL = stem_dir == 1 ? props[props.length -1].line + stem_max
+             : props[props.length -1].line;
+        minL = stem_dir == 1 ? props[0].line
+             : props[0].line - stem_max;
+      }
+      notes_list.push(
+        {line: props[0].line,         // note/rest base line
+         max_line: maxL,              // note/rest upper bounds line
+         min_line: minL,              // note/rest lower bounds line
+         isrest: notes[i].isRest(),
+         stem_dir: stem_dir,
+         stem_max: stem_max,          // Maximum (default) note stem length;
+         stem_min: stem_min,          // minimum note stem length
+         voice_shift: notes[i].getVoiceShiftWidth(),
+         is_displaced: notes[i].isDisplaced(),   // note manually displaced
+         note: notes[i]});
+    }
+
+    var voices = notes_list.length;
+
+    var noteU = notes_list[0];
+    var noteM = voices > 2 ? notes_list[1] : null;
+    var noteL = voices > 2 ? notes_list[2] : notes_list[1];
+
+    // for two voice backward compatibility, ensure upper voice is stems up
+    // for three voices, the voices must be in order (upper, middle, lower)
+    if (voices == 2 && noteU.stem_dir == -1 && noteL.stem_dir == 1) {
+      noteU = notes_list[1];
+      noteL = notes_list[0];
+    }
+
+    var voice_x_shift = Math.max(noteU.voice_shift, noteL.voice_shift);
+    var x_shift = 0;
+    var stem_delta;
+
+    // Test for two voice note intersection
+    if (voices == 2) {
+      var line_spacing = noteU.stem_dir == noteL.stem_dir ? 0.0 : 0.5;
+      // if top voice is a middle voice, check stem intersection with lower voice
+      if (noteU.stem_dir == noteL.stem_dir &&
+          noteU.min_line <= noteL.max_line) {
+        if (!noteU.isrest) {
+          stem_delta = Math.abs(noteU.line - (noteL.max_line + 0.5));
+          stem_delta = Math.max(stem_delta, noteU.stem_min);
+          noteU.min_line = noteU.line - stem_delta;
+          noteU.note.setStemLength(stem_delta * 10);
+        }
+      }
+      if (noteU.min_line <= noteL.max_line + line_spacing) {
+        if (noteU.isrest) {
+          // shift rest up
+          shiftRestVertical(noteU, noteL, 1);
+        } else if (noteL.isrest) {
+          // shift rest down
+          shiftRestVertical(noteL, noteU, -1);
+        } else {
+          x_shift = voice_x_shift;
+          if (noteU.stem_dir == noteL.stem_dir)
+            // upper voice is middle voice, so shift it right
+            noteU.note.setXShift(x_shift + 3);
+          else
+            // shift lower voice right
+            noteL.note.setXShift(x_shift);
+        }
+      }
+
+      // format complete
+      return true;
+    }
+
+    // Check middle voice stem intersection with lower voice
+    if (noteM != null && noteM.min_line < noteL.max_line + 0.5) {
+      if (!noteM.isrest) {
+        stem_delta = Math.abs(noteM.line - (noteL.max_line + 0.5));
+        stem_delta = Math.max(stem_delta, noteM.stem_min);
+        noteM.min_line = noteM.line - stem_delta;
+        noteM.note.setStemLength(stem_delta * 10);
+      }
+    }
+
+    // For three voices, test if rests can be repositioned
+    //
+    // Special case 1 :: middle voice rest between two notes
+    //
+    if (noteM.isrest && !noteU.isrest && !noteL.isrest) {
+      if (noteU.min_line <= noteM.max_line ||
+          noteM.min_line <= noteL.max_line) {
+         var rest_height = noteM.max_line - noteM.min_line;
+         var space = noteU.min_line - noteL.max_line;
+         if (rest_height < space)
+           // center middle voice rest between the upper and lower voices
+           centerRest(noteM, noteU, noteL);
+         else {
+           x_shift = voice_x_shift + 3;    // shift middle rest right
+           noteM.note.setXShift(x_shift);
+         }
+         // format complete
+         return true;
+      }
+    }
+
+    // Special case 2 :: all voices are rests
+    if (noteU.isrest && noteM.isrest && noteL.isrest) {
+      // Shift upper voice rest up
+      shiftRestVertical(noteU, noteM, 1);
+      // Shift lower voice rest down
+      shiftRestVertical(noteL, noteM, -1);
+      // format complete
+      return true;
+    }
+
+    // Test if any other rests can be repositioned
+    if (noteM.isrest && noteU.isrest && noteM.min_line <= noteL.max_line)
+      // Shift middle voice rest up
+      shiftRestVertical(noteM, noteL, 1);
+    if (noteM.isrest && noteL.isrest && noteU.min_line <= noteM.max_line)
+      // Shift middle voice rest down
+      shiftRestVertical(noteM, noteU, -1);
+    if (noteU.isrest && noteU.min_line <= noteM.max_line)
+      // shift upper voice rest up;
+      shiftRestVertical(noteU, noteM, 1);
+    if (noteL.isrest && noteM.min_line <= noteL.max_line)
+      // shift lower voice rest down
+      shiftRestVertical(noteL, noteM, -1);
+
+    // If middle voice intersects upper or lower voice
+    if ((!noteU.isrest && !noteM.isrest && noteU.min_line <= noteM.max_line + 0.5) ||
+        (!noteM.isrest && !noteL.isrest && noteM.min_line <= noteL.max_line)) {
+      x_shift = voice_x_shift + 3;      // shift middle note right
+      noteM.note.setXShift(x_shift);
+    }
+
+    return true;
+  };
+
+  StaveNote.formatByY = function(notes, state) {
+    // NOTE: this function does not support more than two voices per stave
+    //       use with care.
+    var hasStave = true;
+    var i;
+
+    for (i = 0; i < notes.length; i++) {
+      hasStave = hasStave && notes[i].getStave() != null;
+    }
+
+    if (!hasStave) throw new Vex.RERR("Stave Missing",
+      "All notes must have a stave - Vex.Flow.ModifierContext.formatMultiVoice!");
+
+    var x_shift = 0;
+
+    for (i = 0; i < notes.length - 1; i++) {
+      var top_note = notes[i];
+      var bottom_note = notes[i + 1];
+
+      if (top_note.getStemDirection() == Vex.Flow.StaveNote.STEM_DOWN) {
+        top_note = notes[i + 1];
+        bottom_note = notes[i];
+      }
+
+      var top_keys = top_note.getKeyProps();
+      var bottom_keys = bottom_note.getKeyProps();
+
+      var topY = top_note.getStave().getYForLine(top_keys[0].line);
+      var bottomY = bottom_note.getStave().getYForLine(bottom_keys[bottom_keys.length - 1].line);
+
+      var line_space = top_note.getStave().options.spacing_between_lines_px;
+      if (Math.abs(topY - bottomY) == line_space / 2) {
+        x_shift = top_note.getVoiceShiftWidth();
+        bottom_note.setXShift(x_shift);
+      }
+    }
+
+    state.right_shift += x_shift;
+  };
+
+  StaveNote.postFormat = function(notes) {
+    if (!notes) return false;
+
+    notes.forEach(function(note) {
+      note.postFormat();
+    });
+
+    return true;
+  };
+
   // ## Prototype Methods
   //
   Vex.Inherit(StaveNote, Vex.Flow.StemmableNote, {
@@ -32,6 +260,7 @@ Vex.Flow.StaveNote = (function() {
 
       this.keys = note_struct.keys;
       this.clef = note_struct.clef;
+      this.octave_shift = note_struct.octave_shift;
       this.beam = null;
 
       // Pull note rendering properties
@@ -182,10 +411,20 @@ Vex.Flow.StaveNote = (function() {
         // All rests use the same position on the line.
         // if (this.glyph.rest) key = this.glyph.position;
         if (this.glyph.rest) this.glyph.position = key;
-        var props = Vex.Flow.keyProperties(key, this.clef);
+        var options = { octave_shift: this.octave_shift || 0 };
+        var props = Vex.Flow.keyProperties(key, this.clef, options);
         if (!props) {
           throw new Vex.RuntimeError("BadArguments",
               "Invalid key for note properties: " + key);
+        }
+
+        // Override line placement for default rests
+        if (props.key === "R") {
+          if (this.duration === "1" || this.duration === "w") {
+            props.line = 4;
+          } else {
+            props.line = 3;
+          }
         }
 
         // Calculate displacement of this note
@@ -210,11 +449,18 @@ Vex.Flow.StaveNote = (function() {
       }
 
       // Sort the notes from lowest line to highest line
+      var sorted = true;
+      var lastLine = -1000;
+      var that = this;
+      this.keyProps.forEach(function(key) {
+        if (key.line < lastLine) {
+          Vex.W("Unsorted keys in note will be sorted. " +
+            "See https://github.com/0xfe/vexflow/issues/104 for details.");
+        }
+        lastLine = key.line;
+      });
       this.keyProps.sort(function(a, b) { return a.line - b.line; });
     },
-
-    // Get modifier category for `ModifierContext`
-    getCategory: function() { return "stavenotes"; },
 
     // Get the `BoundingBox` for the entire note
     getBoundingBox: function() {
@@ -233,8 +479,8 @@ Vex.Flow.StaveNote = (function() {
 
       if (this.isRest()) {
         var y = this.ys[0];
-        if (this.duration == "w" || this.duration == "h" ||
-            this.duration == "1" || this.duration == "2") {
+        var frac = Vex.Flow.durationToFraction(this.duration);
+        if (frac.equals(1) || frac.equals(2)) {
           min_y = y - half_line_spacing;
           max_y = y + half_line_spacing;
         } else {
@@ -275,14 +521,13 @@ Vex.Flow.StaveNote = (function() {
       var result_line = this.keyProps[0].line;
 
       // No precondition assumed for sortedness of keyProps array
-      for(var i=0; i<this.keyProps.length; i++){
+      for (var i=0; i<this.keyProps.length; i++) {
         var this_line = this.keyProps[i].line;
-        if(is_top_note)
-          if(this_line > result_line)
-                result_line = this_line;
-        else
-          if(this_line < result_line)
-            result_line = this_line;
+        if (is_top_note) {
+          if (this_line > result_line) result_line = this_line;
+        } else {
+          if (this_line < result_line) result_line = this_line;
+        }
       }
 
       return result_line;
@@ -324,7 +569,9 @@ Vex.Flow.StaveNote = (function() {
       this.setYs(ys);
 
       var bounds = this.getNoteHeadBounds();
-      this.stem.setYBounds(bounds.y_top, bounds.y_bottom);
+	    if (this.hasStem()) {
+        this.stem.setYBounds(bounds.y_top, bounds.y_bottom);
+      }
 
       return this;
     },
@@ -400,6 +647,15 @@ Vex.Flow.StaveNote = (function() {
       return { x: this.getAbsoluteX() + x, y: this.ys[index] };
     },
 
+    // Sets the style of the complete StaveNote, including all keys
+    // and the stem.
+    setStyle: function(style) {
+      this.note_heads.forEach(function(notehead) {
+        notehead.setStyle(style);
+      }, this);
+      this.stem.setStyle(style);
+    },
+
     // Sets the notehead at `index` to the provided coloring `style`.
     //
     // `style` is an `object` with the following properties: `shadowColor`,
@@ -407,6 +663,16 @@ Vex.Flow.StaveNote = (function() {
     setKeyStyle: function(index, style) {
       this.note_heads[index].setStyle(style);
       return this;
+    },
+
+    setKeyLine: function(index, line) {
+      this.keyProps[index].line = line;
+      this.note_heads[index].setLine(line);
+      return this;
+    },
+
+    getKeyLine: function(index) {
+      return this.keyProps[index].line;
     },
 
     // Add self to modifier context. `mContext` is the `ModifierContext`
@@ -422,7 +688,7 @@ Vex.Flow.StaveNote = (function() {
     },
 
     // Generic function to add modifiers to a note
-    // 
+    //
     // Parameters:
     // * `index`: The index of the key that we're modifying
     // * `modifier`: The modifier to add
@@ -482,11 +748,14 @@ Vex.Flow.StaveNote = (function() {
     },
 
     // Calculates and sets the extra pixels to the left or right
-    // if the note is displaced
+    // if the note is displaced.
     calcExtraPx: function() {
       this.setExtraLeftPx((this.displaced && this.stem_direction == -1) ?
           this.glyph.head_width : 0);
-      this.setExtraRightPx((this.displaced && this.stem_direction == 1) ?
+
+      // For upstems with flags, the extra space is unnecessary, since it's taken
+      // up by the flag.
+      this.setExtraRightPx((!this.hasFlag() && this.displaced && this.stem_direction == 1) ?
           this.glyph.head_width : 0);
     },
 
@@ -553,6 +822,7 @@ Vex.Flow.StaveNote = (function() {
 
     // Draw the ledger lines between the stave and the highest/lowest keys
     drawLedgerLines: function(){
+      if (this.isRest()) { return; }
       if (!this.context) throw new Vex.RERR("NoCanvasContext",
           "Can't draw without a canvas context.");
       var ctx = this.context;
@@ -589,13 +859,14 @@ Vex.Flow.StaveNote = (function() {
       if (!this.context) throw new Vex.RERR("NoCanvasContext",
           "Can't draw without a canvas context.");
       var ctx = this.context;
+      ctx.openGroup("modifiers");
       for (var i = 0; i < this.modifiers.length; i++) {
         var mod = this.modifiers[i];
         var note_head = this.note_heads[mod.getIndex()];
         var key_style = note_head.getStyle();
         if(key_style) {
             ctx.save();
-            note_head.applyKeyStyle(ctx);
+            note_head.applyStyle(ctx);
         }
         mod.setContext(ctx);
         mod.draw();
@@ -603,6 +874,7 @@ Vex.Flow.StaveNote = (function() {
             ctx.restore();
         }
       }
+      ctx.closeGroup();
     },
 
     // Draw the flag for the note
@@ -635,15 +907,20 @@ Vex.Flow.StaveNote = (function() {
         }
 
         // Draw the Flag
+        this.context.openGroup("flag", null, {pointerBBox: true});
         Vex.Flow.renderGlyph(ctx, flag_x, flag_y,
             this.render_options.glyph_font_scale, flag_code);
+        this.context.closeGroup();
       }
     },
 
     // Draw the NoteHeads
     drawNoteHeads: function(){
+      var that = this;
       this.note_heads.forEach(function(note_head) {
-        note_head.setContext(this.context).draw();
+        that.context.openGroup("notehead", null, {pointerBBox: true});
+        note_head.setContext(that.context).draw();
+        that.context.closeGroup();
       }, this);
     },
 
@@ -655,8 +932,10 @@ Vex.Flow.StaveNote = (function() {
       if (stem_struct) {
         this.setStem(new Stem(stem_struct));
       }
-      
+
+      this.context.openGroup("stem", null, {pointerBBox: true});
       this.stem.setContext(this.context).draw();
+      this.context.closeGroup();
     },
 
     // Draws all the `StaveNote` parts. This is the main drawing method.
@@ -685,10 +964,15 @@ Vex.Flow.StaveNote = (function() {
 
       // Draw each part of the note
       this.drawLedgerLines();
-      if (render_stem) this.drawStem();
-      this.drawNoteHeads();
-      this.drawFlag();
+
+      this.elem = this.context.openGroup("stavenote", this.id);
+      this.context.openGroup("note", null, {pointerBBox: true});
+        if (render_stem) this.drawStem();
+        this.drawNoteHeads();
+        this.drawFlag();
+      this.context.closeGroup();
       this.drawModifiers();
+      this.context.closeGroup();
     }
   });
 

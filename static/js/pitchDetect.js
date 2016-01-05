@@ -16,7 +16,7 @@ var debug_notes;
 var debug_good_regions;
 var amps;
 var max_amp;
-var amp_threshold = calibrateMicrophone();
+var amp_threshold = calibrateMicrophone(); //Implement this
 var recording = false;
 var segment_size = 1200;
 var error = false;
@@ -367,14 +367,14 @@ $.ajaxSetup({
 
 function sendScore(){
     var i = interval;
-    $.post('/interval/send_score', {score: score.toString(), interval: i.toString()}, function(data){
+    $.post('send_score', {score: score.toString(), interval: i.toString()}, function(data){
         console.log("Score saved at " + data)
      });
 }
 
 function sendAndGetScore(){
     var i = interval;
-    $.post('/interval/send_score', {score: score.toString(), interval: i.toString()}, function(){
+    $.post('send_score', {score: score.toString(), interval: i.toString()}, function(){
         if (score == 0){
             attempts++;
             if (attempts==3){
@@ -394,20 +394,20 @@ function sendAndGetScore(){
 
 function sendPerfectScore(){
     var i = interval;
-    $.post('/interval/send_score', {score: "1", interval: i.toString()}, function(data){
+    $.post('send_score', {score: "1", interval: i.toString()}, function(data){
         console.log("level" + data)
      });
 }
 
 function sendZeroScore(){
     var i = interval;
-    $.post('/interval/send_score', {score: "0", interval: i.toString()}, function(data){
+    $.post('send_score', {score: "0", interval: i.toString()}, function(data){
         console.log("Score saved at " + data)
      });
 }
 
 function getInterval(){
-    $.get('/interval/get_interval', function(data){
+    $.get('get_interval', function(data){
         var json = JSON.parse(data);
         interval = json.semitones;
         var name = json.name;
@@ -849,6 +849,8 @@ function updateFrequency(){
     analyserContext.fillStyle = "rgba(255, 255, 255, 0.8 )";
     analyserContext.fillRect(curr_window*(BAR_WIDTH+spacing), 0, BAR_WIDTH, canvasHeight);
 
+    
+    
     // Draw Frequencies.
     for (var i = 0; i < num_windows; i++) {
 
@@ -928,31 +930,49 @@ function updateAmplitude(){
 
 }
 
+
+//Sets controls for navigating the debug displays
 if (debug) {window.onkeydown = function(e) {
     var key = e.keyCode;
-    if (key == 37) { //left key
+
+    //Left and right keys skim through time
+    if (key == 37) { //left
         curr_window = curr_window>0 ? curr_window-1 : curr_window
-    } else if (key == 39) { //right key
+    } else if (key == 39) { //right
         curr_window = curr_window<num_windows-1 ? curr_window+1 : curr_window
-    } else if (key == 90){ //z key
+    } 
+    
+    //z, x and c skip navigate to beginning middle and end of the sample
+    else if (key == 90){ //z
         curr_window = 0;
-    } else if (key == 88){ //x key
+    } else if (key == 88){ //x
         curr_window = Math.round(num_windows/2);
-    } else if (key == 67){ //c key
+    } else if (key == 67){ //c 
         curr_window = num_windows-1;
-    } else if (key == 87){ // w key
+    } 
+    
+
+    //w and s alter the Y axis scale (Frequency)
+    else if (key == 87){ // w key
         range = range + (range-1)*0.2;
     } else if (key == 83){ // s key
         range = range - (range-1)*0.2
-    } else if (key == 69){ // e
+    }
+    
+    //e and d alter the Y axis offset 
+    else if (key == 69){ // e
         center -= 5*(range-1);
     } else if (key == 68){ // d
         center += 5*(range-1);
-    } else if (key == 27){
-        hideHelp();
-    } else {
-        return
     }
+    
+    //Esc hides help
+    else if (key == 27){
+        hideHelp();
+    }
+    
+    else { return }
+
     ACF = ACFs[curr_window]
     updateDisplays()
 }}

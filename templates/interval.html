@@ -16,7 +16,7 @@
 <script src="{% static "js/MIDI/js/Window/DOMLoader.XMLHttp.js" %}"type="text/javascript"></script>
 <script src="{% static "js/MIDI/inc/Base64.js" %}" type="text/javascript"></script>
 <script src="{% static "js/MIDI/inc/base64binary.js" %}" type="text/javascript"></script>
-<script src="{% static "js/vexflow-master/build/vexflow/vexflow-min.js" %}" type="text/javascript"></script>
+<script src="{% static "js/vexflow-master/releases/vexflow-min.js" %}" type="text/javascript"></script>
 {% endblock %}
 
 
@@ -73,17 +73,8 @@
                         </div>
                     </div>
                 </div>
-            </div><div id="displays" >
-                <div class="canvas_display">
-                    <h1>Autocorrelation Function</h1>
-                    <canvas id="correlation_canvas"></canvas>
-                    <div class="debug_info">
-                        <ul>
-                            <li id="window"></li>
-                            <li id="window_pitch"></li>
-                        </ul>
-                    </div>
-                </div>
+            </div>
+            <div id="displays" >
                 <div class="canvas_display">
                     <h1>Frequency</h1>
                     <canvas id="frequency_canvas"></canvas>
@@ -102,6 +93,17 @@
                         </ul>
                     </div>
                 </div>
+                <div class="canvas_display">
+                    <h1>Autocorrelation Function</h1>
+                    <canvas id="correlation_canvas"></canvas>
+                    <div class="debug_info">
+                        <ul>
+                            <li id="window"></li>
+                            <li id="window_pitch"></li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
 

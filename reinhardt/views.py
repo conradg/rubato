@@ -4,10 +4,11 @@ from django.template.loader import get_template
 from django.template import Context, RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
-from django.shortcuts import redirect, render_to_response
+from django.shortcuts import redirect, render_to_response, render
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.urlresolvers import reverse
 from intervals import learning
 import time, datetime
 import logging
@@ -24,12 +25,12 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return redirect('/index')
+                return HttpResponseRedirect(reverse('index'))
             else:
-                return redirect('/login/account-disabled')
+                return HttpResponseRedirect('/login/account-disabled')
                 # Return a 'disabled account' error message
         else:
-            return redirect('/login/invalid-login')
+            return render_to_response('registration/login.html' ,{'invalid': True}, context)
             # Return an 'invalid login' error message.
     else:
         return render_to_response('../templates/registration/login.html', {}, context)
@@ -37,7 +38,7 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/index/')
+    return HttpResponseRedirect(reverse('index'))
 
 def index(request):
     context = RequestContext(request)

@@ -13,11 +13,41 @@ Vex.Flow.Articulation = (function() {
   function Articulation(type) {
     if (arguments.length > 0) this.init(type);
   }
+  Articulation.CATEGORY = "articulations";
 
   // To enable logging for this class. Set `Vex.Flow.Articulation.DEBUG` to `true`.
   function L() { if (Articulation.DEBUG) Vex.L("Vex.Flow.Articulation", arguments); }
 
   var Modifier = Vex.Flow.Modifier;
+
+  // ## Static Methods
+  // Arrange articulations inside `ModifierContext`
+  Articulation.format = function(articulations, state) {
+    if (!articulations || articulations.length === 0) return false;
+
+    var width = 0;
+    for (var i = 0; i < articulations.length; ++i) {
+      var increment = 1;
+      var articulation = articulations[i];
+      width = Math.max(articulation.getWidth(), width);
+
+      var type = Vex.Flow.articulationCodes(articulation.type);
+
+      if (!type.between_lines) increment += 1.5;
+
+      if (articulation.getPosition() === Modifier.Position.ABOVE) {
+        articulation.setTextLine(state.top_text_line);
+        state.top_text_line += increment;
+      } else {
+        articulation.setTextLine(state.text_line);
+        state.text_line += increment;
+      }
+    }
+
+    state.left_shift += width / 2;
+    state.right_shift += width / 2;
+    return true;
+  };
 
   // ## Prototype Methods
   Vex.Inherit(Articulation, Modifier, {
@@ -43,9 +73,6 @@ Vex.Flow.Articulation = (function() {
       this.setWidth(this.articulation.width);
     },
 
-    // Get modifier category for `ModifierContext`.
-    getCategory: function() { return "articulations"; },
-
     // Render articulation in position next to note.
     draw: function() {
       if (!this.context) throw new Vex.RERR("NoContext",
@@ -64,9 +91,8 @@ Vex.Flow.Articulation = (function() {
       var needsLineAdjustment = function(articulation, note_line, line_spacing) {
         var offset_direction = (articulation.position === Modifier.Position.ABOVE) ? 1 : -1;
         var duration = articulation.getNote().getDuration();
-
-        if(!is_on_head && duration !== "w" && duration !== "1"){
-          // Add stem length, inless it's on a whole note
+        if(!is_on_head && Vex.Flow.durationToNumber(duration) <= 1){
+          // Add stem length, unless it's on a whole note.
           note_line += offset_direction * 3.5;
         }
 
@@ -127,18 +153,20 @@ Vex.Flow.Articulation = (function() {
         shiftY = this.articulation.shift_up;
         glyph_y_between_lines = (top - 7) - (spacing * (this.text_line + line_spacing));
 
-        if (this.articulation.between_lines)
+        if (this.articulation.between_lines) {
           glyph_y = glyph_y_between_lines;
-        else
+        } else {
           glyph_y = Math.min(stave.getYForTopText(this.text_line) - 3, glyph_y_between_lines);
+        }
       } else {
         shiftY = this.articulation.shift_down - 10;
 
         glyph_y_between_lines = bottom + 10 + spacing * (this.text_line + line_spacing);
-        if (this.articulation.between_lines)
+        if (this.articulation.between_lines) {
           glyph_y = glyph_y_between_lines;
-        else
+        } else {
           glyph_y = Math.max(stave.getYForBottomText(this.text_line), glyph_y_between_lines);
+        }
       }
 
       var glyph_x = start.x + this.articulation.shift_right;

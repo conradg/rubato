@@ -22,6 +22,45 @@ Vex.Flow.Note = (function() {
   function Note(note_struct) {
     if (arguments.length > 0) this.init(note_struct);
   }
+  Note.CATEGORY = "note";
+
+  // Debug helper. Displays various note metrics for the given
+  // note.
+  Note.plotMetrics = function(ctx, note, yPos) {
+    var metrics = note.getMetrics();
+    var w = metrics.width;
+    var xStart = note.getAbsoluteX() - metrics.modLeftPx - metrics.extraLeftPx;
+    var xPre1 = note.getAbsoluteX() - metrics.extraLeftPx;
+    var xAbs = note.getAbsoluteX();
+    var xPost1 = note.getAbsoluteX() + metrics.noteWidth;
+    var xPost2 = note.getAbsoluteX() + metrics.noteWidth + metrics.extraRightPx;
+    var xEnd = note.getAbsoluteX() + metrics.noteWidth + metrics.extraRightPx + metrics.modRightPx;
+
+    var xWidth = xEnd - xStart;
+    ctx.save();
+    ctx.setFont("Arial", 8, "");
+    ctx.fillText(Math.round(xWidth) + "px", xStart + note.getXShift(), yPos);
+
+    var y = (yPos + 7);
+    function stroke(x1, x2, color) {
+      ctx.beginPath();
+      ctx.setStrokeStyle(color);
+      ctx.setFillStyle(color);
+      ctx.setLineWidth(3);
+      ctx.moveTo(x1 + note.getXShift(), y);
+      ctx.lineTo(x2 + note.getXShift(), y);
+      ctx.stroke();
+    }
+
+    stroke(xStart, xPre1, "red");
+    stroke(xPre1, xAbs, "#999");
+    stroke(xAbs, xPost1, "green");
+    stroke(xPost1, xPost2, "#999");
+    stroke(xPost2, xEnd, "red");
+    stroke(xStart - note.getXShift(), xStart, "#DDD"); // Shift
+    Vex.drawDot(ctx, xAbs + note.getXShift(), y, "blue");
+    ctx.restore();
+  };
 
   // ## Prototype Methods
   //
@@ -49,7 +88,15 @@ Vex.Flow.Note = (function() {
       this.duration = initData.duration;
       this.dots = initData.dots;
       this.noteType = initData.type;
-      this.setIntrinsicTicks(initData.ticks);
+
+      if (note_struct.duration_override) {
+        // Custom duration
+        this.setDuration(note_struct.duration_override);
+      } else {
+        // Default duration
+        this.setIntrinsicTicks(initData.ticks);
+      }
+
       this.modifiers = [];
 
       // Get the glyph code for this note from the font.
@@ -80,6 +127,10 @@ Vex.Flow.Note = (function() {
       this.preFormatted = false;  // Is this note preFormatted?
       this.ys = [];               // list of y coordinates for each note
                                   // we need to hold on to these for ties and beams.
+
+      if (note_struct.align_center) {
+        this.setCenterAlignment(note_struct.align_center);
+      }
 
       // The render surface.
       this.context = null;
@@ -116,6 +167,11 @@ Vex.Flow.Note = (function() {
       this.context = this.stave.context;
       return this;
     },
+
+
+    // `Note` is not really a modifier, but is used in
+    // a `ModifierContext`.
+    getCategory: function() { return this.constructor.CATEGORY; },
 
     // Set the rendering context for the note.
     setContext: function(context) { this.context = context; return this; },
@@ -229,11 +285,16 @@ Vex.Flow.Note = (function() {
       var width = this.getWidth();
       return { width: width,
                noteWidth: width -
-                          modLeftPx - modRightPx -  // used by accidentals and modifiers
+                          modLeftPx - modRightPx -
                           this.extraLeftPx - this.extraRightPx,
                left_shift: this.x_shift, // TODO(0xfe): Make style consistent
+
+
+               // Modifiers, accidentals etc.
                modLeftPx: modLeftPx,
                modRightPx: modRightPx,
+
+               // Displaced note head on left or right.
                extraLeftPx: this.extraLeftPx,
                extraRightPx: this.extraRightPx };
     },
@@ -247,11 +308,9 @@ Vex.Flow.Note = (function() {
         (this.modifierContext ?  this.modifierContext.getWidth() : 0);
     },
 
-    // Displace note by `x` pixels.
-    setXShift: function(x) {
-      this.x_shift = x;
-      return this;
-    },
+    // Displace note by `x` pixels. Used by the formatter.
+    setXShift: function(x) { this.x_shift = x; return this; },
+    getXShift: function() { return this.x_shift; },
 
     // Get `X` position of this tick context.
     getX: function() {
@@ -260,14 +319,23 @@ Vex.Flow.Note = (function() {
       return this.tickContext.getX() + this.x_shift;
     },
 
-    // Get the absolute `X` position of this note relative to the stave.
+    // Get the absolute `X` position of this note's tick context. This
+    // excludes x_shift, so you'll need to factor it in if you're
+    // looking for the post-formatted x-position.
     getAbsoluteX: function() {
       if (!this.tickContext) throw new Vex.RERR("NoTickContext",
           "Note needs a TickContext assigned for an X-Value");
 
-      // {osition note to left edge of tick context.
+      // Position note to left edge of tick context.
       var x = this.tickContext.getX();
-      if (this.stave) x += this.stave.getNoteStartX() + this.render_options.stave_padding;
+      if (this.stave) {
+        x += this.stave.getNoteStartX() + this.render_options.stave_padding;
+      }
+
+      if (this.isCenterAligned()){
+        x += this.getCenterXShift();
+      }
+
       return x;
     },
 

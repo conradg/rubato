@@ -12,6 +12,9 @@ Vex.Flow.Annotation = (function() {
     if (arguments.length > 0) this.init(text);
   }
 
+  Annotation.CATEGORY = "annotations";
+  var Modifier = Vex.Flow.Modifier;
+
   // To enable logging for this class. Set `Vex.Flow.Annotation.DEBUG` to `true`.
   function L() { if (Annotation.DEBUG) Vex.L("Vex.Flow.Annotation", arguments); }
 
@@ -30,11 +33,32 @@ Vex.Flow.Annotation = (function() {
     CENTER_STEM: 4
   };
 
+  // Arrange annotations within a `ModifierContext`
+  Annotation.format = function(annotations, state) {
+    if (!annotations || annotations.length === 0) return false;
+
+    var width = 0;
+    for (var i = 0; i < annotations.length; ++i) {
+      var annotation = annotations[i];
+      width = Math.max(annotation.getWidth(), width);
+      if (annotation.getPosition() === Modifier.Position.ABOVE) {
+        annotation.setTextLine(state.top_text_line);
+        state.top_text_line++;
+      } else {
+        annotation.setTextLine(state.text_line);
+        state.text_line++;
+      }
+    }
+
+    state.left_shift += width / 2;
+    state.right_shift += width / 2;
+    return true;
+  };
+
   // ## Prototype Methods
   //
   // Annotations inherit from `Modifier` and is positioned correctly when
   // in a `ModifierContext`.
-  var Modifier = Vex.Flow.Modifier;
   Vex.Inherit(Annotation, Modifier, {
     // Create a new `Annotation` with the string `text`.
     init: function(text) {
@@ -42,7 +66,6 @@ Vex.Flow.Annotation = (function() {
 
       this.note = null;
       this.index = null;
-      this.text_line = 0;
       this.text = text;
       this.justification = Annotation.Justify.CENTER;
       this.vert_justification = Annotation.VerticalJustify.TOP;
@@ -55,13 +78,6 @@ Vex.Flow.Annotation = (function() {
       // The default width is calculated from the text.
       this.setWidth(Vex.Flow.textWidth(text));
     },
-
-    // Return the modifier type. Used by the `ModifierContext` to calculate
-    // layout.
-    getCategory: function() { return "annotations"; },
-
-    // Set the vertical position of the text relative to the stave.
-    setTextLine: function(line) { this.text_line = line; return this; },
 
     // Set font family, size, and weight. E.g., `Arial`, `10pt`, `Bold`.
     setFont: function(family, size, weight) {

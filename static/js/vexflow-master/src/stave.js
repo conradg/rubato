@@ -70,15 +70,25 @@ Vex.Flow.Stave = (function() {
       // Add additional space if left barline is REPEAT_BEGIN and there are other
       // start modifiers than barlines
       if (this.modifiers[0].barline == Vex.Flow.Barline.type.REPEAT_BEGIN &&
-          this.modifiers.length > 2)
+          this.modifiers.length > 2) {
         start_x += 20;
+      }
+
       return start_x;
     },
 
     getNoteEndX: function() { return this.end_x; },
     getTieStartX: function() { return this.start_x; },
     getTieEndX: function() { return this.x + this.width; },
-    setContext: function(context) { this.context = context; return this; },
+    setContext: function(context) {
+      this.context = context;
+	for(var i=0; i<this.glyphs.length; i++){
+          if(typeof(this.glyphs[i].setContext) === "function"){
+	    this.glyphs[i].setContext(context);
+          }
+	}
+      return this;
+    },
     getContext: function() { return this.context; },
     getX: function() { return this.x; },
     getNumLines: function() { return this.options.num_lines; },
@@ -89,13 +99,29 @@ Vex.Flow.Stave = (function() {
     },
     setY: function(y) { this.y = y; return this; },
 
+    setX: function(x){
+      var shift = x - this.x;
+      this.x = x;
+      this.glyph_start_x += shift;
+      this.glyph_end_x += shift;
+      this.start_x += shift;
+      this.end_x += shift;
+      for(var i=0; i<this.modifiers.length; i++) {
+      	var mod = this.modifiers[i];
+        if (mod.x !== undefined) {
+          mod.x += shift;
+      	}
+      }
+      return this;
+    },
+
     setWidth: function(width) {
       this.width = width;
       this.glyph_end_x = this.x + width;
       this.end_x = this.glyph_end_x;
 
-      // reset the x position of the end barline
-      this.modifiers[1].setX(this.end_x);
+      // reset the x position of the end barline (TODO(0xfe): This makes no sense)
+      // this.modifiers[1].setX(this.end_x);
       return this;
     },
 
@@ -275,14 +301,14 @@ Vex.Flow.Stave = (function() {
       return this;
     },
 
-    addClef: function(clef) {
+    addClef: function(clef, size, annotation) {
       this.clef = clef;
-      this.addModifier(new Vex.Flow.Clef(clef));
+      this.addModifier(new Vex.Flow.Clef(clef, size, annotation));
       return this;
     },
 
-    addEndClef: function(clef) {
-      this.addEndModifier(new Vex.Flow.Clef(clef));
+    addEndClef: function(clef, size, annotation) {
+      this.addEndModifier(new Vex.Flow.Clef(clef, size, annotation));
       return this;
     },
 

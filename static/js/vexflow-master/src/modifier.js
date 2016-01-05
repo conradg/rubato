@@ -14,7 +14,12 @@
 // `ModifierContext`. This ensures that multiple voices don't trample all over each other.
 
 Vex.Flow.Modifier = (function() {
-  function Modifier() { this.init(); }
+  function Modifier() {
+    this.constructor = Modifier;
+    this.init();
+  }
+  Modifier.CATEGORY = "none";
+
     // To enable logging for this class. Set `Vex.Flow.Modifier.DEBUG` to `true`.
   function L() { if (Modifier.DEBUG) Vex.L("Vex.Flow.Modifier", arguments); }
 
@@ -29,7 +34,7 @@ Vex.Flow.Modifier = (function() {
   // ## Prototype Methods
   Modifier.prototype = {
 
-    // The constructor sets initial widhts and constants.
+    // The constructor sets initial widths and constants.
     init: function() {
       this.width = 0;
       this.context = null;
@@ -45,12 +50,13 @@ Vex.Flow.Modifier = (function() {
       this.modifier_context = null;
       this.x_shift = 0;
       this.y_shift = 0;
+      this.spacingFromNextModifier = 0;
       L("Created new modifier");
     },
 
     // Every modifier has a category. The `ModifierContext` uses this to determine
     // the type and order of the modifiers.
-    getCategory: function() { return "none"; },
+    getCategory: function() { return this.constructor.CATEGORY; },
 
     // Get and set modifier widths.
     getWidth: function() { return this.width; },
@@ -82,6 +88,12 @@ Vex.Flow.Modifier = (function() {
     // Shift modifier down `y` pixels. Negative values shift up.
     setYShift: function(y) { this.y_shift = y; return this; },
 
+    setSpacingFromNextModifier: function(x) {
+      this.spacingFromNextModifier = x;
+    },
+
+    getSpacingFromNextModifier: function() {return this.spacingFromNextModifier; },
+
     // Shift modifier `x` pixels in the direction of the modifier. Negative values
     // shift reverse.
     setXShift: function(x) {
@@ -92,6 +104,7 @@ Vex.Flow.Modifier = (function() {
         this.x_shift += x;
       }
     },
+    getXShift: function() {return this.x_shift;},
 
     // Render the modifier onto the canvas.
     draw: function() {
