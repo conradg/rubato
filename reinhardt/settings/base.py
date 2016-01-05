@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 from django.core.exceptions import ImproperlyConfigured
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 def get_env_setting(setting):
     """ Get the environment setting or return exception """
@@ -84,7 +84,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-LOGIN_URL = BASE_URL + "/login"
 
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
