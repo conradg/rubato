@@ -265,6 +265,7 @@ window.URL = window.URL || window.webkitURL;
 navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
 
+
 function toAudioBuffer(url, callback){
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
@@ -278,18 +279,34 @@ function toAudioBuffer(url, callback){
     request.send();
 }
 
-function toggleRecording(){
+
+
+// If the recording is ongoing, it stops it and calls the callback.
+// Otherwise the recording is started.
+function toggleRecording(callback){
     if (recording){
-        stopRecording(
-            function (s) {
-                var blob = s;
-                var url = window.URL.createObjectURL(blob);
-                updatePitchDisplay(url);
-    });
+        stopRecording();
+        saveRecording(callback);
     } else {
         startRecording()
         error = false;
     }
+}
+
+function setAudioElement(url){
+    $("audio#recording").attr("src", url)
+}
+
+// Exports the audio in the recorder to a local URL as a wave file.
+// The callback will be called with the URL as it's sole argument
+function saveRecording(callback){
+    recorder.exportWAV(
+        function BlobToURL(blob){
+            var url = window.URL.createObjectURL(blob);
+            setAudioElement(url);
+            callback(url);
+        }
+    )
 }
 function startRecording() {
     if (navigator.getUserMedia) {
@@ -299,11 +316,10 @@ function startRecording() {
     }
 }
 
-//stops recording and sets the detected_pitch value in the browser to the detected detected_pitch
-function stopRecording(callback) {
+//stops recording
+function stopRecording() {
     recorder.stop();
     recording = false;
-    recorder.exportWAV(callback);
 }
 
 //runs detected_pitch detection on the audio found at the url and updates the detected_pitch display on the page

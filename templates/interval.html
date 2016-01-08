@@ -60,8 +60,9 @@
                     <div id="vexflow_container">
                         <canvas id="vexflow"></canvas>
                     </div><div id="interval_text_container">
-                        <h2 id="interval_text"></h2></div>
-                    </div>
+                        <h2 id="interval_text"></h2>
+                    </div><audio controls id="recording">
+                    </audio></div>
                 <div id="buttons">
                     <div class="button-container">
                         <div id="playbutton">
@@ -69,7 +70,7 @@
                         </div>
                     </div><div class="button-container">
                         <div id="recordbutton">
-                            <img onclick="toggleRecording()"  src="{% static "assets/images/record.png" %}"/>
+                            <img onclick="toggleRecording(updatePitchDisplay)"  src="{% static "assets/images/record.png" %}"/>
                         </div>
                     </div>
                 </div>
