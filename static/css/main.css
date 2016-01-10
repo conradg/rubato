@@ -184,6 +184,8 @@ h2 {
     vertical-align: top;
 }
 
+
+
 #playbutton{
     display:inline-block;
     background-color: white;
@@ -287,6 +289,13 @@ h2 {
 
 }
 
+.exercise-container{
+    vertical-align:top;
+    display:inline-block;
+    width:33.3%;
+
+}
+
 .exercise{
     margin:0;
     margin-left:20px;
@@ -294,6 +303,26 @@ h2 {
     text-align:left;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.exercise.unreleased{
+    color:#AAAAAA;
+}
+
+.exercise.unreleased:after{
+    display: inline-block;
+    margin-left: 20px;
+    margin-top: 9px;
+    width: 50px;
+    text-align: center;
+    font-family: "Roboto";
+    content: "COMING SOON!";
+    font-size: 12px;
+    font-weight: 600;
+    -webkit-transform: rotate(-30deg); 
+    -moz-transform: rotate(-30deg);
+    transform: rotate(-30deg);
+    color: hsl(0, 100%, 50%); 
 }
 
 .rounded-square{

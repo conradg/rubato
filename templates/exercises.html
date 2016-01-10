@@ -1,7 +1,18 @@
 {% extends "base.html" %}
 
 {% block main %}
-     <h1>Exercises</h1>
-    <a href={% url "interval" %}><h2 class="exercise">Interval training</h2></a>
-
+    <h1>Exercises</h1>
+    <div id="container">
+        <div class="exercise-container" id="intonation">
+            <h2>Intonation</h2>
+            <a href={% url "interval" %}><h3 class="exercise">Intervals 1</h2></a>
+        </div><div class="exercise-container" id="melody">
+            <h2>Melody</h2>
+            <h3 class="exercise unreleased">Melody 1</h3>
+        </div><div class="exercise-container" id="rhythm">
+            <h2>Rhythm</h2>
+            <h3 class="exercise unreleased">Rhythm 1</h3>
+        </div>
+        <h3 class="exercise unreleased">Harmonies</h3>
+    </div>
 {% endblock %}
