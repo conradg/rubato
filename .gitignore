@@ -3,3 +3,4 @@
 *.dll
 *.pyc
 *.exe
+db.sqlite3
