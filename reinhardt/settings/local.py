@@ -4,7 +4,7 @@ DEBUG = True
 
 BASE_URL=""
 
-LOGIN = BASE_URL + "/login"
+LOGIN_URL = BASE_URL + "/login"
 
 STATIC_ROOT = ''
 
