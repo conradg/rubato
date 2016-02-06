@@ -7,15 +7,21 @@ import random
 def get_next_interval(user_id):
     level = UserProfile.objects.get(user__id=user_id).level;
     history = IntervalScore.objects.filter(user=user_id)
-    interval_set = level_to_interval_set[level]
+    available_intervals = level_to_interval_set[level]
+
     if len(history)<10:
-        return random.choice(interval_set)
+        return random.choice(available_intervals)
+
     interval_averages = []
-    for i in interval_set:
-        interval_averages.append((i,recent_average_score(user_id,i)))
+
+    # Array of intervals for the given level
+    for intvl in available_intervals:
+        interval_averages.append((intvl,recent_average_score(user_id,intvl)))
+
     interval_weightings = []
     acc = 0
     for a in interval_averages:
+        avg_score = a[1]
         interval_weightings.append(1/(a[1]+0.25))
         acc += 1/(a[1]+0.25)
     interval_weightings_norm = []
@@ -26,21 +32,20 @@ def get_next_interval(user_id):
     rand = random.random()
     for x in range(0, len(interval_weightings_norm)):
         if interval_weightings_norm[x]>rand:
-            return interval_set[x]
+            return available_intervals[x]
         else:
             pass
 
+
+# Gets the average score over the last 10 attempts at a given interval
 def recent_average_score(user_id,_interval):
     last_10 = IntervalScore.objects.filter(user=user_id,interval=_interval).order_by("-timestamp")[:10]
     if len(last_10) == 0:
         return 0.5
-    print (last_10)
     acc = 0
-    count = 0
     for x in last_10:
         acc += x.score
-        count += 1
-    return acc/count
+    return acc/len(last_10)
 
 def best_interval(user_id,date_time):
     time = date_time.timestamp()
