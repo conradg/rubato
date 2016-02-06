@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="153.122"
+   width="95.1158"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46dev+devel"
+   sodipodi:docname="rickvanderzwet_Treble_clef_black.svg"
+   sodipodi:docbase="/Users/rick/Desktop"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <sodipodi:namedview
+     inkscape:window-height="643"
+     inkscape:window-width="823"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     inkscape:zoom="2.4686199"
+     inkscape:cx="47.557899"
+     inkscape:cy="80.611843"
+     inkscape:window-x="213"
+     inkscape:window-y="37"
+     inkscape:current-layer="svg2"
+     showgrid="false" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>treble clef</dc:title>
+        <dc:description>email adress</dc:description>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li />
+            <rdf:li>symbol</rdf:li>
+            <rdf:li>musicsym</rdf:li>
+            <rdf:li>signs_and_symbols</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Yves Aubry (yvounet)</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Yves Aubry (yvounet)</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Yves Aubry (yvounet)</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <marker
+       id="ArrowEnd"
+       markerHeight="3"
+       markerUnits="strokeWidth"
+       markerWidth="4"
+       orient="auto"
+       refX="0"
+       refY="5"
+       viewBox="0 0 10 10">
+      <path
+         d="M 0 0 L 10 5 L 0 10 z"
+         id="path9" />
+    </marker>
+    <marker
+       id="ArrowStart"
+       markerHeight="3"
+       markerUnits="strokeWidth"
+       markerWidth="4"
+       orient="auto"
+       refX="10"
+       refY="5"
+       viewBox="0 0 10 10">
+      <path
+         d="M 10 0 L 0 5 L 10 10 z"
+         id="path12" />
+    </marker>
+  </defs>
+  <path
+     style="fill:#000000;stroke:black;stroke-width:1"
+     d="M 51.6875 5.25 C 46.2614 5.10907 39.913601 18.0682 40.125 29.625 C 40.173525 33.145495 41.284906 40.284396 42.90625 49.25 C 32.682506 59.830802 20.8125 70.690344 20.8125 84.9375 C 20.6493 97.9951 28.628901 114.63275 47.5625 114.46875 C 50.468496 114.45379 53.083256 114.08551 55.40625 113.46875 C 57.136863 122.96051 58.28755 130.44986 58.28125 133.90625 C 58.342289 147.54665 40.421185 148.89665 39.5625 141.0625 C 43.339077 140.933 46.343749 137.92554 46.34375 134.21875 C 46.34375 130.42875 43.205801 127.34375 39.3125 127.34375 C 37.17097 127.34375 35.262735 128.28174 33.96875 129.75 C 33.939474 129.78322 33.90363 129.80999 33.875 129.84375 C 33.582537 130.14805 33.337402 130.5242 33.09375 130.9375 C 32.296132 132.29048 31.777697 134.23 31.75 137 C 31.75 148.425 60.624999 155.77399 60.625 133.25 C 60.670146 130.22476 59.367494 122.53454 57.46875 112.84375 C 78.071859 105.38688 72.895938 74.799768 53.9375 74.65625 C 52.467771 74.671103 51.05116 74.841958 49.6875 75.1875 C 48.608241 69.990611 47.566125 64.946633 46.65625 60.3125 C 53.855246 53.240996 60.140557 44.087537 60 27.21875 C 60.0222 15.10525 55.986101 5.3909999 51.6875 5.25 z M 52.96875 16.96875 C 55.424716 16.731569 57.375 19.01225 57.375 24.03125 C 57.5739 32.651306 51.535029 40.178824 44.34375 47.75 C 43.656193 43.603397 43.204863 40.242781 43.15625 38.25 C 43.36025 24.784313 48.875473 17.364052 52.96875 16.96875 z M 45.25 61.65625 C 46.126787 66.171363 47.074325 70.927645 48.03125 75.71875 C 35.482648 80.183291 29.46094 97.673077 47.25 105.5 C 36.406884 96.268947 41.744469 85.342498 49.5625 83.4375 C 51.528076 93.254463 53.447767 102.93731 55 111.3125 C 52.892622 112.04572 50.433588 112.48076 47.5625 112.5 C 40.3808 112.5 26.03125 107.9268 26.03125 90.625 C 26.03125 76.131062 36.077645 70.241463 45.25 61.65625 z M 51.34375 83.125 C 51.657197 83.106322 51.995516 83.113673 52.3125 83.125 C 65.37492 83.125 70.302125 103.86782 57 110.5 C 55.344959 102.18075 53.338378 92.63963 51.34375 83.125 z "
+     id="path26" />
+</svg>

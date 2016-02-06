@@ -22,7 +22,7 @@
 
 
 {% block main %}
-    <h1>Train your intonation</h1>
+    <h1>Intonation I</h1>
     <h2 class="top-right" onclick="showHelp()">help</h2>
     <div id="debug">
         <h2>Debug</h2>
@@ -53,26 +53,34 @@
         </div>
     </div>
     <div id="main_exercise">
-        <div id="pitch" style="display:block;text-align: center">Press play to hear the starting note</div>
         <div class="container">
             <div id="exercise">
                 <div id="interval">
+                    <div id="interval_text_container">
+                        <h2 id="interval_text"></h2>
+                    </div>
                     <div id="vexflow_container">
                         <canvas id="vexflow"></canvas>
-                    </div><div id="interval_text_container">
-                        <h2 id="interval_text"></h2>
-                    </div><audio controls id="recording">
-                    </audio></div>
-                <div id="buttons">
-                    <div class="button-container">
+                    </div>
+                </div>
+                <div style="display:inline-block">
+                    <div class="note-display">
+                        <h4>Start Note</h4>
+                        <span class="note-display" id="start-note"></span>
                         <div id="playbutton">
                             <img onclick="playNote(start_pitch);" src="{% static "assets/images/play.png" %}"/>
                         </div>
-                    </div><div class="button-container">
-                        <div id="recordbutton">
-                            <img onclick="toggleRecording(updatePitchDisplay)"  src="{% static "assets/images/record.png" %}"/>
-                        </div>
                     </div>
+                    <div class="note-display">
+                        <h4>Target Note</h4>
+                        <span class="note-display"  id="target-note"></span>
+                        <div id="recordbutton">
+                            <img onclick="toggleRecording(updatePitchDisplay)"  src="{% static "assets/images/record.svg" %}"/>
+                        </div>
+                        <audio controls id="recording"></audio>
+                    </div>
+                    </div>
+
                 </div>
             </div>
             <div id="displays" >
@@ -130,11 +138,12 @@
         // add the overlay with loading image to the page
 
         var over = '<div id="midi-loading" class="overlay">' +
-            '<img id="loading" src="{% static "assets/images/loading.gif" %}">' +
-            '</div>';
+                '<h1 id="loading">Loading...</h1>' +
+                //'<img id="loading" src="{% static "assets/images/loading.gif" %}">' +
+                '</div>';
         $(over).appendTo('body');
     };
 
-    loading();
+    //loading();
     </script>
 {% endblock %}
