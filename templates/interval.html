@@ -37,7 +37,7 @@
     </div>
     <div id="help" class="overlay">
         <div id="help-menu">
-            <h2>Help</h2>
+            <h4>Help</h4>
             <p>
             A musical interval is the gap between two notes. Every interval has a name, that corresponds to an amount
             of semitones equal to that gap. For example, a diminished second is the smallest interval, and corresponds to one semitone.
@@ -53,17 +53,18 @@
         </div>
     </div>
     <div id="main_exercise">
+        <h4 class="top-right" onclick="showHelp()">help</h4>
         <div class="container">
             <div id="exercise">
-                <div id="interval">
-                    <div id="interval_text_container">
+                <div class = "half" id="interval">
+                    <div class = "half" id="interval_text_container">
                         <h2 id="interval_text"></h2>
                     </div>
                     <div id="vexflow_container">
                         <canvas id="vexflow"></canvas>
                     </div>
                 </div>
-                <div style="display:inline-block">
+                <div class = "half" id="note_names">
                     <div class="note-display">
                         <h4>Start Note</h4>
                         <span class="note-display" id="start-note"></span>
@@ -131,6 +132,8 @@
                 $("#midi-loading").fadeOut(400,function(){$("#midi-loading").remove()});
             }
         });
+
+        getInterval()
     };
 
 

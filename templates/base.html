@@ -12,34 +12,32 @@
 
 </head>
 <body>
-<div class="sticky-header">
-    <div class="container">
-        <div id="name">
-            <a href={% url "index" %}><img src="/static/assets/images/rubato-72px.png" alt="logo"></a>
-        </div>
-        <nav class="header-nav">
-            <ul>
-                <li><a href={% url "index" %}>Home</a></li>
-                <li><a href={% url "exercises" %}>Exercises</a></li>
-            </ul>
-            <div class="sticky-right">
-            {% if user.is_authenticated %}
-                <a id = "user-name" href={% url "profile" %}>
-                <img src="http://cdn.flaticon.com/png/32/78/78373.png" style="position: absolute; left: -22px; bottom: -5px; display: inline; -webkit-filter: invert();">
-                {{ user.username }}</a>
-                <a href={% url "logout" %}>logout</a>
-            {% else %}
-                <a id = "login" href={% url "login" %}>login</a>
-            {% endif %}
+    <div class="sticky-header">
+        <div class="container">
+            <div id="name">
+                <a href={% url "index" %}><img src="/static/assets/images/rubato-72px.png" alt="logo"></a>
             </div>
-        </nav>
-
+            <nav class="header-nav">
+                <ul>
+                    <li><a href={% url "index" %}>Home</a></li>
+                    <li><a href={% url "exercises" %}>Exercises</a></li>
+                </ul>
+                <div class="sticky-right">
+                {% if user.is_authenticated %}
+                    <a id = "user-name" href={% url "profile" %}>
+                    <img src="http://cdn.flaticon.com/png/32/78/78373.png" style="position: absolute; left: -22px; bottom: -5px; display: inline; -webkit-filter: invert();">
+                    {{ user.username }}</a>
+                    <a href={% url "logout" %}>logout</a>
+                {% else %}
+                    <a id = "login" href={% url "login" %}>login</a>
+                {% endif %}
+                </div>
+            </nav>
+        </div>
     </div>
-</div>
-<main>
-    {% block main %}
-    {% endblock %}
-<main>
-
+    <main>
+        {% block main %}
+        {% endblock %}
+    </main>
 </body>
 </html>

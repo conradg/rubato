@@ -1,4 +1,5 @@
 body{
+    color: #2B2B2B;
     font-family: 'Open Sans', sans-serif;
     margin: 0px;
     background-color: hsla(210,100%,68%,1);
@@ -286,6 +287,7 @@ h4 {
     margin:auto;
     border-radius:25px;
     width:70%;
+    position: relative;
 }
 .container{
     border: 1px grey;
@@ -297,6 +299,10 @@ h4 {
     /* vertical-align: top; */
 }
 
+#exercise .half{
+  display: inline-block;
+  box-sizing: border-box;
+}
 
 span.note-display{
   display: inline-block;
@@ -337,6 +343,7 @@ span.note-display{
 audio {
   display:block;
 }
+
 #interval>div{
     vertical-align: top;
     display: block;
@@ -346,11 +353,17 @@ audio {
 
 #interval {
   width:400px;
-  display:inline-block;
   border-right-width: 2px;
   border-right-style: inset;
 }
 
+#note_names{
+  padding-left:50px;
+}
+
+#interval_text_container{
+  width:100%;
+}
 
 .overlay {
     position: fixed;
@@ -377,12 +390,19 @@ audio {
 }
 
 #help-menu{
-    background-color: #cbe6f5;
+    background-color: hsla(210,100%,68%,1);
+    color: white;
     width:500px;
     padding:50px;
     margin:auto;
     margin-top:200px;
     box-shadow: 0px 0px 64px 20px rgba(0, 0, 0, 0.31);
+}
+
+#help h4{
+  color:white;
+  text-align:center;
+
 }
 
 #help{
@@ -423,7 +443,7 @@ audio {
 .exercise-container{
     vertical-align:top;
     display:inline-block;
-    width:33.3%;
+    width: 33.3%;
     background-color: white;
     border-radius: 30px;
     border-left: solid 10px#CBE6F5;
@@ -432,29 +452,36 @@ audio {
     box-sizing: border-box;
 }
 
-.exercise{
-    margin:0;
-    margin-left:20px;
-    margin-right:20px;
-    text-align:left;
-    padding-top: 10px;
-    padding-bottom: 10px;
+.exercise-container h4{
+  text-align:center;
 }
 
+.exercise{
+    margin:0;
+    background-color:initial;
+    margin-left:20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: none;
+}
+
+
+
 .exercise.unreleased{
-    color:#AAAAAA;
+    color: #E6E6E6;
 }
 
 .exercise.unreleased:after{
     display: inline-block;
     margin-left: 20px;
-    margin-top: 9px;
+    margin-top: -10px;
     width: 50px;
     text-align: center;
     font-family: "Roboto";
     content: "COMING SOON!";
     font-size: 12px;
     font-weight: 600;
+    vertical-align: middle;
     -webkit-transform: rotate(-30deg);
     -moz-transform: rotate(-30deg);
     transform: rotate(-30deg);
@@ -492,14 +519,15 @@ main>p{
 }
 
 .top-right{
-    position:absolute;
-    top:100px;
-    right:0;
+    cursor: pointer;
+    position: absolute;
+    right: 23px;
     margin:0;
     margin-right:20px;
     line-height:58px;
 }
 
 .top-right:hover{
-    color: white;
+    color: grey;
+    cursor: target;
 }

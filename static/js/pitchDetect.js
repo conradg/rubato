@@ -45,9 +45,6 @@ var ACF = []; //store the current autocorrelationfunction
 var ACFs = []; //store the autocorrelation functions for the active buffer
 
 
-getInterval();
-
-
 
 function Pitch(freq){
     this.frequency = freq;
@@ -81,7 +78,21 @@ function Pitch(freq){
 //////////////////////////////// HOMEPAGE DEMO /////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-
+function demo_getInterval(num){
+  intervals = [{semitones:0, name: "Unison", direction:"up"},
+               {semitones:7, name: "Perfect Fifth", direction:"up"},
+               {semitones:3, name: "Minor Third", direction: "down"}]
+  var json = intervals[num]
+  interval = json.semitones;
+  var name = json.name;
+  var direction = json.direction;
+  $("#interval_text").text((interval == 0 ? "" : (direction=="up" ? "Ascending " : "Descending ")) + name);
+  start_pitch = calculateStartPitch();
+  $("span#start-note").text(pitchMIDItoSci(start_pitch));
+  target_pitch = start_pitch + interval;
+  $("span#target-note").text(pitchMIDItoSci(target_pitch));
+  updateVex(start_pitch, target_pitch);
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -326,7 +337,8 @@ function getPitch(buf){
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
-    calculateScore()
+    feedback(calculateScore(), "#pitch")
+
     if (detected_frequency == NaN){
         error = true;
         error_text = "Woah! Something went wrong there... Please try again"
@@ -338,25 +350,32 @@ function getPitch(buf){
 function calculateScore(){
     difference = Math.abs(detected_pitch_m-target_pitch)
     perfect_score = 0.1
-    how_far_from_perfect = Math.max(difference-perfect_score,0);
-    score = 1 - (how_far_from_perfect);
+    distance_from_perfect = Math.max(difference-perfect_score,0);
+    score = 1 - (distance_from_perfect);
     score = Math.max(score,0);
     console.log("score: " + score);
-    var flat_sharp = detected_pitch_m>target_pitch ? "sharp" : "flat"
-    if (score==0){
+    var flat_sharp = detected_pitch_m>target_pitch ? 1 : -1
+    return (score*flat_sharp)
+}
+
+//Gives the user feedback on their sung note, and how they can improve it.
+function feedback(score, f_display){
+  flat_sharp = score >=0 ? "sharp" : "flat"
+  score = Math.abs(score)
+  if (score==0){
         if (difference>11 && difference < 13){
-            $("#pitch").text("Looks like you're singing in the wrong octave!")
+            $(f_display).text("Looks like you're singing in the wrong octave!")
         } else {
-            $("#pitch").text("It seems like you're singing the wrong note, try again")
+            $(f_display).text("It seems like you're singing the wrong note, try again")
         }
     } else if (score<0.3){
-        $("#pitch").text("You're quite " + flat_sharp + "!")
+        $(f_display).text("You're quite " + flat_sharp + "!")
     } else if (score<0.7){
-        $("#pitch").text("A little " + flat_sharp + " but pretty good")
+        $(f_display).text("A little " + flat_sharp + " but pretty good")
     } else if (score<1){
-        $("#pitch").text("Good job!")
+        $(f_display).text("Good job!")
     } else if (score==1){
-        $("#pitch").text("Perfect Score!");
+        $(f_display).text("Perfect Score!");
     }
 }
 
