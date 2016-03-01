@@ -377,16 +377,17 @@ audio {
 
 
 #midi-loading{
-    background-color:dodgerblue;
+    background-color: rgb(30, 144, 255);
+    border-radius: 25px;
+    position: absolute;
 }
 #loading {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 45%;
+    left: 53%;
     margin: -28px 0 0 -138px;
     color:white;
     text-shadow: 0px 0px 2px white;
-
 }
 
 #help-menu{
@@ -521,7 +522,8 @@ main>p{
 .top-right{
     cursor: pointer;
     position: absolute;
-    right: 23px;
+    top: 7px;
+    right: 13px;
     margin:0;
     margin-right:20px;
     line-height:58px;

@@ -110,7 +110,7 @@
     </div>
     <script type="text/javascript">
 
-    if (debug){
+    if (!debug){
         $("#displays").remove();
     }
 
@@ -137,10 +137,10 @@
                 '<h1 id="loading">Loading...</h1>' +
                 //'<img id="loading" src="{% static "assets/images/loading.gif" %}">' +
                 '</div>';
-        $(over).appendTo('body');
+        $(over).appendTo('#exercise');
     };
 
-    //loading();
+    loading();
     </script>
 </div>
 
