@@ -28,10 +28,9 @@ def get_env_setting(setting):
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_env_setting('RUBATO_SECRET_KEY')
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = ['www.conradgodfrey.com']
 
+INTERNAL_IPS = ['127.0.0.1']
 
 # Application definition
 
@@ -84,8 +83,26 @@ USE_L10N = True
 USE_TZ = True
 
 
+TEMPLATES = [
+  {
+      'BACKEND' :'django.template.backends.django.DjangoTemplates',
+      'DIRS'    : [os.path.join(BASE_DIR, 'templates')],
+      'APP_DIRS': True,
+      'OPTIONS' : {
+          'debug': True,
+          'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+          ]
+      }
+  }
+]
 
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 
 # Static files (CSS, JavaScript, Images)
