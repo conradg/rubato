@@ -4,7 +4,9 @@
 
 {% block title %}Rubato {% endblock %}
 
+
 {% block javascript %}
+<script type="text/javascript">var debug = "{{debug}}" === "True" ? true : false</script>
 <script type="text/javascript" src="{% static "js/pitchDetect.js" %}"></script>
 <script type="text/javascript" src="{% static "js/Recorderjs-master/recorder.js" %}"> </script>
 <script src="{% static "js/MIDI/js/MIDI/AudioDetect.js" %}" type="text/javascript"></script>
@@ -107,7 +109,8 @@
        </div>
     </div>
     <script type="text/javascript">
-    if (!debug){
+
+    if (debug){
         $("#displays").remove();
     }
 

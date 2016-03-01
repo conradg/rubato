@@ -30,7 +30,6 @@ var start_pitch;
 var target_pitch;
 var num_windows;
 var curr_window;
-var debug = true;
 var log_view = true;
 
 var male_range_s = ["G1","G5"];
@@ -43,7 +42,6 @@ var interval = 0; //the size of the interval in semitones, negative indicates do
 var max_correlation = 0;
 var ACF = []; //store the current autocorrelationfunction
 var ACFs = []; //store the autocorrelation functions for the active buffer
-
 
 
 function Pitch(freq){
