@@ -56,7 +56,7 @@
 
 <div class="slide" style="background-color:#dddddd">
     <div class="spacer-50px"></div>
-    <h1>Intonation I</h1>
+    <h1>Demo</h1>
     <div id="help" class="overlay">
         <div id="help-menu">
             <h4>Help</h4>
@@ -98,7 +98,7 @@
                         <h4>Target Note</h4>
                         <span class="note-display"  id="target-note"></span>
                         <div id="recordbutton">
-                            <img onclick="toggleRecording()"  src="{% static "assets/images/record.svg" %}"/>
+                            <img onclick="toggleRecording(demo_updatePitchDisplay)"  src="{% static "assets/images/record.svg" %}"/>
                         </div>
                         <audio controls id="recording"></audio>
                     </div>
@@ -125,7 +125,7 @@
                 $("#midi-loading").fadeOut(400,function(){$("#midi-loading").remove()});
             }
         });
-        demo_getInterval(0);
+        demo_getInterval(demo_interval_index);
 
     };
 

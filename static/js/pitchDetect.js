@@ -76,10 +76,12 @@ function Pitch(freq){
 //////////////////////////////// HOMEPAGE DEMO /////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+demo_interval_index = 0
+
 function demo_getInterval(num){
   intervals = [{semitones:0, name: "Unison", direction:"up"},
                {semitones:7, name: "Perfect Fifth", direction:"up"},
-               {semitones:3, name: "Minor Third", direction: "down"}]
+               {semitones:-3, name: "Minor Third", direction: "down"}]
   var json = intervals[num]
   interval = json.semitones;
   var name = json.name;
@@ -90,6 +92,22 @@ function demo_getInterval(num){
   target_pitch = start_pitch + interval;
   $("span#target-note").text(pitchMIDItoSci(target_pitch));
   updateVex(start_pitch, target_pitch);
+}
+
+// Runs pitch detection on the audio found at the url and updates the pitch
+// display on the page. Passed as a callback to ToggleRecording.
+function demo_updatePitchDisplay(url){
+    pitchDetect(url, function(){
+        if(!error){
+            demo_interval_index ++
+            demo_getInterval(demo_interval_index)
+            $("#pitch").text(detected_pitch_s);
+        } else{
+            $("#pitch").text(error_text);
+            return
+        }
+
+    });
 }
 
 
@@ -384,7 +402,7 @@ function feedback(score, f_display){
 var csrftoken = $.cookie('csrftoken');
 
 function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
+    // These HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 $.ajaxSetup({
