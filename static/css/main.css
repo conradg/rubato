@@ -100,9 +100,9 @@ main{
   height:200px;
   display:block;
 }
-article p {
-    font-weight: 100;
-    font-size: 20px;
+p {
+    font-weight: 400;
+    font-size: 16px;
     margin:0.5em 0;
     padding-left:10px;
 }
@@ -121,13 +121,13 @@ article p {
     position: relative;
     /* top: 120px; */
     padding-top: 100px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
     min-width: 900px;
     box-sizing: border-box;
     max-width: 818px;
     margin:auto;
-    background-color: #97DAFF;
+    background-color: #FFFFFF;
     /* box-shadow: 0px 0px 1px 2px rgba(44, 67, 90, 0.66); */
     border-radius: 10px;
 }
@@ -183,7 +183,7 @@ h2 {
 
 h3 {
   font-weight: 600;
-  font-size: 23px;
+  font-size: 21px;
   background-color: hsla(208,64%,56%,1);
   padding-left: 10px;
   text-shadow: 0 0 1px white;
@@ -228,10 +228,15 @@ h4 {
 
 #pitch{
     font-family: 'Open Sans', sans-serif;
-    font-size: 36px;
+    font-size: 25px;
     font-weight: 100;
     padding:20px;
     display:inline-block;
+    color: #1B1B1B;
+    position: absolute;
+    top: 82px;
+    text-align: center;
+    width: 287px;
 }
 
 .canvas_display>canvas{
@@ -292,11 +297,12 @@ h4 {
 .container{
     border: 1px grey;
     overflow: auto;
+    position: relative;
 }
 #exercise{
     display: block;
     width:100%;
-    /* vertical-align: top; */
+    vertical-align: top;
 }
 
 #exercise .half{
@@ -341,6 +347,7 @@ span.note-display{
 }
 
 audio {
+  width: 191px;
   display:block;
 }
 
@@ -352,7 +359,7 @@ audio {
 }
 
 #interval {
-  width:400px;
+  width: 500px;
   border-right-width: 2px;
   border-right-style: inset;
 }
@@ -376,10 +383,15 @@ audio {
 }
 
 
-#midi-loading{
+.demo {
     background-color: rgb(30, 144, 255);
     border-radius: 25px;
     position: absolute;
+}
+
+.demo span:hover{
+  color: white;
+  text-shadow: 0px 0px 10px white;
 }
 #loading {
     position: absolute;
@@ -444,12 +456,13 @@ audio {
 .exercise-container{
     vertical-align:top;
     display:inline-block;
-    width: 33.3%;
+    width: 27.3%;
     background-color: white;
     border-radius: 30px;
-    border-left: solid 10px#CBE6F5;
-    border-right: solid 10px #CBE6F5;
+    border-left: solid 10px#EBF8FF;
+    border-right: solid 10px #EBF8FF;
     min-height: 200px;
+    margin: 20px;
     box-sizing: border-box;
 }
 
@@ -474,7 +487,7 @@ audio {
 
 .exercise.unreleased:after{
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 10px;
     margin-top: -10px;
     width: 50px;
     text-align: center;
@@ -497,11 +510,6 @@ audio {
 
 }
 
-
-
-main>p{
-    font-weight:300; font-size: 24px; padding:20px 200px 20px 200px
-}
 
 #spacer{
     text-align: center;
@@ -532,4 +540,35 @@ main>p{
 .top-right:hover{
     color: grey;
     cursor: target;
+}
+
+table#login{
+  margin:auto;
+  background-color: #DDDDDD;
+  border-radius: 20px;
+  padding: 24px;
+}
+
+table#login td{
+  text-align:right;
+}
+div.login{
+  padding:0 200px;
+  box-sizing:border-box;
+}
+
+div.login input{
+  background-color: #FFFFFF;
+  border-radius:20px;
+  font-family: "Open Sans";
+  font-size: 20px;
+  padding-left: 10px;
+  border: none;
+}
+
+.warning {
+  color: #FD0707;
+  font-weight: 600;
+  text-align: center;
+  padding-top: 30px;
 }

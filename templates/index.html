@@ -102,7 +102,16 @@
                         </div>
                         <audio controls id="recording"></audio>
                     </div>
-                    </div>
+                </div>
+                <div id="pitch">
+                  Press the <span style="color:#AEC8E2">play</span> button to hear the starting note,
+                  and then press <span style="color:#DF1717">record</span> and sing the target note.
+                </div>
+                <div id="male-or-female" class="demo overlay">
+                  <h1>Is your voice range:</h1>
+                  <h1><span onclick="male_or_female('m')">Male</span>
+                    or <span onclick="male_or_female('f')">Female</span>
+                </div>;
 
                 </div>
             </div>
@@ -125,19 +134,23 @@
                 $("#midi-loading").fadeOut(400,function(){$("#midi-loading").remove()});
             }
         });
-        demo_getInterval(demo_interval_index);
-
     };
 
 
     var loading = function() {
         // add the overlay with loading image to the page
 
-        var over = '<div id="midi-loading" class="overlay">' +
+        var over = '<div id="midi-loading" class="demo overlay">' +
                 '<h1 id="loading">Loading...</h1>' +
                 //'<img id="loading" src="{% static "assets/images/loading.gif" %}">' +
                 '</div>';
         $(over).appendTo('#exercise');
+    };
+
+     var male_or_female = function(gender) {
+        m_or_f = gender;
+        $("#male-or-female").remove()
+        demo_getInterval(demo_interval_index);
     };
 
     loading();

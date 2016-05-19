@@ -3,24 +3,39 @@
 {% block title %}Login Rubato{% endblock %}
 {% block main %}
 
-<h2>Please login!</h2>
-<p>Rubato tracks your progress as you complete exercises, and adapts accordingly, so we need you to log in so we can store your exercise info.</p>
+<div id="main_exercise" class="login">
+  <h2>Please login!</h2>
+  <p>Rubato follows your progress as you complete exercises, and adapts accordingly.</p>
+
+
 
 {% if invalid %}
     <p class="warning">Invalid email/password, please try again!</p>
 {% endif %}
-<div id="spacer">
-  <form action="" method="post">
-    {% csrf_token %}
-    <div class="row">
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    </div><div class="row">
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
-    </div>
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next|escape }}" />
-  </form>
+  <div id="spacer">
+    <form action="" method="post">
+      {% csrf_token %}
+      <table id="login">
+        <tr>
+          <td><label for="username">User name:</label></td>
+          <td><input type="text" name="username" value="" id="username"></td>
+        </tr>
+        <tr>
+          <td><label for="password">Password:</label></td>
+          <td><input type="password" name="password" value="" id="password"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input type="submit" value="login" /></td>
+        </tr>
+      <input type="hidden" name="next" value="{{ next|escape }}" />
+      </table>
+    </form>
+  </div>
+
+  <p>
+    Rubato is currently in pre-alpha, and sign-ups are currently restricted.
+  </p>
+  <div class="spacer-50px"></div>
 </div>
 {% endblock %}

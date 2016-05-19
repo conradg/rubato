@@ -5,6 +5,7 @@
 var recorder;
 var audio;
 var context = new webkitAudioContext();
+var analyser = context.createAnalyser(); //TODO: This
 var buffer; // the current audio buffer we're analysing
 var freqs;
 var center;
@@ -16,11 +17,13 @@ var debug_notes;
 var debug_good_regions;
 var amps;
 var max_amp;
-var amp_threshold = calibrateMicrophone(); //Implement this
+var amp_threshold = calibrateMicrophone(); // TODO Implement this
 var recording = false;
 var segment_size = 1200;
 var error = false;
 var error_text = "";
+var m_or_f = "m"
+
 
 var detected_pitch_m;
 var detected_pitch_s;
@@ -79,6 +82,10 @@ function Pitch(freq){
 demo_interval_index = 0
 
 function demo_getInterval(num){
+  if (num>2){
+    $("#pitch").text("Well done! That completes the demo, please login in to enjoy more features")
+    return
+  }
   intervals = [{semitones:0, name: "Unison", direction:"up"},
                {semitones:7, name: "Perfect Fifth", direction:"up"},
                {semitones:-3, name: "Minor Third", direction: "down"}]
@@ -87,9 +94,9 @@ function demo_getInterval(num){
   var name = json.name;
   var direction = json.direction;
   $("#interval_text").text((interval == 0 ? "" : (direction=="up" ? "Ascending " : "Descending ")) + name);
-  start_pitch = calculateStartPitch();
-  $("span#start-note").text(pitchMIDItoSci(start_pitch));
+  start_pitch = calculateStartPitch(m_or_f);
   target_pitch = start_pitch + interval;
+  $("span#start-note").text(pitchMIDItoSci(start_pitch));
   $("span#target-note").text(pitchMIDItoSci(target_pitch));
   updateVex(start_pitch, target_pitch);
 }
@@ -98,12 +105,14 @@ function demo_getInterval(num){
 // display on the page. Passed as a callback to ToggleRecording.
 function demo_updatePitchDisplay(url){
     pitchDetect(url, function(){
-        if(!error){
+        if(!error && score > 0){
             demo_interval_index ++
             demo_getInterval(demo_interval_index)
-            $("#pitch").text(detected_pitch_s);
-        } else{
-            $("#pitch").text(error_text);
+            console.log(detected_pitch_s)
+        } else {
+            if (error){
+              $("#pitch").text(error_text);
+            }
             return
         }
 
@@ -172,6 +181,7 @@ var onSuccess = function(s) {
     recorder = new Recorder(mediaStreamSource);
     recorder.record();
     recording = true;
+    $("#pitch").text("When you've finished singing, press the record button to analyse the result")
 }
 
 
@@ -353,13 +363,13 @@ function getPitch(buf){
     detected_pitch_m = freqToPitch_m(detected_frequency);
     detected_pitch_s = detected_pitch_s_cents[0];
     detected_cents   = detected_pitch_s_cents[1];
-    feedback(calculateScore(), "#pitch")
+    $("#pitch").text(feedback(calculateScore(),detected_pitch_s))
 
     if (detected_frequency == NaN){
         error = true;
         error_text = "Woah! Something went wrong there... Please try again"
     }
-    if(debug)updateDisplays();
+    // if(debug)updateDisplays(); // TODO: Decide on how when displays should be shown
 }
 
 //calculates a score based on the value in the detected_pitch variable, the starting note, and the interval
@@ -375,23 +385,23 @@ function calculateScore(){
 }
 
 //Gives the user feedback on their sung note, and how they can improve it.
-function feedback(score, f_display){
+function feedback(score,detected_pitch){
   flat_sharp = score >=0 ? "sharp" : "flat"
   score = Math.abs(score)
   if (score==0){
         if (difference>11 && difference < 13){
-            $(f_display).text("Looks like you're singing in the wrong octave!")
+            return "Looks like you're singing in the wrong octave!"
         } else {
-            $(f_display).text("It seems like you're singing the wrong note, try again")
+            return "It seems like you're singing " + detected_pitch + ", try again"
         }
     } else if (score<0.3){
-        $(f_display).text("You're quite " + flat_sharp + "!")
+       return "You're quite " + flat_sharp + "!"
     } else if (score<0.7){
-        $(f_display).text("A little " + flat_sharp + " but pretty good")
+        return "A little " + flat_sharp + " but pretty good"
     } else if (score<1){
-        $(f_display).text("Good job!")
+        return "Good job!"
     } else if (score==1){
-        $(f_display).text("Perfect Score!");
+        return "Perfect Score!"
     }
 }
 
@@ -462,7 +472,7 @@ function getInterval(){
         var name = json.name;
         var direction = json.direction;
         $("#interval_text").text( (direction=="up" ? "Ascending " : "Descending ") + name);
-        start_pitch = calculateStartPitch();
+        start_pitch = calculateStartPitch("m");
         $("span#start-note").text(pitchMIDItoSci(start_pitch));
         target_pitch = start_pitch + interval;
         $("span#target-note").text(pitchMIDItoSci(target_pitch));
@@ -473,9 +483,9 @@ function getInterval(){
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-function calculateStartPitch(){
-    var lower = 51;
-    var upper = 58;
+function calculateStartPitch(m_or_f){
+    var lower = m_or_f === "m" ? 51 : 60
+    var upper = m_or_f === "m" ? 58 : 67
 
     var start_pitch = getRandomInt(lower,upper) - interval;
 
@@ -694,6 +704,7 @@ function reasonablePitch(pitch, is_freq){
 function reasonableVolume(amp){
     return amp>amp_threshold;
 }
+
 function updateCorrelation() {
 
     var canvas = $("#correlation_canvas")[0];
